@@ -1188,7 +1188,11 @@ export const databaseService = {
   // --------------------------------------------------------------------------
   // Class Subjects (Academic Year Relationships)
   // --------------------------------------------------------------------------
-  async getClassSubjects(academicYearId?: string, classId?: string): Promise<ClassSubject[]> {
+  async getClassSubjects(
+    academicYearId?: string,
+    classId?: string,
+    sectionId?: string
+  ): Promise<ClassSubject[]> {
     if (isSupabaseConfigured) {
       try {
         let query = supabase
@@ -1196,6 +1200,7 @@ export const databaseService = {
           .select(`
             *,
             class:classes(*),
+            section:sections(*),
             subject:subjects(*),
             academic_year:academic_years(*)
           `)
@@ -1203,6 +1208,9 @@ export const databaseService = {
 
         if (academicYearId) query = query.eq('academic_year_id', academicYearId);
         if (classId) query = query.eq('class_id', classId);
+        if (sectionId) {
+          query = query.or(`section_id.eq.${sectionId},section_id.is.null`);
+        }
 
         const { data, error } = await query;
         if (!error && data) return data as ClassSubject[];
@@ -1213,27 +1221,39 @@ export const databaseService = {
 
     const classSubjects = loadFromStorage<ClassSubject[]>(STORAGE_KEYS.CLASS_SUBJECTS, INITIAL_CLASS_SUBJECTS);
     const classes = await this.getClasses();
+    const sections = await this.getSections();
     const subjects = await this.getSubjects();
     const years = await this.getAcademicYears();
 
     let filtered = classSubjects;
     if (academicYearId) filtered = filtered.filter(cs => cs.academic_year_id === academicYearId);
     if (classId) filtered = filtered.filter(cs => cs.class_id === classId);
+    if (sectionId) {
+      filtered = filtered.filter(cs => !cs.section_id || cs.section_id === sectionId);
+    }
 
     return filtered.map(cs => ({
       ...cs,
       class: classes.find(c => c.id === cs.class_id),
+      section: sections.find(s => s.id === cs.section_id),
       subject: subjects.find(s => s.id === cs.subject_id),
       academic_year: years.find(y => y.id === cs.academic_year_id)
     })).sort((a, b) => a.display_order - b.display_order);
   },
 
-  async createClassSubject(academicYearId: string, classId: string, subjectId: string, displayOrder = 1): Promise<ClassSubject> {
+  async createClassSubject(
+    academicYearId: string,
+    classId: string,
+    subjectId: string,
+    displayOrder = 1,
+    sectionId?: string | null
+  ): Promise<ClassSubject> {
     const now = new Date().toISOString();
     const newEntry: ClassSubject = {
       id: crypto.randomUUID(),
       academic_year_id: academicYearId,
       class_id: classId,
+      section_id: sectionId || null,
       subject_id: subjectId,
       display_order: displayOrder,
       status: 'active',
@@ -1248,6 +1268,7 @@ export const databaseService = {
           .insert({
             academic_year_id: academicYearId,
             class_id: classId,
+            section_id: sectionId || null,
             subject_id: subjectId,
             display_order: displayOrder,
             status: 'active'
@@ -1255,6 +1276,7 @@ export const databaseService = {
           .select(`
             *,
             class:classes(*),
+            section:sections(*),
             subject:subjects(*),
             academic_year:academic_years(*)
           `)
@@ -1267,22 +1289,35 @@ export const databaseService = {
       }
     }
 
-    const existing = await this.getClassSubjects(academicYearId, classId);
-    if (existing.some(item => item.subject_id === subjectId)) {
-      throw new Error('This subject is already assigned to this class for the selected academic year.');
+    const all = loadFromStorage<ClassSubject[]>(STORAGE_KEYS.CLASS_SUBJECTS, INITIAL_CLASS_SUBJECTS);
+    
+    // Duplicate validation: check if already assigned to this exact section (or all sections if sectionId is null)
+    const duplicate = all.find(item => 
+      item.academic_year_id === academicYearId &&
+      item.class_id === classId &&
+      (item.section_id || null) === (sectionId || null) &&
+      item.subject_id === subjectId
+    );
+    if (duplicate) {
+      throw new Error(
+        sectionId 
+          ? 'This subject is already assigned to this class section for the selected academic year.'
+          : 'This subject is already assigned to this class for the selected academic year.'
+      );
     }
 
-    const all = loadFromStorage<ClassSubject[]>(STORAGE_KEYS.CLASS_SUBJECTS, INITIAL_CLASS_SUBJECTS);
     all.push(newEntry);
     saveToStorage(STORAGE_KEYS.CLASS_SUBJECTS, all);
 
     const classes = await this.getClasses();
+    const sections = await this.getSections();
     const subjects = await this.getSubjects();
     const years = await this.getAcademicYears();
 
     return {
       ...newEntry,
       class: classes.find(c => c.id === classId),
+      section: sections.find(s => s.id === sectionId),
       subject: subjects.find(s => s.id === subjectId),
       academic_year: years.find(y => y.id === academicYearId)
     };

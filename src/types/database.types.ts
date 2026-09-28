@@ -85,6 +85,7 @@ export interface ClassSubject {
   id: string;
   academic_year_id: string;
   class_id: string;
+  section_id?: string | null;
   subject_id: string;
   display_order: number;
   status: EntityStatus;
@@ -92,6 +93,7 @@ export interface ClassSubject {
   updated_at: string;
   // Joined relation fields
   class?: ClassItem;
+  section?: SectionItem;
   subject?: SubjectItem;
   academic_year?: AcademicYear;
 }

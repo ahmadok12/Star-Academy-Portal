@@ -111,7 +111,7 @@ export const TeacherAssignmentsPage: React.FC = () => {
       try {
         const [csList, subjList] = await Promise.all([
           databaseService.getClassSections(formClassId, formYearId),
-          databaseService.getClassSubjects(formClassId),
+          databaseService.getClassSubjects(formYearId, formClassId),
         ]);
         setAvailableClassSections(csList.filter((cs) => cs.status === 'active'));
         setAvailableClassSubjects(subjList);

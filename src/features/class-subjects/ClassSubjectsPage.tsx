@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Plus, Power, Trash2, CalendarRange, Calendar, Filter } from 'lucide-react';
+import { Plus, Power, Trash2, CalendarRange, Calendar, Filter, Layers } from 'lucide-react';
 import { PageHeader } from '../../components/common/PageHeader';
 import { DataTable, Column } from '../../components/common/DataTable';
 import { StatusBadge } from '../../components/common/StatusBadge';
@@ -8,7 +8,7 @@ import { ClassSubjectFormModal } from './ClassSubjectFormModal';
 import { useAcademicYear } from '../../context/AcademicYearContext';
 import { useToast } from '../../context/ToastContext';
 import { databaseService } from '../../lib/database-service';
-import { ClassSubject, ClassItem, SubjectItem, EntityStatus } from '../../types/database.types';
+import { ClassSubject, ClassItem, SubjectItem, SectionItem, EntityStatus } from '../../types/database.types';
 
 export const ClassSubjectsPage: React.FC = () => {
   const { academicYears, selectedAcademicYear } = useAcademicYear();
@@ -16,11 +16,13 @@ export const ClassSubjectsPage: React.FC = () => {
 
   const [classSubjects, setClassSubjects] = useState<ClassSubject[]>([]);
   const [classes, setClasses] = useState<ClassItem[]>([]);
+  const [sections, setSections] = useState<SectionItem[]>([]);
   const [subjects, setSubjects] = useState<SubjectItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Filters
   const [selectedClassFilter, setSelectedClassFilter] = useState<string>('all');
+  const [selectedSectionFilter, setSelectedSectionFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -31,14 +33,16 @@ export const ClassSubjectsPage: React.FC = () => {
     if (!selectedAcademicYear) return;
     try {
       setIsLoading(true);
-      const [csList, cList, sList] = await Promise.all([
+      const [csList, cList, sList, secList] = await Promise.all([
         databaseService.getClassSubjects(selectedAcademicYear.id),
         databaseService.getClasses(),
         databaseService.getSubjects(),
+        databaseService.getSections(),
       ]);
       setClassSubjects(csList);
       setClasses(cList);
       setSubjects(sList);
+      setSections(secList);
     } catch (e: any) {
       toast.error('Failed to load class subjects', e.message);
     } finally {
@@ -53,16 +57,29 @@ export const ClassSubjectsPage: React.FC = () => {
   const handleCreateAssignment = async ({
     academicYearId,
     classId,
+    sectionId,
     subjectId,
     displayOrder,
   }: {
     academicYearId: string;
     classId: string;
+    sectionId?: string | null;
     subjectId: string;
     displayOrder: number;
   }) => {
-    await databaseService.createClassSubject(academicYearId, classId, subjectId, displayOrder);
-    toast.success('Subject Assigned', 'Subject curriculum linked to class for the academic year.');
+    await databaseService.createClassSubject(
+      academicYearId,
+      classId,
+      subjectId,
+      displayOrder,
+      sectionId
+    );
+    toast.success(
+      'Subject Assigned',
+      sectionId
+        ? 'Subject curriculum linked specifically to class section.'
+        : 'Subject curriculum linked to class for the academic year.'
+    );
     await loadData();
   };
 
@@ -94,8 +111,14 @@ export const ClassSubjectsPage: React.FC = () => {
 
   const filteredItems = classSubjects.filter((item) => {
     const matchesClass = selectedClassFilter === 'all' || item.class_id === selectedClassFilter;
+    const matchesSection =
+      selectedSectionFilter === 'all'
+        ? true
+        : selectedSectionFilter === 'common'
+        ? !item.section_id
+        : item.section_id === selectedSectionFilter;
     const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
-    return matchesClass && matchesStatus;
+    return matchesClass && matchesSection && matchesStatus;
   });
 
   const columns: Column<ClassSubject>[] = [
@@ -107,6 +130,23 @@ export const ClassSubjectsPage: React.FC = () => {
           <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600 font-mono font-semibold">
             {row.class?.code}
           </span>
+        </div>
+      ),
+    },
+    {
+      header: 'Section Scope',
+      cell: (row) => (
+        <div>
+          {row.section ? (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+              <Layers className="w-3 h-3 text-blue-500" />
+              <span>Section {row.section.name}</span>
+            </span>
+          ) : (
+            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium text-slate-500 bg-slate-100 border border-slate-200">
+              All Sections
+            </span>
+          )}
         </div>
       ),
     },
@@ -184,8 +224,8 @@ export const ClassSubjectsPage: React.FC = () => {
           { label: 'Academic Setup' },
           { label: 'Class Subjects' },
         ]}
-        title="Class Subjects Configuration"
-        subtitle="Specify which subjects are taught to a class during the academic cycle. Preserves historical syllabus records."
+        title="Class &amp; Section Subjects Configuration"
+        subtitle="Specify which subjects are taught to a class and section during the academic cycle. Preserves historical syllabus records."
         action={
           <button
             onClick={() => setModalOpen(true)}
@@ -193,7 +233,7 @@ export const ClassSubjectsPage: React.FC = () => {
             type="button"
           >
             <Plus className="w-4 h-4" />
-            <span>Assign Class Subject</span>
+            <span>Assign Subject to Class / Section</span>
           </button>
         }
       />
@@ -217,7 +257,7 @@ export const ClassSubjectsPage: React.FC = () => {
               )}
             </div>
             <p className="text-[11px] text-slate-500 mt-0.5">
-              Showing active class-subject syllabus mappings configured specifically for this cycle.
+              Showing active class &amp; section subject syllabus mappings configured specifically for this cycle.
             </p>
           </div>
         </div>
@@ -248,6 +288,23 @@ export const ClassSubjectsPage: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-2">
+            <span className="text-xs text-slate-600 font-semibold">Section:</span>
+            <select
+              value={selectedSectionFilter}
+              onChange={(e) => setSelectedSectionFilter(e.target.value)}
+              className="text-xs bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-slate-800 font-medium focus:ring-slate-900"
+            >
+              <option value="all">All Sections &amp; Scopes</option>
+              <option value="common">Class-wide Only (All Sections)</option>
+              {sections.map((s) => (
+                <option key={s.id} value={s.id}>
+                  Section {s.name} Only
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center space-x-2">
             <span className="text-xs text-slate-600 font-semibold">Status:</span>
             <select
               value={statusFilter}
@@ -268,7 +325,7 @@ export const ClassSubjectsPage: React.FC = () => {
         data={filteredItems}
         keyExtractor={(row) => row.id}
         isLoading={isLoading}
-        emptyMessage="No subjects configured for this class/academic cycle."
+        emptyMessage="No subjects configured for this class/section and academic cycle."
       />
 
       {/* Form Modal */}
@@ -289,7 +346,7 @@ export const ClassSubjectsPage: React.FC = () => {
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleConfirmDelete}
         title="Unlink Subject from Curriculum"
-        message={`Are you sure you want to remove "${deleteTarget?.subject?.name}" from "${deleteTarget?.class?.name}" for academic cycle "${deleteTarget?.academic_year?.name || selectedAcademicYear?.name}"?`}
+        message={`Are you sure you want to remove "${deleteTarget?.subject?.name}" from "${deleteTarget?.class?.name}"${deleteTarget?.section ? ` (Section ${deleteTarget.section.name})` : ''} for academic cycle "${deleteTarget?.academic_year?.name || selectedAcademicYear?.name}"?`}
         confirmText="Confirm Unlink"
         type="danger"
         isLoading={isDeleting}

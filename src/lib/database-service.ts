@@ -948,6 +948,20 @@ export const databaseService = {
   // Class Sections (Academic Year Relationships)
   // --------------------------------------------------------------------------
   async getClassSections(academicYearId?: string, classId?: string): Promise<ClassSection[]> {
+    let effectiveYearId = academicYearId;
+    let effectiveClassId = classId;
+
+    if (academicYearId && classId) {
+      const classes = await this.getClasses();
+      const years = await this.getAcademicYears();
+      const isParam1Class = classes.some(c => c.id === academicYearId);
+      const isParam2Year = years.some(y => y.id === classId);
+      if (isParam1Class && isParam2Year) {
+        effectiveYearId = classId;
+        effectiveClassId = academicYearId;
+      }
+    }
+
     if (isSupabaseConfigured) {
       try {
         let query = supabase
@@ -959,8 +973,8 @@ export const databaseService = {
             academic_year:academic_years(*)
           `);
 
-        if (academicYearId) query = query.eq('academic_year_id', academicYearId);
-        if (classId) query = query.eq('class_id', classId);
+        if (effectiveYearId) query = query.eq('academic_year_id', effectiveYearId);
+        if (effectiveClassId) query = query.eq('class_id', effectiveClassId);
 
         const { data, error } = await query;
         if (!error && data) return data as ClassSection[];
@@ -975,8 +989,8 @@ export const databaseService = {
     const years = await this.getAcademicYears();
 
     let filtered = classSections;
-    if (academicYearId) filtered = filtered.filter(cs => cs.academic_year_id === academicYearId);
-    if (classId) filtered = filtered.filter(cs => cs.class_id === classId);
+    if (effectiveYearId) filtered = filtered.filter(cs => cs.academic_year_id === effectiveYearId);
+    if (effectiveClassId) filtered = filtered.filter(cs => cs.class_id === effectiveClassId);
 
     // Hydrate joined objects
     return filtered.map(cs => ({

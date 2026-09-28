@@ -62,15 +62,17 @@ export const ClassSubjectFormModal: React.FC<ClassSubjectFormModalProps> = ({
   useEffect(() => {
     if (!classId || !academicYearId) {
       setAvailableSections([]);
+      setSectionId('');
       return;
     }
     let isCancelled = false;
     const fetchSections = async () => {
       try {
         setLoadingSections(true);
-        const list = await databaseService.getClassSections(classId, academicYearId);
+        // Correct order: academicYearId first, classId second
+        const list = await databaseService.getClassSections(academicYearId, classId);
         if (!isCancelled) {
-          const active = list.filter(cs => cs.status === 'active');
+          const active = list.filter(cs => cs.status === 'active' && (!cs.section || cs.section.status === 'active'));
           setAvailableSections(active);
         }
       } catch {
@@ -162,7 +164,10 @@ export const ClassSubjectFormModal: React.FC<ClassSubjectFormModalProps> = ({
           </label>
           <select
             value={academicYearId}
-            onChange={(e) => setAcademicYearId(e.target.value)}
+            onChange={(e) => {
+              setAcademicYearId(e.target.value);
+              setSectionId('');
+            }}
             className="w-full text-xs font-medium bg-slate-50/70 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-800 focus:bg-white focus:ring-2 focus:ring-slate-900 focus:outline-none"
           >
             {academicYears.map((year) => (
@@ -179,7 +184,10 @@ export const ClassSubjectFormModal: React.FC<ClassSubjectFormModalProps> = ({
           </label>
           <select
             value={classId}
-            onChange={(e) => setClassId(e.target.value)}
+            onChange={(e) => {
+              setClassId(e.target.value);
+              setSectionId('');
+            }}
             className="w-full text-xs font-medium bg-slate-50/70 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-800 focus:bg-white focus:ring-2 focus:ring-slate-900 focus:outline-none"
           >
             {activeClasses.map((c) => (
@@ -204,22 +212,32 @@ export const ClassSubjectFormModal: React.FC<ClassSubjectFormModalProps> = ({
           <select
             value={sectionId}
             onChange={(e) => setSectionId(e.target.value)}
+            disabled={loadingSections}
             className="w-full text-xs font-medium bg-slate-50/70 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-800 focus:bg-white focus:ring-2 focus:ring-slate-900 focus:outline-none"
           >
             <option value="">All Sections (Entire Class)</option>
-            {availableSections.map((cs) => (
-              <option key={cs.section_id} value={cs.section_id}>
-                Section {cs.section?.name || 'Section'}
-              </option>
-            ))}
+            {availableSections.map((cs) => {
+              const rawName = cs.section?.name || 'Section';
+              const label = rawName.toLowerCase().startsWith('section') ? rawName : `Section ${rawName}`;
+              return (
+                <option key={cs.section_id} value={cs.section_id}>
+                  {label}
+                </option>
+              );
+            })}
           </select>
-          {availableSections.length === 0 && !loadingSections ? (
-            <p className="text-[11px] text-slate-400 mt-1">
-              No sections configured for this class yet. Subject will apply to all students of this class.
+          {loadingSections ? (
+            <p className="text-[11px] text-slate-400 mt-1">Loading assigned sections...</p>
+          ) : availableSections.length === 0 ? (
+            <p className="text-[11px] text-amber-600 mt-1">
+              No sections currently mapped to this class for this academic year. Subject will apply to all students of this class.
             </p>
           ) : (
-            <p className="text-[11px] text-slate-500 mt-1">
-              Select a section (e.g. Pre-Engineering vs Pre-Medical) to assign specific subjects, or leave as All Sections.
+            <p className="text-[11px] text-emerald-700 font-medium mt-1">
+              ✓ {availableSections.length} assigned section{availableSections.length > 1 ? 's' : ''} available: {availableSections.map(cs => {
+                const rawName = cs.section?.name || 'Section';
+                return rawName.toLowerCase().startsWith('section') ? rawName : `Section ${rawName}`;
+              }).join(', ')}.
             </p>
           )}
         </div>

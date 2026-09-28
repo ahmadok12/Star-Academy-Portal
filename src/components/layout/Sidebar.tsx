@@ -1,11 +1,7 @@
 import {
   LayoutDashboard,
   Calendar,
-  GraduationCap,
-  Layers,
   BookOpen,
-  Link2,
-  Settings,
   LogOut,
   Users,
   UserPlus,
@@ -15,9 +11,7 @@ import {
   FileSpreadsheet,
   DollarSign,
   Briefcase,
-  BarChart3,
-  CalendarRange,
-  Sparkles
+  BarChart3
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -277,134 +271,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   >
                     <BookOpen className="w-4 h-4 shrink-0" />
                     <span>Teacher Allocations</span>
-                  </button>
-                </li>
-              </ul>
-            </div>
-
-            {/* Academic Setup */}
-            <div>
-              <p className="text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-2 px-3">
-                Academic Setup
-              </p>
-              <ul className="space-y-1">
-                <li>
-                  <button
-                    onClick={() => handleNavClick('academic-years')}
-                    className={`w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl font-medium text-xs transition ${
-                      currentTab === 'academic-years'
-                        ? 'bg-slate-100 text-slate-900 font-semibold'
-                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-                    }`}
-                  >
-                    <Calendar className="w-4 h-4 shrink-0" />
-                    <span>Academic Years</span>
-                  </button>
-                </li>
-
-                <li>
-                  <button
-                    onClick={() => handleNavClick('classes')}
-                    className={`w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl font-medium text-xs transition ${
-                      currentTab === 'classes'
-                        ? 'bg-slate-100 text-slate-900 font-semibold'
-                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-                    }`}
-                  >
-                    <GraduationCap className="w-4 h-4 shrink-0" />
-                    <span>Classes Master</span>
-                  </button>
-                </li>
-
-                <li>
-                  <button
-                    onClick={() => handleNavClick('sections')}
-                    className={`w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl font-medium text-xs transition ${
-                      currentTab === 'sections'
-                        ? 'bg-slate-100 text-slate-900 font-semibold'
-                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-                    }`}
-                  >
-                    <Layers className="w-4 h-4 shrink-0" />
-                    <span>Sections Master</span>
-                  </button>
-                </li>
-
-                <li>
-                  <button
-                    onClick={() => handleNavClick('batches')}
-                    className={`w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl font-medium text-xs transition ${
-                      currentTab === 'batches'
-                        ? 'bg-slate-100 text-slate-900 font-semibold'
-                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-                    }`}
-                  >
-                    <Sparkles className="w-4 h-4 shrink-0" />
-                    <span>Batches Master</span>
-                  </button>
-                </li>
-
-                <li>
-                  <button
-                    onClick={() => handleNavClick('class-sections')}
-                    className={`w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl font-medium text-xs transition ${
-                      currentTab === 'class-sections'
-                        ? 'bg-slate-100 text-slate-900 font-semibold'
-                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-                    }`}
-                  >
-                    <Link2 className="w-4 h-4 shrink-0" />
-                    <span>Class Sections</span>
-                  </button>
-                </li>
-
-                <li>
-                  <button
-                    onClick={() => handleNavClick('subjects')}
-                    className={`w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl font-medium text-xs transition ${
-                      currentTab === 'subjects'
-                        ? 'bg-slate-100 text-slate-900 font-semibold'
-                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-                    }`}
-                  >
-                    <BookOpen className="w-4 h-4 shrink-0" />
-                    <span>Subjects Master</span>
-                  </button>
-                </li>
-
-                <li>
-                  <button
-                    onClick={() => handleNavClick('class-subjects')}
-                    className={`w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl font-medium text-xs transition ${
-                      currentTab === 'class-subjects'
-                        ? 'bg-slate-100 text-slate-900 font-semibold'
-                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-                    }`}
-                  >
-                    <CalendarRange className="w-4 h-4 shrink-0" />
-                    <span>Class Subjects</span>
-                  </button>
-                </li>
-              </ul>
-            </div>
-
-            {/* Settings */}
-            <div>
-              <p className="text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-2 px-3">
-                Settings
-              </p>
-              <ul className="space-y-1">
-                <li>
-                  <button
-                    onClick={() => handleNavClick('settings')}
-                    className={`w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl font-medium text-xs transition ${
-                      currentTab === 'settings'
-                        ? 'bg-slate-100 text-slate-900 font-semibold'
-                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-                    }`}
-                  >
-                    <Settings className="w-4 h-4 shrink-0" />
-                    <span>Academy Profile</span>
                   </button>
                 </li>
               </ul>

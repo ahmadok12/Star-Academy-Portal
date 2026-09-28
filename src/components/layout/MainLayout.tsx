@@ -35,6 +35,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
         <Header
           onOpenMobileMenu={() => setMobileMenuOpen(true)}
           academyName={settings?.academy_name}
+          currentTab={currentTab}
+          onSelectTab={onSelectTab}
         />
 
         <main className="flex-1 overflow-y-auto custom-scroll p-4 sm:p-6 lg:p-8 bg-[#F7F8FA]">

@@ -139,6 +139,49 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </ul>
             </div>
 
+            {/* Operations & Schedule (Phase 5 & 6) */}
+            <div>
+              <p className="text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-2 px-3 flex items-center justify-between">
+                <span>Operations &amp; Schedule</span>
+                <span className="text-[9px] bg-emerald-50 text-emerald-700 font-semibold px-1.5 py-0.5 rounded border border-emerald-200/60">Phase 5 &amp; 6</span>
+              </p>
+              <ul className="space-y-1">
+                <li>
+                  <button
+                    onClick={() => handleNavClick('timetable')}
+                    className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl font-medium text-xs transition ${
+                      currentTab === 'timetable'
+                        ? 'bg-slate-100 text-slate-900 font-semibold'
+                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <Calendar className="w-4 h-4 shrink-0" />
+                      <span>Timetable &amp; Schedule</span>
+                    </div>
+                    <span className="text-[9px] font-mono text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded font-semibold">P5</span>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    onClick={() => handleNavClick('attendance')}
+                    className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl font-medium text-xs transition ${
+                      currentTab === 'attendance'
+                        ? 'bg-slate-100 text-slate-900 font-semibold'
+                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <Clock className="w-4 h-4 shrink-0" />
+                      <span>Attendance &amp; Registers</span>
+                    </div>
+                    <span className="text-[9px] font-mono text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded font-semibold">P6</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+
             {/* Student Module (Phase 3) */}
             <div>
               <p className="text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-2 px-3">
@@ -340,42 +383,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   >
                     <CalendarRange className="w-4 h-4 shrink-0" />
                     <span>Class Subjects</span>
-                  </button>
-                </li>
-              </ul>
-            </div>
-
-            {/* Operations & Schedule */}
-            <div>
-              <p className="text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-2 px-3">
-                Operations &amp; Schedule
-              </p>
-              <ul className="space-y-1">
-                <li>
-                  <button
-                    onClick={() => handleNavClick('timetable')}
-                    className={`w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl font-medium text-xs transition ${
-                      currentTab === 'timetable'
-                        ? 'bg-slate-100 text-slate-900 font-semibold'
-                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-                    }`}
-                  >
-                    <Calendar className="w-4 h-4 shrink-0" />
-                    <span>Timetable &amp; Schedule</span>
-                  </button>
-                </li>
-
-                <li>
-                  <button
-                    onClick={() => handleNavClick('attendance')}
-                    className={`w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl font-medium text-xs transition ${
-                      currentTab === 'attendance'
-                        ? 'bg-slate-100 text-slate-900 font-semibold'
-                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-                    }`}
-                  >
-                    <Clock className="w-4 h-4 shrink-0" />
-                    <span>Attendance &amp; Registers</span>
                   </button>
                 </li>
               </ul>

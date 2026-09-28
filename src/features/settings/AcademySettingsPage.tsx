@@ -74,6 +74,7 @@ export const AcademySettingsPage: React.FC<AcademySettingsPageProps> = ({ onSett
       toast.error('Upload Failed', err.message);
     } finally {
       setIsUploadingLogo(false);
+      e.target.value = '';
     }
   };
 
@@ -158,17 +159,37 @@ export const AcademySettingsPage: React.FC<AcademySettingsPageProps> = ({ onSett
                 )}
               </div>
 
-              <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl shadow-xs transition">
-                <Upload className="w-3.5 h-3.5" />
-                <span>{isUploadingLogo ? 'Uploading...' : 'Upload Logo'}</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleLogoUpload}
-                  disabled={isUploadingLogo}
-                  className="hidden"
-                />
-              </label>
+              <div className="flex items-center gap-2">
+                <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl shadow-xs transition">
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>{isUploadingLogo ? 'Uploading...' : 'Upload Logo'}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleLogoUpload}
+                    disabled={isUploadingLogo}
+                    className="hidden"
+                  />
+                </label>
+                {logoUrl && (
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      setLogoUrl(null);
+                      await databaseService.updateAcademySettings({ logo_url: null });
+                      if (settings) {
+                        const updated = { ...settings, logo_url: null };
+                        setSettings(updated);
+                        onSettingsUpdated?.(updated);
+                      }
+                      toast.success('Logo Removed', 'Academy logo has been cleared.');
+                    }}
+                    className="px-2.5 py-1.5 text-xs text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xl transition border border-rose-200"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
               <p className="text-[10px] text-slate-400 mt-2">
                 Stored in Supabase Storage (`academy-assets`)
               </p>

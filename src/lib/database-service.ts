@@ -69,7 +69,12 @@ const INITIAL_CLASSES: ClassItem[] = [
 const INITIAL_SECTIONS: SectionItem[] = [
   { id: 'e0000000-0000-0000-0000-000000000001', name: 'A', code: 'SEC-A', display_order: 1, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
   { id: 'e0000000-0000-0000-0000-000000000002', name: 'B', code: 'SEC-B', display_order: 2, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
-  { id: 'e0000000-0000-0000-0000-000000000003', name: 'C', code: 'SEC-C', display_order: 3, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() }
+  { id: 'e0000000-0000-0000-0000-000000000003', name: 'C', code: 'SEC-C', display_order: 3, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'e0000000-0000-0000-0000-000000000004', name: 'Pre - Medical', code: 'PMED', display_order: 4, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'e0000000-0000-0000-0000-000000000005', name: 'Pre - Engineering', code: 'PENG', display_order: 5, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'e0000000-0000-0000-0000-000000000006', name: 'ICS - Physics', code: 'ICSP', display_order: 6, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'e0000000-0000-0000-0000-000000000007', name: 'ICS - Statistics', code: 'ICSS', display_order: 7, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'e0000000-0000-0000-0000-000000000008', name: 'FA - IT', code: 'FAIT', display_order: 8, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() }
 ];
 
 const INITIAL_BATCHES: BatchItem[] = [
@@ -111,7 +116,16 @@ const INITIAL_SUBJECTS: SubjectItem[] = [
   { id: 'b0000000-0000-0000-0000-000000000003', name: 'Mathematics', code: 'MTH', short_name: 'Maths', display_order: 3, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
   { id: 'b0000000-0000-0000-0000-000000000004', name: 'Science', code: 'SCI', short_name: 'Science', display_order: 4, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
   { id: 'b0000000-0000-0000-0000-000000000005', name: 'Computer Science', code: 'CS', short_name: 'Comp Sci', display_order: 5, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
-  { id: 'b0000000-0000-0000-0000-000000000006', name: 'Islamiyat', code: 'ISL', short_name: 'Islamiyat', display_order: 6, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() }
+  { id: 'b0000000-0000-0000-0000-000000000006', name: 'Islamiyat', code: 'ISL', short_name: 'Islamiyat', display_order: 6, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'b0000000-0000-0000-0000-000000000007', name: 'Physics', code: 'PHY', short_name: 'Physics', display_order: 7, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'b0000000-0000-0000-0000-000000000008', name: 'Chemistry', code: 'CHM', short_name: 'Chemistry', display_order: 8, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'b0000000-0000-0000-0000-000000000009', name: 'Biology', code: 'BIO', short_name: 'Biology', display_order: 9, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'b0000000-0000-0000-0000-000000000010', name: 'Tarjama tul Quran', code: 'TTQ', short_name: 'Tarjama Quran', display_order: 10, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'b0000000-0000-0000-0000-000000000011', name: 'Pak Studies', code: 'PKS', short_name: 'Pak Studies', display_order: 11, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'b0000000-0000-0000-0000-000000000012', name: 'Statistics', code: 'STAT', short_name: 'Statistics', display_order: 12, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'b0000000-0000-0000-0000-000000000013', name: 'Economics', code: 'ECO', short_name: 'Economics', display_order: 13, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'b0000000-0000-0000-0000-000000000014', name: 'Physical Education', code: 'PED', short_name: 'Physical Edu', display_order: 14, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'b0000000-0000-0000-0000-000000000015', name: 'Islamiyat Elective', code: 'ISL-E', short_name: 'Isl Elective', display_order: 15, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() }
 ];
 
 const INITIAL_CLASS_SECTIONS: ClassSection[] = [
@@ -119,7 +133,19 @@ const INITIAL_CLASS_SECTIONS: ClassSection[] = [
   { id: 'cs000000-0000-0000-0000-000000000002', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000002', section_id: 'e0000000-0000-0000-0000-000000000002', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
   { id: 'cs000000-0000-0000-0000-000000000003', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000003', section_id: 'e0000000-0000-0000-0000-000000000001', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
   { id: 'cs000000-0000-0000-0000-000000000004', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000003', section_id: 'e0000000-0000-0000-0000-000000000002', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
-  { id: 'cs000000-0000-0000-0000-000000000005', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000003', section_id: 'e0000000-0000-0000-0000-000000000003', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() }
+  { id: 'cs000000-0000-0000-0000-000000000005', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000003', section_id: 'e0000000-0000-0000-0000-000000000003', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  // FSc Part 1 Sections
+  { id: 'cs000000-0000-0000-0000-000000000006', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000004', section_id: 'e0000000-0000-0000-0000-000000000004', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'cs000000-0000-0000-0000-000000000007', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000004', section_id: 'e0000000-0000-0000-0000-000000000005', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'cs000000-0000-0000-0000-000000000008', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000004', section_id: 'e0000000-0000-0000-0000-000000000006', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'cs000000-0000-0000-0000-000000000009', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000004', section_id: 'e0000000-0000-0000-0000-000000000007', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'cs000000-0000-0000-0000-000000000010', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000004', section_id: 'e0000000-0000-0000-0000-000000000008', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  // FSc Part 2 Sections
+  { id: 'cs000000-0000-0000-0000-000000000011', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000005', section_id: 'e0000000-0000-0000-0000-000000000004', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'cs000000-0000-0000-0000-000000000012', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000005', section_id: 'e0000000-0000-0000-0000-000000000005', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'cs000000-0000-0000-0000-000000000013', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000005', section_id: 'e0000000-0000-0000-0000-000000000006', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'cs000000-0000-0000-0000-000000000014', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000005', section_id: 'e0000000-0000-0000-0000-000000000007', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'cs000000-0000-0000-0000-000000000015', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000005', section_id: 'e0000000-0000-0000-0000-000000000008', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() }
 ];
 
 const INITIAL_CLASS_SUBJECTS: ClassSubject[] = [

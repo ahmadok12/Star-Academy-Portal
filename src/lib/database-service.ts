@@ -75,9 +75,8 @@ const INITIAL_CLASSES: ClassItem[] = [
 ];
 
 const INITIAL_SECTIONS: SectionItem[] = [
-  { id: 'e0000000-0000-0000-0000-000000000001', name: 'A', code: 'SEC-A', display_order: 1, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
-  { id: 'e0000000-0000-0000-0000-000000000002', name: 'B', code: 'SEC-B', display_order: 2, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
-  { id: 'e0000000-0000-0000-0000-000000000003', name: 'C', code: 'SEC-C', display_order: 3, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'e0000000-0000-0000-0000-000000000001', name: 'Science', code: 'SEC-SC', display_order: 1, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'e0000000-0000-0000-0000-000000000002', name: 'Computer', code: 'SEC-CS', display_order: 2, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
   { id: 'e0000000-0000-0000-0000-000000000004', name: 'Pre - Medical', code: 'PMED', display_order: 4, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
   { id: 'e0000000-0000-0000-0000-000000000005', name: 'Pre - Engineering', code: 'PENG', display_order: 5, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
   { id: 'e0000000-0000-0000-0000-000000000006', name: 'ICS - Physics', code: 'ICSP', display_order: 6, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },

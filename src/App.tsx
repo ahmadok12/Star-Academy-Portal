@@ -20,6 +20,8 @@ import { StudentsDirectoryPage } from './features/students/StudentsDirectoryPage
 import { StudentPromotionPage } from './features/students/StudentPromotionPage';
 import { StaffDirectoryPage } from './features/staff/StaffDirectoryPage';
 import { TeacherAssignmentsPage } from './features/staff/TeacherAssignmentsPage';
+import { TimetablePage } from './features/timetable/TimetablePage';
+import { AttendancePage } from './features/attendance/AttendancePage';
 import { databaseService } from './lib/database-service';
 import { AcademySettings, StudentInquiry } from './types/database.types';
 
@@ -115,6 +117,10 @@ const MainAppContent: React.FC = () => {
       {/* Staff & Faculty Module (Phase 4) */}
       {currentTab === 'staff-directory' && <StaffDirectoryPage />}
       {currentTab === 'teacher-assignments' && <TeacherAssignmentsPage />}
+
+      {/* Operations & Schedule (Phase 5 & 6) */}
+      {currentTab === 'timetable' && <TimetablePage />}
+      {currentTab === 'attendance' && <AttendancePage />}
 
       {/* Academic Setup */}
       {currentTab === 'academic-years' && <AcademicYearsPage />}

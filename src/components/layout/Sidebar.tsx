@@ -36,6 +36,8 @@ export type NavTab =
   | 'class-sections'
   | 'subjects'
   | 'class-subjects'
+  | 'timetable'
+  | 'attendance'
   | 'settings';
 
 interface SidebarProps {
@@ -343,6 +345,42 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </ul>
             </div>
 
+            {/* Operations & Schedule */}
+            <div>
+              <p className="text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-2 px-3">
+                Operations &amp; Schedule
+              </p>
+              <ul className="space-y-1">
+                <li>
+                  <button
+                    onClick={() => handleNavClick('timetable')}
+                    className={`w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl font-medium text-xs transition ${
+                      currentTab === 'timetable'
+                        ? 'bg-slate-100 text-slate-900 font-semibold'
+                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                    }`}
+                  >
+                    <Calendar className="w-4 h-4 shrink-0" />
+                    <span>Timetable &amp; Schedule</span>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    onClick={() => handleNavClick('attendance')}
+                    className={`w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl font-medium text-xs transition ${
+                      currentTab === 'attendance'
+                        ? 'bg-slate-100 text-slate-900 font-semibold'
+                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                    }`}
+                  >
+                    <Clock className="w-4 h-4 shrink-0" />
+                    <span>Attendance &amp; Registers</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+
             {/* Settings */}
             <div>
               <p className="text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-2 px-3">
@@ -373,9 +411,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </p>
               <ul className="space-y-1 opacity-55">
                 {[
-                  { label: 'Staff & Teachers', icon: Briefcase },
-                  { label: 'Timetable', icon: Calendar },
-                  { label: 'Attendance', icon: Clock },
                   { label: 'Exams & Marks', icon: FileSpreadsheet },
                   { label: 'Fees & Finance', icon: DollarSign },
                   { label: 'Central Reports', icon: BarChart3 },

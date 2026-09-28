@@ -186,6 +186,7 @@ export interface StudentAcademicRecord {
 
 export interface StudentWithEnrollment extends Student {
   currentEnrollment?: StudentAcademicRecord;
+  academic_record?: StudentAcademicRecord;
   allEnrollments?: StudentAcademicRecord[];
 }
 
@@ -256,4 +257,127 @@ export interface TeacherSubjectAssignment {
   section?: SectionItem;
   subject?: SubjectItem;
 }
+
+// ============================================================================
+// PHASE 5: TIMETABLE & SCHEDULES
+// ============================================================================
+
+export type DayOfWeek = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
+
+export interface TimetablePeriod {
+  id: string;
+  period_number: number;
+  name: string;
+  start_time: string;
+  end_time: string;
+  is_break: boolean;
+  display_order: number;
+  status: EntityStatus;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface TimetableSlot {
+  id: string;
+  academic_year_id: string;
+  class_id: string;
+  section_id?: string | null;
+  period_id?: string | null;
+  day_of_week: DayOfWeek;
+  period_number: number;
+  start_time: string;
+  end_time: string;
+  subject_id: string;
+  teacher_id: string;
+  room?: string | null;
+  status: EntityStatus;
+  created_at?: string;
+  updated_at?: string;
+  // Joined
+  period?: TimetablePeriod;
+  academic_year?: AcademicYear;
+  class?: ClassItem;
+  section?: SectionItem;
+  subject?: SubjectItem;
+  teacher?: Staff;
+}
+
+// ============================================================================
+// PHASE 6: ATTENDANCE MODULE
+// ============================================================================
+
+export type AttendanceStatus = 'Present' | 'Absent' | 'Late' | 'Leave';
+
+export interface DailyAttendance {
+  id: string;
+  academic_year_id: string;
+  student_id: string;
+  class_id: string;
+  section_id?: string | null;
+  batch_id?: string | null;
+  date: string;
+  status: AttendanceStatus;
+  remarks?: string | null;
+  recorded_by?: string | null;
+  created_at?: string;
+  updated_at?: string;
+  // Joined relations
+  student?: Student;
+  class?: ClassItem;
+  section?: SectionItem;
+  batch?: BatchItem;
+  recorded_by_staff?: Staff;
+}
+
+export interface LectureAttendance {
+  id: string;
+  academic_year_id: string;
+  timetable_slot_id?: string | null;
+  student_id: string;
+  subject_id: string;
+  teacher_id: string;
+  class_id: string;
+  section_id?: string | null;
+  date: string;
+  status: AttendanceStatus;
+  remarks?: string | null;
+  recorded_by?: string | null;
+  created_at?: string;
+  updated_at?: string;
+  // Joined relations
+  student?: Student;
+  subject?: SubjectItem;
+  teacher?: Staff;
+  timetable_slot?: TimetableSlot;
+  class?: ClassItem;
+  section?: SectionItem;
+}
+
+export interface AttendanceKPIStats {
+  total: number;
+  present: number;
+  absent: number;
+  late: number;
+  leave: number;
+  percentage: number;
+}
+
+export interface StudentAttendanceSummary {
+  student_id: string;
+  admission_no: string;
+  student_name: string;
+  father_name: string;
+  class_name: string;
+  section_name?: string;
+  batch_name?: string;
+  phone?: string;
+  total_days: number;
+  present_days: number;
+  absent_days: number;
+  late_days: number;
+  leave_days: number;
+  attendance_percentage: number;
+  records: Record<string, AttendanceStatus>;
+}
+
 

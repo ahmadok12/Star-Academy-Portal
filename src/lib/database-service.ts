@@ -15,7 +15,15 @@ import {
   StudentAcademicRecord,
   StudentWithEnrollment,
   Staff,
-  TeacherSubjectAssignment
+  TeacherSubjectAssignment,
+  TimetablePeriod,
+  TimetableSlot,
+  DayOfWeek,
+  DailyAttendance,
+  LectureAttendance,
+  AttendanceStatus,
+  AttendanceKPIStats,
+  StudentAttendanceSummary
 } from '../types/database.types';
 
 // ============================================================================
@@ -1386,6 +1394,78 @@ const INITIAL_TEACHER_ASSIGNMENTS: TeacherSubjectAssignment[] = [
   }
 ];
 
+// Phase 5: Initial Timetable Periods
+const INITIAL_TIMETABLE_PERIODS: TimetablePeriod[] = [
+  { id: 'f0000000-0000-0000-0000-000000000001', period_number: 1, name: 'Period 1', start_time: '08:00', end_time: '08:45', is_break: false, display_order: 1, status: 'active' },
+  { id: 'f0000000-0000-0000-0000-000000000002', period_number: 2, name: 'Period 2', start_time: '08:45', end_time: '09:30', is_break: false, display_order: 2, status: 'active' },
+  { id: 'f0000000-0000-0000-0000-000000000003', period_number: 3, name: 'Period 3', start_time: '09:30', end_time: '10:15', is_break: false, display_order: 3, status: 'active' },
+  { id: 'f0000000-0000-0000-0000-000000000004', period_number: 0, name: 'Morning Recess / Break', start_time: '10:15', end_time: '10:45', is_break: true, display_order: 4, status: 'active' },
+  { id: 'f0000000-0000-0000-0000-000000000005', period_number: 4, name: 'Period 4', start_time: '10:45', end_time: '11:30', is_break: false, display_order: 5, status: 'active' },
+  { id: 'f0000000-0000-0000-0000-000000000006', period_number: 5, name: 'Period 5', start_time: '11:30', end_time: '12:15', is_break: false, display_order: 6, status: 'active' },
+  { id: 'f0000000-0000-0000-0000-000000000007', period_number: 6, name: 'Period 6', start_time: '12:15', end_time: '13:00', is_break: false, display_order: 7, status: 'active' },
+  { id: 'f0000000-0000-0000-0000-000000000008', period_number: 7, name: 'Period 7', start_time: '13:00', end_time: '13:45', is_break: false, display_order: 8, status: 'active' }
+];
+
+// Phase 5: Initial Timetable Slots (Class 9 - Section A Sample)
+const INITIAL_TIMETABLE_SLOTS: TimetableSlot[] = [
+  { id: 'fa000000-0000-0000-0000-000000000001', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000002', section_id: 'e0000000-0000-0000-0000-000000000001', period_id: 'f0000000-0000-0000-0000-000000000001', day_of_week: 'Monday', period_number: 1, start_time: '08:00', end_time: '08:45', subject_id: 'b0000000-0000-0000-0000-000000000003', teacher_id: '30000000-0000-0000-0000-000000000001', room: 'Room 101', status: 'active' },
+  { id: 'fa000000-0000-0000-0000-000000000002', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000002', section_id: 'e0000000-0000-0000-0000-000000000001', period_id: 'f0000000-0000-0000-0000-000000000002', day_of_week: 'Monday', period_number: 2, start_time: '08:45', end_time: '09:30', subject_id: 'b0000000-0000-0000-0000-000000000007', teacher_id: '30000000-0000-0000-0000-000000000002', room: 'Physics Lab', status: 'active' },
+  { id: 'fa000000-0000-0000-0000-000000000003', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000002', section_id: 'e0000000-0000-0000-0000-000000000001', period_id: 'f0000000-0000-0000-0000-000000000003', day_of_week: 'Monday', period_number: 3, start_time: '09:30', end_time: '10:15', subject_id: 'b0000000-0000-0000-0000-000000000008', teacher_id: '30000000-0000-0000-0000-000000000003', room: 'Chem Lab', status: 'active' },
+  { id: 'fa000000-0000-0000-0000-000000000004', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000002', section_id: 'e0000000-0000-0000-0000-000000000001', period_id: 'f0000000-0000-0000-0000-000000000005', day_of_week: 'Monday', period_number: 4, start_time: '10:45', end_time: '11:30', subject_id: 'b0000000-0000-0000-0000-000000000001', teacher_id: '30000000-0000-0000-0000-000000000004', room: 'Room 101', status: 'active' },
+  { id: 'fa000000-0000-0000-0000-000000000005', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000002', section_id: 'e0000000-0000-0000-0000-000000000001', period_id: 'f0000000-0000-0000-0000-000000000006', day_of_week: 'Monday', period_number: 5, start_time: '11:30', end_time: '12:15', subject_id: 'b0000000-0000-0000-0000-000000000005', teacher_id: '30000000-0000-0000-0000-000000000006', room: 'Computer Lab', status: 'active' },
+  { id: 'fa000000-0000-0000-0000-000000000006', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000002', section_id: 'e0000000-0000-0000-0000-000000000001', period_id: 'f0000000-0000-0000-0000-000000000001', day_of_week: 'Tuesday', period_number: 1, start_time: '08:00', end_time: '08:45', subject_id: 'b0000000-0000-0000-0000-000000000007', teacher_id: '30000000-0000-0000-0000-000000000002', room: 'Room 101', status: 'active' },
+  { id: 'fa000000-0000-0000-0000-000000000007', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000002', section_id: 'e0000000-0000-0000-0000-000000000001', period_id: 'f0000000-0000-0000-0000-000000000002', day_of_week: 'Tuesday', period_number: 2, start_time: '08:45', end_time: '09:30', subject_id: 'b0000000-0000-0000-0000-000000000003', teacher_id: '30000000-0000-0000-0000-000000000001', room: 'Room 101', status: 'active' },
+  { id: 'fa000000-0000-0000-0000-000000000008', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000002', section_id: 'e0000000-0000-0000-0000-000000000001', period_id: 'f0000000-0000-0000-0000-000000000003', day_of_week: 'Tuesday', period_number: 3, start_time: '09:30', end_time: '10:15', subject_id: 'b0000000-0000-0000-0000-000000000002', teacher_id: '30000000-0000-0000-0000-000000000005', room: 'Room 101', status: 'active' },
+  { id: 'fa000000-0000-0000-0000-000000000009', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000002', section_id: 'e0000000-0000-0000-0000-000000000001', period_id: 'f0000000-0000-0000-0000-000000000005', day_of_week: 'Tuesday', period_number: 4, start_time: '10:45', end_time: '11:30', subject_id: 'b0000000-0000-0000-0000-000000000009', teacher_id: '30000000-0000-0000-0000-000000000007', room: 'Bio Lab', status: 'active' }
+];
+
+// Phase 6: Initial Daily Attendance Seeds
+const INITIAL_DAILY_ATTENDANCE: DailyAttendance[] = [
+  {
+    id: 'e1000000-0000-0000-0000-000000000001',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    student_id: 'd0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    section_id: 'e0000000-0000-0000-0000-000000000001',
+    date: new Date().toISOString().split('T')[0],
+    status: 'Present',
+    remarks: 'On time',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'e1000000-0000-0000-0000-000000000002',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    student_id: 'd0000000-0000-0000-0000-000000000002',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    section_id: 'e0000000-0000-0000-0000-000000000002',
+    date: new Date().toISOString().split('T')[0],
+    status: 'Present',
+    remarks: 'On time',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
+// Phase 6: Initial Lecture Attendance Seeds
+const INITIAL_LECTURE_ATTENDANCE: LectureAttendance[] = [
+  {
+    id: 'e2000000-0000-0000-0000-000000000001',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    timetable_slot_id: 'fa000000-0000-0000-0000-000000000001',
+    student_id: 'd0000000-0000-0000-0000-000000000001',
+    subject_id: 'b0000000-0000-0000-0000-000000000003',
+    teacher_id: '30000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    section_id: 'e0000000-0000-0000-0000-000000000001',
+    date: new Date().toISOString().split('T')[0],
+    status: 'Present',
+    remarks: 'Active in class',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
 // Local storage keys
 const STORAGE_KEYS = {
   SETTINGS: 'star_academy_settings',
@@ -1401,6 +1481,10 @@ const STORAGE_KEYS = {
   STUDENT_ACADEMIC_RECORDS: 'star_academy_student_academic_records',
   STAFF: 'star_academy_staff',
   TEACHER_ASSIGNMENTS: 'star_academy_teacher_assignments',
+  TIMETABLE_PERIODS: 'star_academy_timetable_periods',
+  TIMETABLE_SLOTS: 'star_academy_timetable_slots',
+  DAILY_ATTENDANCE: 'star_academy_daily_attendance',
+  LECTURE_ATTENDANCE: 'star_academy_lecture_attendance',
 };
 
 // Safe storage access helper (supports browser localStorage and Node test environments)
@@ -2590,13 +2674,17 @@ export const databaseService = {
           const subjects = await this.getSubjects();
           const results: StudentWithEnrollment[] = data
             .filter((rec: any) => rec.student)
-            .map((rec: any) => ({
-              ...rec.student,
-              currentEnrollment: {
+            .map((rec: any) => {
+              const enrollment = {
                 ...rec,
                 supplementary_subjects: subjects.filter(s => rec.supplementary_subject_ids?.includes(s.id))
-              }
-            }));
+              };
+              return {
+                ...rec.student,
+                currentEnrollment: enrollment,
+                academic_record: enrollment
+              };
+            });
 
           if (search) {
             const q = search.toLowerCase();
@@ -2649,6 +2737,7 @@ export const databaseService = {
         matched.push({
           ...student,
           currentEnrollment: hydratedRec,
+          academic_record: hydratedRec,
           allEnrollments: allRecords.filter(r => r.student_id === student.id)
         });
       }
@@ -2667,6 +2756,7 @@ export const databaseService = {
         return {
           ...student,
           currentEnrollment: studentRecs[0],
+          academic_record: studentRecs[0],
           allEnrollments: studentRecs
         };
       });
@@ -3386,6 +3476,817 @@ export const databaseService = {
       reader.onloadend = () => resolve(reader.result as string);
       reader.readAsDataURL(file);
     });
+  },
+
+  // --------------------------------------------------------------------------
+  // Phase 5: Timetable Periods Master
+  // --------------------------------------------------------------------------
+  async getTimetablePeriods(): Promise<TimetablePeriod[]> {
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('timetable_periods')
+          .select('*')
+          .order('display_order', { ascending: true });
+        if (!error && data) return data as TimetablePeriod[];
+      } catch (e) {
+        console.warn('Supabase timetable_periods query failed, falling back locally', e);
+      }
+    }
+    const list = loadFromStorage<TimetablePeriod[]>(STORAGE_KEYS.TIMETABLE_PERIODS, INITIAL_TIMETABLE_PERIODS);
+    return list.sort((a, b) => a.display_order - b.display_order);
+  },
+
+  async createTimetablePeriod(payload: Omit<TimetablePeriod, 'id' | 'created_at' | 'updated_at'>): Promise<TimetablePeriod> {
+    const now = new Date().toISOString();
+    const newPeriod: TimetablePeriod = {
+      ...payload,
+      id: crypto.randomUUID(),
+      created_at: now,
+      updated_at: now
+    };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('timetable_periods')
+          .insert(newPeriod)
+          .select()
+          .single();
+        if (!error && data) return data as TimetablePeriod;
+        if (error) throw error;
+      } catch (e) {
+        console.warn('Supabase create timetable_period failed', e);
+        throw e;
+      }
+    }
+
+    const list = loadFromStorage<TimetablePeriod[]>(STORAGE_KEYS.TIMETABLE_PERIODS, INITIAL_TIMETABLE_PERIODS);
+    list.push(newPeriod);
+    saveToStorage(STORAGE_KEYS.TIMETABLE_PERIODS, list);
+    return newPeriod;
+  },
+
+  async updateTimetablePeriod(id: string, updates: Partial<TimetablePeriod>): Promise<TimetablePeriod> {
+    const now = new Date().toISOString();
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('timetable_periods')
+          .update({ ...updates, updated_at: now })
+          .eq('id', id)
+          .select()
+          .single();
+        if (!error && data) return data as TimetablePeriod;
+        if (error) throw error;
+      } catch (e) {
+        console.warn('Supabase update timetable_period failed', e);
+        throw e;
+      }
+    }
+
+    const list = loadFromStorage<TimetablePeriod[]>(STORAGE_KEYS.TIMETABLE_PERIODS, INITIAL_TIMETABLE_PERIODS);
+    const idx = list.findIndex(p => p.id === id);
+    if (idx === -1) throw new Error('Timetable period not found');
+    list[idx] = { ...list[idx], ...updates, updated_at: now };
+    saveToStorage(STORAGE_KEYS.TIMETABLE_PERIODS, list);
+    return list[idx];
+  },
+
+  async deleteTimetablePeriod(id: string): Promise<void> {
+    if (isSupabaseConfigured) {
+      try {
+        const { error } = await supabase
+          .from('timetable_periods')
+          .delete()
+          .eq('id', id);
+        if (error) throw error;
+      } catch (e) {
+        console.warn('Supabase delete timetable_period failed', e);
+        throw e;
+      }
+    }
+
+    const list = loadFromStorage<TimetablePeriod[]>(STORAGE_KEYS.TIMETABLE_PERIODS, INITIAL_TIMETABLE_PERIODS);
+    const filtered = list.filter(p => p.id !== id);
+    saveToStorage(STORAGE_KEYS.TIMETABLE_PERIODS, filtered);
+  },
+
+  // --------------------------------------------------------------------------
+  // Phase 5: Timetable Slots (Class & Section Schedules)
+  // --------------------------------------------------------------------------
+  async getTimetableSlots(filters?: {
+    academicYearId?: string;
+    classId?: string;
+    sectionId?: string;
+    teacherId?: string;
+    dayOfWeek?: DayOfWeek;
+  }): Promise<TimetableSlot[]> {
+    if (isSupabaseConfigured) {
+      try {
+        let query = supabase
+          .from('timetable_slots')
+          .select(`
+            *,
+            period:timetable_periods(*),
+            academic_year:academic_years(*),
+            class:classes(*),
+            section:sections(*),
+            subject:subjects(*),
+            teacher:staff(*)
+          `)
+          .order('period_number', { ascending: true });
+
+        if (filters?.academicYearId) query = query.eq('academic_year_id', filters.academicYearId);
+        if (filters?.classId) query = query.eq('class_id', filters.classId);
+        if (filters?.sectionId) query = query.eq('section_id', filters.sectionId);
+        if (filters?.teacherId) query = query.eq('teacher_id', filters.teacherId);
+        if (filters?.dayOfWeek) query = query.eq('day_of_week', filters.dayOfWeek);
+
+        const { data, error } = await query;
+        if (!error && data) return data as TimetableSlot[];
+      } catch (e) {
+        console.warn('Supabase timetable_slots query failed, falling back locally', e);
+      }
+    }
+
+    let list = loadFromStorage<TimetableSlot[]>(STORAGE_KEYS.TIMETABLE_SLOTS, INITIAL_TIMETABLE_SLOTS);
+    const periods = await this.getTimetablePeriods();
+    const years = await this.getAcademicYears();
+    const classes = await this.getClasses();
+    const sections = await this.getSections();
+    const subjects = await this.getSubjects();
+    const staffList = await this.getStaff();
+
+    if (filters?.academicYearId) list = list.filter(s => s.academic_year_id === filters.academicYearId);
+    if (filters?.classId) list = list.filter(s => s.class_id === filters.classId);
+    if (filters?.sectionId) list = list.filter(s => s.section_id === filters.sectionId);
+    if (filters?.teacherId) list = list.filter(s => s.teacher_id === filters.teacherId);
+    if (filters?.dayOfWeek) list = list.filter(s => s.day_of_week === filters.dayOfWeek);
+
+    return list.map(slot => ({
+      ...slot,
+      period: periods.find(p => p.id === slot.period_id || p.period_number === slot.period_number),
+      academic_year: years.find(y => y.id === slot.academic_year_id),
+      class: classes.find(c => c.id === slot.class_id),
+      section: sections.find(sec => sec.id === slot.section_id),
+      subject: subjects.find(sub => sub.id === slot.subject_id),
+      teacher: staffList.find(st => st.id === slot.teacher_id)
+    })).sort((a, b) => a.period_number - b.period_number);
+  },
+
+  async createTimetableSlot(payload: Omit<TimetableSlot, 'id' | 'created_at' | 'updated_at'>): Promise<TimetableSlot> {
+    // 1. Conflict Check: Teacher Double-booking
+    const allSlots = await this.getTimetableSlots({
+      academicYearId: payload.academic_year_id,
+      dayOfWeek: payload.day_of_week
+    });
+    
+    const teacherConflict = allSlots.find(
+      s => s.status === 'active' && s.teacher_id === payload.teacher_id && s.period_number === payload.period_number
+    );
+    if (teacherConflict) {
+      const teacherName = teacherConflict.teacher?.name || 'Teacher';
+      const className = teacherConflict.class?.name || 'another class';
+      const sectionName = teacherConflict.section?.name ? `(${teacherConflict.section.name})` : '';
+      throw new Error(`Scheduling Conflict: ${teacherName} is already assigned to ${className} ${sectionName} during Period ${payload.period_number} on ${payload.day_of_week}.`);
+    }
+
+    // 2. Conflict Check: Class & Section Double-booking
+    const classConflict = allSlots.find(
+      s => s.status === 'active' &&
+        s.class_id === payload.class_id &&
+        (s.section_id === payload.section_id || !s.section_id || !payload.section_id) &&
+        s.period_number === payload.period_number
+    );
+    if (classConflict) {
+      const className = classConflict.class?.name || 'Class';
+      const subjectName = classConflict.subject?.name || 'another subject';
+      throw new Error(`Scheduling Conflict: ${className} already has ${subjectName} scheduled during Period ${payload.period_number} on ${payload.day_of_week}.`);
+    }
+
+    // 3. Conflict Check: Room Double-booking
+    if (payload.room && payload.room.trim()) {
+      const roomConflict = allSlots.find(
+        s => s.status === 'active' &&
+          s.period_number === payload.period_number &&
+          s.room?.trim().toLowerCase() === payload.room?.trim().toLowerCase()
+      );
+      if (roomConflict) {
+        throw new Error(`Scheduling Conflict: Room "${payload.room}" is already booked for ${roomConflict.class?.name} during Period ${payload.period_number} on ${payload.day_of_week}.`);
+      }
+    }
+
+    const now = new Date().toISOString();
+    const newSlot: TimetableSlot = {
+      ...payload,
+      id: crypto.randomUUID(),
+      created_at: now,
+      updated_at: now
+    };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('timetable_slots')
+          .insert({
+            id: newSlot.id,
+            academic_year_id: newSlot.academic_year_id,
+            class_id: newSlot.class_id,
+            section_id: newSlot.section_id || null,
+            period_id: newSlot.period_id || null,
+            day_of_week: newSlot.day_of_week,
+            period_number: newSlot.period_number,
+            start_time: newSlot.start_time,
+            end_time: newSlot.end_time,
+            subject_id: newSlot.subject_id,
+            teacher_id: newSlot.teacher_id,
+            room: newSlot.room || null,
+            status: newSlot.status
+          })
+          .select(`
+            *,
+            period:timetable_periods(*),
+            academic_year:academic_years(*),
+            class:classes(*),
+            section:sections(*),
+            subject:subjects(*),
+            teacher:staff(*)
+          `)
+          .single();
+
+        if (!error && data) return data as TimetableSlot;
+        if (error) throw error;
+      } catch (e) {
+        console.warn('Supabase create timetable_slot failed', e);
+        throw e;
+      }
+    }
+
+    const list = loadFromStorage<TimetableSlot[]>(STORAGE_KEYS.TIMETABLE_SLOTS, INITIAL_TIMETABLE_SLOTS);
+    list.push(newSlot);
+    saveToStorage(STORAGE_KEYS.TIMETABLE_SLOTS, list);
+    return newSlot;
+  },
+
+  async updateTimetableSlot(id: string, updates: Partial<TimetableSlot>): Promise<TimetableSlot> {
+    const now = new Date().toISOString();
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('timetable_slots')
+          .update({ ...updates, updated_at: now })
+          .eq('id', id)
+          .select(`
+            *,
+            period:timetable_periods(*),
+            academic_year:academic_years(*),
+            class:classes(*),
+            section:sections(*),
+            subject:subjects(*),
+            teacher:staff(*)
+          `)
+          .single();
+        if (!error && data) return data as TimetableSlot;
+        if (error) throw error;
+      } catch (e) {
+        console.warn('Supabase update timetable_slot failed', e);
+        throw e;
+      }
+    }
+
+    const list = loadFromStorage<TimetableSlot[]>(STORAGE_KEYS.TIMETABLE_SLOTS, INITIAL_TIMETABLE_SLOTS);
+    const idx = list.findIndex(s => s.id === id);
+    if (idx === -1) throw new Error('Timetable slot not found');
+    list[idx] = { ...list[idx], ...updates, updated_at: now };
+    saveToStorage(STORAGE_KEYS.TIMETABLE_SLOTS, list);
+    return list[idx];
+  },
+
+  async deleteTimetableSlot(id: string): Promise<void> {
+    if (isSupabaseConfigured) {
+      try {
+        const { error } = await supabase
+          .from('timetable_slots')
+          .delete()
+          .eq('id', id);
+        if (error) throw error;
+      } catch (e) {
+        console.warn('Supabase delete timetable_slot failed', e);
+        throw e;
+      }
+    }
+
+    const list = loadFromStorage<TimetableSlot[]>(STORAGE_KEYS.TIMETABLE_SLOTS, INITIAL_TIMETABLE_SLOTS);
+    const filtered = list.filter(s => s.id !== id);
+    saveToStorage(STORAGE_KEYS.TIMETABLE_SLOTS, filtered);
+  },
+
+  // ============================================================================
+  // PHASE 6: ATTENDANCE MODULE METHODS
+  // ============================================================================
+
+  async getDailyAttendance(params: {
+    academic_year_id: string;
+    date?: string;
+    class_id?: string;
+    section_id?: string;
+    batch_id?: string;
+    student_id?: string;
+  }): Promise<DailyAttendance[]> {
+    if (isSupabaseConfigured) {
+      try {
+        let query = supabase
+          .from('daily_attendance')
+          .select(`
+            *,
+            student:students(*),
+            class:classes(*),
+            section:sections(*),
+            batch:batches(*),
+            recorded_by_staff:staff(*)
+          `)
+          .eq('academic_year_id', params.academic_year_id);
+
+        if (params.date) query = query.eq('date', params.date);
+        if (params.class_id) query = query.eq('class_id', params.class_id);
+        if (params.section_id) query = query.eq('section_id', params.section_id);
+        if (params.batch_id) query = query.eq('batch_id', params.batch_id);
+        if (params.student_id) query = query.eq('student_id', params.student_id);
+
+        const { data, error } = await query.order('created_at', { ascending: false });
+        if (!error && data) return data as DailyAttendance[];
+        if (error) console.warn('Supabase getDailyAttendance query error:', error);
+      } catch (e) {
+        console.warn('Supabase getDailyAttendance failed, falling back to local storage', e);
+      }
+    }
+
+    // Local Storage Fallback
+    const list = loadFromStorage<DailyAttendance[]>(STORAGE_KEYS.DAILY_ATTENDANCE, INITIAL_DAILY_ATTENDANCE);
+    const students = loadFromStorage<Student[]>(STORAGE_KEYS.STUDENTS, INITIAL_STUDENTS);
+    const classes = loadFromStorage<ClassItem[]>(STORAGE_KEYS.CLASSES, INITIAL_CLASSES);
+    const sections = loadFromStorage<SectionItem[]>(STORAGE_KEYS.SECTIONS, INITIAL_SECTIONS);
+    const batches = loadFromStorage<BatchItem[]>(STORAGE_KEYS.BATCHES, INITIAL_BATCHES);
+
+    return list
+      .filter(item => {
+        if (item.academic_year_id !== params.academic_year_id) return false;
+        if (params.date && item.date !== params.date) return false;
+        if (params.class_id && item.class_id !== params.class_id) return false;
+        if (params.section_id && item.section_id !== params.section_id) return false;
+        if (params.batch_id && item.batch_id !== params.batch_id) return false;
+        if (params.student_id && item.student_id !== params.student_id) return false;
+        return true;
+      })
+      .map(item => ({
+        ...item,
+        student: students.find(s => s.id === item.student_id),
+        class: classes.find(c => c.id === item.class_id),
+        section: sections.find(s => s.id === item.section_id),
+        batch: batches.find(b => b.id === item.batch_id)
+      }));
+  },
+
+  async recordDailyAttendanceBatch(
+    records: Array<Omit<DailyAttendance, 'id' | 'created_at' | 'updated_at'>>
+  ): Promise<DailyAttendance[]> {
+    if (records.length === 0) return [];
+    const now = new Date().toISOString();
+
+    if (isSupabaseConfigured) {
+      try {
+        const payload = records.map(r => ({
+          academic_year_id: r.academic_year_id,
+          student_id: r.student_id,
+          class_id: r.class_id,
+          section_id: r.section_id || null,
+          batch_id: r.batch_id || null,
+          date: r.date,
+          status: r.status,
+          remarks: r.remarks || null,
+          recorded_by: r.recorded_by || null,
+          updated_at: now
+        }));
+
+        const { data, error } = await supabase
+          .from('daily_attendance')
+          .upsert(payload, { onConflict: 'academic_year_id,student_id,date' })
+          .select(`
+            *,
+            student:students(*),
+            class:classes(*),
+            section:sections(*),
+            batch:batches(*)
+          `);
+
+        if (!error && data) return data as DailyAttendance[];
+        if (error) throw error;
+      } catch (e) {
+        console.warn('Supabase recordDailyAttendanceBatch failed, updating local fallback', e);
+        throw e;
+      }
+    }
+
+    // Local Storage Fallback
+    const list = loadFromStorage<DailyAttendance[]>(STORAGE_KEYS.DAILY_ATTENDANCE, INITIAL_DAILY_ATTENDANCE);
+    const updatedResults: DailyAttendance[] = [];
+
+    for (const r of records) {
+      const existingIdx = list.findIndex(
+        item => item.academic_year_id === r.academic_year_id &&
+                item.student_id === r.student_id &&
+                item.date === r.date
+      );
+
+      if (existingIdx >= 0) {
+        list[existingIdx] = {
+          ...list[existingIdx],
+          ...r,
+          updated_at: now
+        };
+        updatedResults.push(list[existingIdx]);
+      } else {
+        const newItem: DailyAttendance = {
+          ...r,
+          id: `att-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`,
+          created_at: now,
+          updated_at: now
+        };
+        list.push(newItem);
+        updatedResults.push(newItem);
+      }
+    }
+
+    saveToStorage(STORAGE_KEYS.DAILY_ATTENDANCE, list);
+    return updatedResults;
+  },
+
+  async getLectureAttendance(params: {
+    academic_year_id: string;
+    date?: string;
+    timetable_slot_id?: string;
+    teacher_id?: string;
+    student_id?: string;
+    subject_id?: string;
+    class_id?: string;
+    section_id?: string;
+  }): Promise<LectureAttendance[]> {
+    if (isSupabaseConfigured) {
+      try {
+        let query = supabase
+          .from('lecture_attendance')
+          .select(`
+            *,
+            student:students(*),
+            subject:subjects(*),
+            teacher:staff!lecture_attendance_teacher_id_fkey(*),
+            timetable_slot:timetable_slots(*),
+            class:classes(*),
+            section:sections(*)
+          `)
+          .eq('academic_year_id', params.academic_year_id);
+
+        if (params.date) query = query.eq('date', params.date);
+        if (params.timetable_slot_id) query = query.eq('timetable_slot_id', params.timetable_slot_id);
+        if (params.teacher_id) query = query.eq('teacher_id', params.teacher_id);
+        if (params.student_id) query = query.eq('student_id', params.student_id);
+        if (params.subject_id) query = query.eq('subject_id', params.subject_id);
+        if (params.class_id) query = query.eq('class_id', params.class_id);
+        if (params.section_id) query = query.eq('section_id', params.section_id);
+
+        const { data, error } = await query.order('created_at', { ascending: false });
+        if (!error && data) return data as LectureAttendance[];
+        if (error) console.warn('Supabase getLectureAttendance query error:', error);
+      } catch (e) {
+        console.warn('Supabase getLectureAttendance failed, falling back to local storage', e);
+      }
+    }
+
+    // Local Storage Fallback
+    const list = loadFromStorage<LectureAttendance[]>(STORAGE_KEYS.LECTURE_ATTENDANCE, INITIAL_LECTURE_ATTENDANCE);
+    const students = loadFromStorage<Student[]>(STORAGE_KEYS.STUDENTS, INITIAL_STUDENTS);
+    const subjects = loadFromStorage<SubjectItem[]>(STORAGE_KEYS.SUBJECTS, INITIAL_SUBJECTS);
+    const staff = loadFromStorage<Staff[]>(STORAGE_KEYS.STAFF, INITIAL_STAFF);
+    const slots = loadFromStorage<TimetableSlot[]>(STORAGE_KEYS.TIMETABLE_SLOTS, INITIAL_TIMETABLE_SLOTS);
+
+    return list
+      .filter(item => {
+        if (item.academic_year_id !== params.academic_year_id) return false;
+        if (params.date && item.date !== params.date) return false;
+        if (params.timetable_slot_id && item.timetable_slot_id !== params.timetable_slot_id) return false;
+        if (params.teacher_id && item.teacher_id !== params.teacher_id) return false;
+        if (params.student_id && item.student_id !== params.student_id) return false;
+        if (params.subject_id && item.subject_id !== params.subject_id) return false;
+        if (params.class_id && item.class_id !== params.class_id) return false;
+        if (params.section_id && item.section_id !== params.section_id) return false;
+        return true;
+      })
+      .map(item => ({
+        ...item,
+        student: students.find(s => s.id === item.student_id),
+        subject: subjects.find(sub => sub.id === item.subject_id),
+        teacher: staff.find(t => t.id === item.teacher_id),
+        timetable_slot: slots.find(sl => sl.id === item.timetable_slot_id)
+      }));
+  },
+
+  async recordLectureAttendanceBatch(
+    records: Array<Omit<LectureAttendance, 'id' | 'created_at' | 'updated_at'>>
+  ): Promise<LectureAttendance[]> {
+    if (records.length === 0) return [];
+    const now = new Date().toISOString();
+
+    if (isSupabaseConfigured) {
+      try {
+        const payload = records.map(r => ({
+          academic_year_id: r.academic_year_id,
+          timetable_slot_id: r.timetable_slot_id || null,
+          student_id: r.student_id,
+          subject_id: r.subject_id,
+          teacher_id: r.teacher_id,
+          class_id: r.class_id,
+          section_id: r.section_id || null,
+          date: r.date,
+          status: r.status,
+          remarks: r.remarks || null,
+          recorded_by: r.recorded_by || null,
+          updated_at: now
+        }));
+
+        const { data, error } = await supabase
+          .from('lecture_attendance')
+          .upsert(payload, { onConflict: 'timetable_slot_id,student_id,date' })
+          .select(`
+            *,
+            student:students(*),
+            subject:subjects(*),
+            teacher:staff!lecture_attendance_teacher_id_fkey(*),
+            timetable_slot:timetable_slots(*)
+          `);
+
+        if (!error && data) return data as LectureAttendance[];
+        if (error) throw error;
+      } catch (e) {
+        console.warn('Supabase recordLectureAttendanceBatch failed', e);
+        throw e;
+      }
+    }
+
+    // Local Storage Fallback
+    const list = loadFromStorage<LectureAttendance[]>(STORAGE_KEYS.LECTURE_ATTENDANCE, INITIAL_LECTURE_ATTENDANCE);
+    const updatedResults: LectureAttendance[] = [];
+
+    for (const r of records) {
+      const existingIdx = list.findIndex(
+        item => item.timetable_slot_id === r.timetable_slot_id &&
+                item.student_id === r.student_id &&
+                item.date === r.date
+      );
+
+      if (existingIdx >= 0) {
+        list[existingIdx] = {
+          ...list[existingIdx],
+          ...r,
+          updated_at: now
+        };
+        updatedResults.push(list[existingIdx]);
+      } else {
+        const newItem: LectureAttendance = {
+          ...r,
+          id: `lec-att-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`,
+          created_at: now,
+          updated_at: now
+        };
+        list.push(newItem);
+        updatedResults.push(newItem);
+      }
+    }
+
+    saveToStorage(STORAGE_KEYS.LECTURE_ATTENDANCE, list);
+    return updatedResults;
+  },
+
+  async getAttendanceKPIs(
+    academic_year_id: string,
+    date: string,
+    class_id?: string,
+    section_id?: string
+  ): Promise<AttendanceKPIStats> {
+    const attendanceRecords = await this.getDailyAttendance({
+      academic_year_id,
+      date,
+      class_id,
+      section_id
+    });
+
+    const enrolledStudents = await this.getStudents(academic_year_id);
+    const filteredStudents = enrolledStudents.filter(s => {
+      if (class_id && s.academic_record?.class_id !== class_id) return false;
+      if (section_id && s.academic_record?.section_id !== section_id) return false;
+      return true;
+    });
+
+    const totalStudents = filteredStudents.length;
+    let present = 0;
+    let absent = 0;
+    let late = 0;
+    let leave = 0;
+
+    attendanceRecords.forEach(r => {
+      if (r.status === 'Present') present++;
+      else if (r.status === 'Absent') absent++;
+      else if (r.status === 'Late') late++;
+      else if (r.status === 'Leave') leave++;
+    });
+
+    // If records were taken, calculate percentage
+    const recordedTotal = present + absent + late + leave;
+    const denominator = recordedTotal > 0 ? recordedTotal : (totalStudents || 1);
+    const percentage = denominator > 0 ? Math.round(((present + late) / denominator) * 100) : 0;
+
+    return {
+      total: totalStudents,
+      present,
+      absent,
+      late,
+      leave,
+      percentage
+    };
+  },
+
+  async getStudentMonthlyRegister(params: {
+    academic_year_id: string;
+    class_id: string;
+    section_id?: string;
+    month: number; // 1-12
+    year: number;  // e.g. 2026
+  }): Promise<StudentAttendanceSummary[]> {
+    // 1. Get enrolled students
+    const studentsWithEnrollment = await this.getStudents(params.academic_year_id);
+    const classStudents = studentsWithEnrollment.filter(s => {
+      if (s.academic_record?.class_id !== params.class_id) return false;
+      if (params.section_id && s.academic_record?.section_id !== params.section_id) return false;
+      return true;
+    });
+
+    // 2. Format month start and end dates
+    const paddedMonth = String(params.month).padStart(2, '0');
+    const startDate = `${params.year}-${paddedMonth}-01`;
+    const lastDay = new Date(params.year, params.month, 0).getDate();
+    const endDate = `${params.year}-${paddedMonth}-${String(lastDay).padStart(2, '0')}`;
+
+    // 3. Fetch all daily attendance in that month range
+    let allRecords: DailyAttendance[] = [];
+    if (isSupabaseConfigured) {
+      try {
+        let query = supabase
+          .from('daily_attendance')
+          .select('*')
+          .eq('academic_year_id', params.academic_year_id)
+          .eq('class_id', params.class_id)
+          .gte('date', startDate)
+          .lte('date', endDate);
+
+        if (params.section_id) {
+          query = query.eq('section_id', params.section_id);
+        }
+
+        const { data, error } = await query;
+        if (!error && data) allRecords = data as DailyAttendance[];
+      } catch (e) {
+        console.warn('Supabase monthly register fetch error, using local', e);
+      }
+    }
+
+    if (allRecords.length === 0) {
+      const local = loadFromStorage<DailyAttendance[]>(STORAGE_KEYS.DAILY_ATTENDANCE, INITIAL_DAILY_ATTENDANCE);
+      allRecords = local.filter(r => 
+        r.academic_year_id === params.academic_year_id &&
+        r.class_id === params.class_id &&
+        (!params.section_id || r.section_id === params.section_id) &&
+        r.date >= startDate &&
+        r.date <= endDate
+      );
+    }
+
+    // 4. Map for each student
+    return classStudents.map(st => {
+      const studentRecords = allRecords.filter(r => r.student_id === st.id);
+      const recordMap: Record<string, AttendanceStatus> = {};
+      let present = 0;
+      let absent = 0;
+      let late = 0;
+      let leave = 0;
+
+      studentRecords.forEach(r => {
+        recordMap[r.date] = r.status;
+        if (r.status === 'Present') present++;
+        else if (r.status === 'Absent') absent++;
+        else if (r.status === 'Late') late++;
+        else if (r.status === 'Leave') leave++;
+      });
+
+      const totalRecorded = studentRecords.length;
+      const attendancePercentage = totalRecorded > 0 ? Math.round(((present + late) / totalRecorded) * 100) : 100;
+
+      return {
+        student_id: st.id,
+        admission_no: st.admission_no,
+        student_name: st.student_name,
+        father_name: st.father_name,
+        class_name: st.academic_record?.class?.name || '',
+        section_name: st.academic_record?.section?.name,
+        batch_name: st.academic_record?.batch?.name,
+        phone: st.phone,
+        total_days: totalRecorded,
+        present_days: present,
+        absent_days: absent,
+        late_days: late,
+        leave_days: leave,
+        attendance_percentage: attendancePercentage,
+        records: recordMap
+      };
+    });
+  },
+
+  async getAttendanceDefaulters(
+    academic_year_id: string,
+    minPercentage = 75,
+    class_id?: string
+  ): Promise<StudentAttendanceSummary[]> {
+    const studentsWithEnrollment = await this.getStudents(academic_year_id);
+    const filteredStudents = studentsWithEnrollment.filter(s => {
+      if (class_id && s.academic_record?.class_id !== class_id) return false;
+      return true;
+    });
+
+    let allRecords: DailyAttendance[] = [];
+    if (isSupabaseConfigured) {
+      try {
+        let query = supabase
+          .from('daily_attendance')
+          .select('*')
+          .eq('academic_year_id', academic_year_id);
+
+        if (class_id) query = query.eq('class_id', class_id);
+        const { data, error } = await query;
+        if (!error && data) allRecords = data as DailyAttendance[];
+      } catch (e) {
+        console.warn('Supabase fetch attendance records failed', e);
+      }
+    }
+
+    if (allRecords.length === 0) {
+      const local = loadFromStorage<DailyAttendance[]>(STORAGE_KEYS.DAILY_ATTENDANCE, INITIAL_DAILY_ATTENDANCE);
+      allRecords = local.filter(r => r.academic_year_id === academic_year_id);
+    }
+
+    const summaries: StudentAttendanceSummary[] = [];
+
+    for (const st of filteredStudents) {
+      const studentRecords = allRecords.filter(r => r.student_id === st.id);
+      if (studentRecords.length === 0) continue; // Skip students with 0 recorded days yet
+
+      const recordMap: Record<string, AttendanceStatus> = {};
+      let present = 0;
+      let absent = 0;
+      let late = 0;
+      let leave = 0;
+
+      studentRecords.forEach(r => {
+        recordMap[r.date] = r.status;
+        if (r.status === 'Present') present++;
+        else if (r.status === 'Absent') absent++;
+        else if (r.status === 'Late') late++;
+        else if (r.status === 'Leave') leave++;
+      });
+
+      const totalRecorded = studentRecords.length;
+      const rate = Math.round(((present + late) / totalRecorded) * 100);
+
+      if (rate < minPercentage) {
+        summaries.push({
+          student_id: st.id,
+          admission_no: st.admission_no,
+          student_name: st.student_name,
+          father_name: st.father_name,
+          class_name: st.academic_record?.class?.name || '',
+          section_name: st.academic_record?.section?.name,
+          batch_name: st.academic_record?.batch?.name,
+          phone: st.phone,
+          total_days: totalRecorded,
+          present_days: present,
+          absent_days: absent,
+          late_days: late,
+          leave_days: leave,
+          attendance_percentage: rate,
+          records: recordMap
+        });
+      }
+    }
+
+    return summaries.sort((a, b) => a.attendance_percentage - b.attendance_percentage);
   }
 };
 

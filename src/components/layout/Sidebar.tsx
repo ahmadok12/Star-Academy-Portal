@@ -16,7 +16,8 @@ import {
   DollarSign,
   Briefcase,
   BarChart3,
-  CalendarRange
+  CalendarRange,
+  Sparkles
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -31,6 +32,7 @@ export type NavTab =
   | 'academic-years'
   | 'classes'
   | 'sections'
+  | 'batches'
   | 'class-sections'
   | 'subjects'
   | 'class-subjects'
@@ -280,6 +282,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   >
                     <Layers className="w-4 h-4 shrink-0" />
                     <span>Sections Master</span>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    onClick={() => handleNavClick('batches')}
+                    className={`w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl font-medium text-xs transition ${
+                      currentTab === 'batches'
+                        ? 'bg-slate-100 text-slate-900 font-semibold'
+                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                    }`}
+                  >
+                    <Sparkles className="w-4 h-4 shrink-0" />
+                    <span>Batches Master</span>
                   </button>
                 </li>
 

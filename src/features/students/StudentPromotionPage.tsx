@@ -3,16 +3,21 @@ import {
   ArrowRightLeft,
   ArrowLeft,
   CheckSquare,
-  Square
+  Square,
+  AlertCircle,
+  BookOpen
 } from 'lucide-react';
 import { PageHeader } from '../../components/common/PageHeader';
 import { useAcademicYear } from '../../context/AcademicYearContext';
 import { databaseService } from '../../lib/database-service';
 import { useToast } from '../../context/ToastContext';
 import {
+  BatchItem,
   ClassItem,
   ClassSection,
-  StudentWithEnrollment
+  EnrollmentType,
+  StudentWithEnrollment,
+  SubjectItem
 } from '../../types/database.types';
 
 interface StudentPromotionPageProps {
@@ -28,6 +33,8 @@ export const StudentPromotionPage: React.FC<StudentPromotionPageProps> = ({
   const toast = useToast();
 
   const [classes, setClasses] = useState<ClassItem[]>([]);
+  const [batches, setBatches] = useState<BatchItem[]>([]);
+  const [subjects, setSubjects] = useState<SubjectItem[]>([]);
   const [sourceYearId, setSourceYearId] = useState('');
   const [sourceClassId, setSourceClassId] = useState('');
   const [sourceStudents, setSourceStudents] = useState<StudentWithEnrollment[]>([]);
@@ -37,17 +44,33 @@ export const StudentPromotionPage: React.FC<StudentPromotionPageProps> = ({
   const [targetYearId, setTargetYearId] = useState('');
   const [targetClassId, setTargetClassId] = useState('');
   const [targetSectionId, setTargetSectionId] = useState('');
+  const [targetBatchId, setTargetBatchId] = useState('');
+  const [enrollmentType, setEnrollmentType] = useState<EnrollmentType>('regular');
+  const [supplementarySubjectIds, setSupplementarySubjectIds] = useState<string[]>([]);
   const [targetClassSections, setTargetClassSections] = useState<ClassSection[]>([]);
 
   const [isLoadingStudents, setIsLoadingStudents] = useState(false);
   const [isPromoting, setIsPromoting] = useState(false);
 
-  // Initialize Source & Target Years
+  // Initialize Source & Target Years and Reference Lists
   useEffect(() => {
     const init = async () => {
-      const cList = await databaseService.getClasses();
+      const [cList, bList, sList] = await Promise.all([
+        databaseService.getClasses(),
+        databaseService.getBatches(),
+        databaseService.getSubjects(),
+      ]);
       const activeClasses = cList.filter(c => c.status === 'active');
+      const activeBatches = bList.filter(b => b.status === 'active');
       setClasses(activeClasses);
+      setBatches(activeBatches);
+      setSubjects(sList.filter(s => s.status === 'active'));
+
+      if (activeBatches.length > 0) {
+        // Default to Regular batch if exists
+        const reg = activeBatches.find(b => b.code.toLowerCase().includes('reg')) || activeBatches[0];
+        setTargetBatchId(reg.id);
+      }
 
       if (academicYears.length > 1) {
         // Pick previous year as source if available, or first
@@ -123,6 +146,12 @@ export const StudentPromotionPage: React.FC<StudentPromotionPageProps> = ({
     }
   };
 
+  const toggleSupplementarySubject = (subId: string) => {
+    setSupplementarySubjectIds(prev =>
+      prev.includes(subId) ? prev.filter(id => id !== subId) : [...prev, subId]
+    );
+  };
+
   const handleExecutePromotion = async () => {
     if (selectedStudentIds.size === 0) {
       toast.error('No Students Selected', 'Please check at least one student to promote.');
@@ -130,6 +159,10 @@ export const StudentPromotionPage: React.FC<StudentPromotionPageProps> = ({
     }
     if (!targetYearId || !targetClassId || !targetSectionId) {
       toast.error('Missing Target Configuration', 'Please select a Target Year, Class, and Section.');
+      return;
+    }
+    if (enrollmentType === 'supplementary' && supplementarySubjectIds.length === 0) {
+      toast.error('Supplementary Subjects Missing', 'Please select at least one supplementary/failed subject.');
       return;
     }
 
@@ -140,12 +173,15 @@ export const StudentPromotionPage: React.FC<StudentPromotionPageProps> = ({
         targetAcademicYearId: targetYearId,
         targetClassId,
         targetSectionId,
+        targetBatchId: targetBatchId || undefined,
+        enrollmentType,
+        supplementarySubjectIds: enrollmentType === 'supplementary' ? supplementarySubjectIds : [],
         studentIds: Array.from(selectedStudentIds),
       });
 
       toast.success(
-        'Promotion Completed!',
-        `Successfully enrolled/promoted ${res.promotedCount} students into the target academic cycle.`
+        'Promotion / Re-enrollment Completed!',
+        `Successfully enrolled/promoted ${res.promotedCount} students into the target academic cycle as ${enrollmentType === 'supplementary' ? 'Supplementary Students' : 'Regular Students'}.`
       );
       onPromotionSuccess();
     } catch (err: any) {
@@ -230,16 +266,18 @@ export const StudentPromotionPage: React.FC<StudentPromotionPageProps> = ({
 
         {/* Target Configuration */}
         <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs space-y-4">
-          <div className="flex items-center space-x-2.5 pb-3 border-b border-slate-100">
-            <div className="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-xs">
-              TO
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div className="flex items-center space-x-2.5">
+              <div className="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-xs">
+                TO
+              </div>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">
+                Target Academic Year, Class &amp; Batch
+              </h3>
             </div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">
-              Target Academic Year &amp; Class
-            </h3>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Target Year
@@ -294,6 +332,86 @@ export const StudentPromotionPage: React.FC<StudentPromotionPageProps> = ({
                 )}
               </select>
             </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Target Batch
+              </label>
+              <select
+                value={targetBatchId}
+                onChange={(e) => setTargetBatchId(e.target.value)}
+                className="w-full text-xs font-medium bg-slate-50/70 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:bg-white focus:ring-slate-900"
+              >
+                <option value="">Default / Unassigned</option>
+                {batches.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.name} ({b.code})
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Enrollment Category Selection */}
+          <div className="pt-2 border-t border-slate-100 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-700">Enrollment Type:</span>
+              <div className="flex items-center space-x-1.5 p-1 bg-slate-100 rounded-xl">
+                <button
+                  type="button"
+                  onClick={() => setEnrollmentType('regular')}
+                  className={`px-3 py-1 text-xs font-bold rounded-lg transition ${
+                    enrollmentType === 'regular'
+                      ? 'bg-white text-slate-900 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Regular Promotion
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setEnrollmentType('supplementary')}
+                  className={`px-3 py-1 text-xs font-bold rounded-lg transition ${
+                    enrollmentType === 'supplementary'
+                      ? 'bg-amber-600 text-white shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Supplementary Re-enrollment
+                </button>
+              </div>
+            </div>
+
+            {enrollmentType === 'supplementary' && (
+              <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-xl space-y-2.5">
+                <div className="flex items-start space-x-2">
+                  <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <p className="text-[11px] text-amber-800">
+                    Selected students failed one or more subjects and will be tracked separately for supplementary exam prep. Select the subjects to re-enroll below:
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {subjects.map(s => {
+                    const isSelected = supplementarySubjectIds.includes(s.id);
+                    return (
+                      <button
+                        key={s.id}
+                        type="button"
+                        onClick={() => toggleSupplementarySubject(s.id)}
+                        className={`px-2.5 py-1 text-xs font-semibold rounded-lg border transition flex items-center space-x-1 ${
+                          isSelected
+                            ? 'bg-amber-600 border-amber-600 text-white shadow-xs'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        <BookOpen className="w-3 h-3" />
+                        <span>{s.name}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

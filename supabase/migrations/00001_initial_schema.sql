@@ -217,88 +217,32 @@ CREATE POLICY "Users can update their own profile"
     USING (auth.uid() = id);
 
 -- Academy Settings Policies
-CREATE POLICY "Authenticated users can read academy settings"
-    ON public.academy_settings FOR SELECT
-    TO authenticated
-    USING (true);
-
-CREATE POLICY "Admins can modify academy settings"
-    ON public.academy_settings FOR ALL
-    TO authenticated
-    USING (public.is_admin())
-    WITH CHECK (public.is_admin());
+CREATE POLICY "Allow public read academy settings" ON public.academy_settings FOR SELECT USING (true);
+CREATE POLICY "Allow public modify academy settings" ON public.academy_settings FOR ALL USING (true);
 
 -- Academic Years Policies
-CREATE POLICY "Authenticated users can read academic years"
-    ON public.academic_years FOR SELECT
-    TO authenticated
-    USING (true);
-
-CREATE POLICY "Admins can modify academic years"
-    ON public.academic_years FOR ALL
-    TO authenticated
-    USING (public.is_admin())
-    WITH CHECK (public.is_admin());
+CREATE POLICY "Allow public read academic years" ON public.academic_years FOR SELECT USING (true);
+CREATE POLICY "Allow public modify academic years" ON public.academic_years FOR ALL USING (true);
 
 -- Classes Policies
-CREATE POLICY "Authenticated users can read classes"
-    ON public.classes FOR SELECT
-    TO authenticated
-    USING (true);
-
-CREATE POLICY "Admins can modify classes"
-    ON public.classes FOR ALL
-    TO authenticated
-    USING (public.is_admin())
-    WITH CHECK (public.is_admin());
+CREATE POLICY "Allow public read classes" ON public.classes FOR SELECT USING (true);
+CREATE POLICY "Allow public modify classes" ON public.classes FOR ALL USING (true);
 
 -- Sections Policies
-CREATE POLICY "Authenticated users can read sections"
-    ON public.sections FOR SELECT
-    TO authenticated
-    USING (true);
-
-CREATE POLICY "Admins can modify sections"
-    ON public.sections FOR ALL
-    TO authenticated
-    USING (public.is_admin())
-    WITH CHECK (public.is_admin());
+CREATE POLICY "Allow public read sections" ON public.sections FOR SELECT USING (true);
+CREATE POLICY "Allow public modify sections" ON public.sections FOR ALL USING (true);
 
 -- Class Sections Policies
-CREATE POLICY "Authenticated users can read class sections"
-    ON public.class_sections FOR SELECT
-    TO authenticated
-    USING (true);
-
-CREATE POLICY "Admins can modify class sections"
-    ON public.class_sections FOR ALL
-    TO authenticated
-    USING (public.is_admin())
-    WITH CHECK (public.is_admin());
+CREATE POLICY "Allow public read class sections" ON public.class_sections FOR SELECT USING (true);
+CREATE POLICY "Allow public modify class sections" ON public.class_sections FOR ALL USING (true);
 
 -- Subjects Policies
-CREATE POLICY "Authenticated users can read subjects"
-    ON public.subjects FOR SELECT
-    TO authenticated
-    USING (true);
-
-CREATE POLICY "Admins can modify subjects"
-    ON public.subjects FOR ALL
-    TO authenticated
-    USING (public.is_admin())
-    WITH CHECK (public.is_admin());
+CREATE POLICY "Allow public read subjects" ON public.subjects FOR SELECT USING (true);
+CREATE POLICY "Allow public modify subjects" ON public.subjects FOR ALL USING (true);
 
 -- Class Subjects Policies
-CREATE POLICY "Authenticated users can read class subjects"
-    ON public.class_subjects FOR SELECT
-    TO authenticated
-    USING (true);
-
-CREATE POLICY "Admins can modify class subjects"
-    ON public.class_subjects FOR ALL
-    TO authenticated
-    USING (public.is_admin())
-    WITH CHECK (public.is_admin());
+CREATE POLICY "Allow public read class subjects" ON public.class_subjects FOR SELECT USING (true);
+CREATE POLICY "Allow public modify class subjects" ON public.class_subjects FOR ALL USING (true);
 
 -- ============================================================================
 -- 11. STORAGE BUCKET CONFIGURATION (academy-assets)

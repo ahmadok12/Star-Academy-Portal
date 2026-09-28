@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Modulix ERP - Create New Invoice</title>
+<!-- Tailwind CSS v3 with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#F9FAFB',
+              100: '#F3F4F6',
+              200: '#E5E7EB',
+              800: '#1F2937',
+              900: '#111827',
+              dark: '#16191E',
+            },
+            modulix: {
+              card: '#FFFFFF',
+              bg: '#F5F6F8',
+              muted: '#6B7280',
+              accent: '#10B981',
+              border: '#E8ECF2'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          },
+          boxShadow: {
+            'modal': '0 25px 60px -15px rgba(15, 23, 42, 0.22), 0 0 1px 1px rgba(15, 23, 42, 0.05)',
+            'subtle': '0 2px 8px 0 rgba(0, 0, 0, 0.03)',
+          }
+        }
+      }
+    }
+  </script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style data-purpose="base-styling">
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background-color: #ECEEF2;
+    }
+    /* Custom scrollbars for modal */
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #E2E8F0;
+      border-radius: 9999px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #CBD5E1;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 antialiased p-0 sm:p-4 lg:p-6 flex items-center justify-center">
+<!-- BEGIN: BrowserFrameContainer -->
+<!-- Outer mockup container matching browser window from screenshot -->
+<div class="relative w-full max-w-[1540px] bg-white rounded-3xl shadow-2xl border border-slate-200/90 overflow-hidden min-h-[920px] flex flex-col">
+<!-- BEGIN: BrowserTopBar -->
+<div class="h-11 bg-white border-b border-slate-100 flex items-center px-5 justify-between select-none">
+<!-- Traffic lights window dots -->
+<div class="flex items-center space-x-2">
+<span class="w-3 h-3 rounded-full bg-[#FF5F56] inline-block border border-[#E0443E]"></span>
+<span class="w-3 h-3 rounded-full bg-[#FFBD2E] inline-block border border-[#DEA123]"></span>
+<span class="w-3 h-3 rounded-full bg-[#27C93F] inline-block border border-[#1AAB29]"></span>
+<div class="flex items-center space-x-2 ml-4 text-slate-300">
+<svg class="w-3.5 h-3.5 cursor-pointer hover:text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<svg class="w-3.5 h-3.5 cursor-pointer hover:text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+</div>
+<!-- URL Bar pill -->
+<div class="w-1/3 max-w-sm bg-slate-100/90 text-slate-500 text-xs py-1.5 px-4 rounded-xl flex items-center justify-center space-x-1.5 font-medium">
+<svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>modulix.com</span>
+</div>
+<!-- Refresh Icon -->
+<div class="text-slate-400">
+<svg class="w-3.5 h-3.5 cursor-pointer hover:text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+</div>
+<!-- END: BrowserTopBar -->
+<!-- BEGIN: DashboardBackdropWrapper -->
+<!-- The ERP Desktop Dashboard as backdrop -->
+<div class="relative flex-1 flex bg-[#F7F8FA] overflow-hidden" data-purpose="erp-main-layout">
+<!-- BEGIN: LeftSidebar -->
+<aside class="w-64 bg-white border-r border-slate-200/80 flex flex-col justify-between p-5 flex-shrink-0 select-none">
+<div>
+<!-- Modulix Logo & Collapse -->
+<div class="flex items-center justify-between pb-6 border-b border-slate-100">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center font-bold text-base shadow-sm">
+                M
+              </div>
+<span class="text-lg font-bold tracking-tight text-slate-900">Modulix</span>
+</div>
+<button class="w-7 h-7 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:text-slate-700">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M11 19l-7-7 7-7m8 14l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+</div>
+<!-- Main Navigation Links -->
+<div class="mt-6">
+<span class="text-[10px] font-semibold tracking-wider text-slate-400 uppercase px-3">Main Menu</span>
+<nav class="mt-3 space-y-1">
+<a class="flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-slate-100 text-slate-900 font-semibold text-sm" href="#">
+<svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-500 hover:bg-slate-50 font-medium text-sm" href="#">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Orders</span>
+</a>
+<div class="pt-1">
+<div class="flex items-center justify-between px-3 py-2 text-slate-600 font-medium text-sm">
+<div class="flex items-center space-x-3">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Track Deliveries</span>
+</div>
+<svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M5 15l7-7 7 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+<!-- Delivery Submenu -->
+<div class="ml-6 pl-4 border-l border-slate-200 space-y-1.5 mt-1 text-xs">
+<div class="flex items-center space-x-2 text-slate-900 font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-900"></span>
+<span>On Progress</span>
+</div>
+<div class="flex items-center space-x-2 text-slate-400">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+<span>Delivered</span>
+</div>
+<div class="flex items-center space-x-2 text-slate-400">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+<span>Canceled</span>
+</div>
+<div class="flex items-center space-x-2 text-slate-400">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+<span>Pending</span>
+</div>
+</div>
+</div>
+<a class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-500 hover:bg-slate-50 font-medium text-sm" href="#">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Payment</span>
+</a>
+</nav>
+</div>
+<!-- Setting Section -->
+<div class="mt-8">
+<span class="text-[10px] font-semibold tracking-wider text-slate-400 uppercase px-3">Setting</span>
+<div class="mt-3 space-y-1">
+<a class="flex items-center space-x-3 px-3 py-2 rounded-xl text-slate-500 hover:bg-slate-50 font-medium text-sm" href="#">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Settings</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 rounded-xl text-slate-500 hover:bg-slate-50 font-medium text-sm" href="#">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Support &amp; Help</span>
+</a>
+</div>
+</div>
+</div>
+<!-- User Profile Pill in Sidebar Footer -->
+<div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+<div class="flex items-center space-x-3 min-w-0">
+<div class="w-9 h-9 rounded-xl bg-slate-900 text-white font-semibold text-xs flex items-center justify-center flex-shrink-0">
+              DC
+            </div>
+<div class="truncate">
+<h5 class="text-xs font-bold text-slate-900 truncate">Danang Calvin</h5>
+<p class="text-[11px] text-slate-400 truncate">Calvin12@gmail.com</p>
+</div>
+</div>
+<button class="text-slate-400 hover:text-slate-700">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+</div>
+</aside>
+<!-- END: LeftSidebar -->
+<!-- BEGIN: DashboardBodyBackdrop -->
+<!-- Right Main content blurred out slightly in background -->
+<main class="flex-1 p-8 space-y-6 overflow-hidden">
+<!-- Top bar with breadcrumb and search -->
+<div class="flex items-center justify-between">
+<div class="text-xs text-slate-500 flex items-center space-x-1.5 font-medium">
+<span>Main Menu</span>
+<span>/</span>
+<span class="text-slate-900 font-semibold flex items-center space-x-1">
+<svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              Dashboard
+            </span>
+</div>
+<div class="flex items-center space-x-3">
+<div class="relative w-72">
+<span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</span>
+<input class="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 bg-white" disabled="" placeholder="Search anything..." type="text"/>
+</div>
+<div class="w-9 h-9 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-500">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+</div>
+</div>
+<!-- Greeting title -->
+<div>
+<h1 class="text-2xl font-bold text-slate-900 tracking-tight">Welcome , Danang Calvin 👋</h1>
+<p class="text-xs text-slate-500 mt-1">Manage orders, track shipments, and shop products — all in one place.</p>
+</div>
+<!-- 3 Metric Cards Placeholder -->
+<div class="grid grid-cols-3 gap-5">
+<div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+<p class="text-xs font-semibold text-slate-500">Pending Orders</p>
+<p class="text-2xl font-bold text-slate-900 mt-2">219</p>
+</div>
+<div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+<p class="text-xs font-semibold text-slate-500">Recent Delivered</p>
+<p class="text-2xl font-bold text-slate-900 mt-2">231</p>
+</div>
+<div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+<p class="text-xs font-semibold text-slate-500">Total Orders</p>
+<p class="text-2xl font-bold text-slate-900 mt-2">500</p>
+</div>
+</div>
+<!-- Chart Overview Area -->
+<div class="bg-white p-6 rounded-2xl border border-slate-100 h-64 shadow-sm flex items-end justify-between px-10">
+<div class="w-8 h-24 bg-slate-100 rounded-lg"></div>
+<div class="w-8 h-20 bg-slate-100 rounded-lg"></div>
+<div class="w-8 h-32 bg-slate-100 rounded-lg"></div>
+<div class="w-8 h-28 bg-slate-100 rounded-lg"></div>
+<div class="w-8 h-44 bg-slate-800 rounded-lg relative"></div>
+<div class="w-8 h-24 bg-slate-100 rounded-lg"></div>
+<div class="w-8 h-30 bg-slate-100 rounded-lg"></div>
+<div class="w-8 h-40 bg-slate-100 rounded-lg"></div>
+</div>
+</main>
+<!-- END: DashboardBodyBackdrop -->
+</div>
+<!-- END: DashboardBackdropWrapper -->
+<!-- ========================================================================= -->
+<!-- BEGIN: ModalOverlay -->
+<!-- Translucent Backdrop Blur Overlay with Add Invoice Dialog Centered -->
+<!-- ========================================================================= -->
+<div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6" data-purpose="modal-container">
+<!-- BEGIN: InvoiceModalDialog -->
+<section aria-labelledby="modal-headline" aria-modal="true" class="bg-white w-full max-w-[850px] max-h-[92vh] rounded-2xl sm:rounded-3xl shadow-modal border border-slate-200/90 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200" role="dialog">
+<!-- BEGIN: ModalHeader -->
+<header class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-white flex-shrink-0">
+<div class="flex items-center space-x-3.5">
+<div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-sm">
+<!-- Invoice / Document Icon -->
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<div class="flex items-center space-x-2.5">
+<h2 class="text-lg font-bold text-slate-900 tracking-tight" id="modal-headline">Create New Invoice</h2>
+<!-- Invoice Number Auto Badge -->
+<span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-mono font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                  #INV-2025-0842
+                </span>
+<!-- Draft Status Badge -->
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200/60">
+                  ● Draft
+                </span>
+</div>
+<p class="text-xs text-slate-500 mt-0.5">Draft an accounts receivable invoice for client orders &amp; shipments.</p>
+</div>
+</div>
+<!-- Close Modal Button -->
+<button aria-label="Close modal" class="w-8 h-8 rounded-lg border border-slate-200 text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors flex items-center justify-center" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</header>
+<!-- END: ModalHeader -->
+<!-- BEGIN: ModalScrollableFormBody -->
+<div class="p-6 overflow-y-auto custom-scroll space-y-6 flex-1 text-slate-800">
+<!-- BEGIN: SectionClientOrderDetails -->
+<!-- 3-Column Meta Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4" data-purpose="invoice-meta-fields">
+<!-- Client Selection -->
+<div class="md:col-span-2 space-y-1.5">
+<label class="block text-xs font-semibold text-slate-700">Client / Customer</label>
+<div class="relative">
+<select class="w-full text-xs font-medium bg-slate-50/70 border border-slate-200 rounded-xl px-3 py-2.5 pr-8 text-slate-800 focus:bg-white focus:border-slate-800 focus:ring-0 appearance-none">
+<option selected="">PT Modulix Konstruksi Indonesia (Danang Calvin Corp)</option>
+<option>Wijaya Karya Precast Tbk</option>
+<option>Adhi Beton Mega Mandiri</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+</div>
+</div>
+<!-- Currency Selection -->
+<div class="space-y-1.5">
+<label class="block text-xs font-semibold text-slate-700">Billing Currency</label>
+<div class="relative">
+<select class="w-full text-xs font-medium bg-slate-50/70 border border-slate-200 rounded-xl px-3 py-2.5 pr-8 text-slate-800 focus:bg-white focus:border-slate-800 focus:ring-0 appearance-none">
+<option selected="">USD ($) - US Dollar</option>
+<option>IDR (Rp) - Indonesian Rupiah</option>
+<option>SGD (S$) - Singapore Dollar</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+</div>
+</div>
+<!-- Issue Date -->
+<div class="space-y-1.5">
+<label class="block text-xs font-semibold text-slate-700">Invoice Issue Date</label>
+<div class="relative">
+<input class="w-full text-xs font-medium bg-slate-50/70 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:bg-white focus:border-slate-800 focus:ring-0" type="date" value="2025-08-24"/>
+</div>
+</div>
+<!-- Payment Due Date -->
+<div class="space-y-1.5">
+<div class="flex items-center justify-between">
+<label class="block text-xs font-semibold text-slate-700">Payment Due Date</label>
+<span class="text-[10px] text-emerald-600 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded">Net 30 Days</span>
+</div>
+<input class="w-full text-xs font-medium bg-slate-50/70 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:bg-white focus:border-slate-800 focus:ring-0" type="date" value="2025-09-23"/>
+</div>
+<!-- Linked Order Ref -->
+<div class="space-y-1.5">
+<label class="block text-xs font-semibold text-slate-700">Linked Order Reference</label>
+<div class="relative">
+<select class="w-full text-xs font-medium bg-slate-50/70 border border-slate-200 rounded-xl px-3 py-2.5 pr-8 text-slate-800 focus:bg-white focus:border-slate-800 focus:ring-0 appearance-none font-mono">
+<option selected="">#ORD-2341 (Concrete Blocks)</option>
+<option>#ORD-2342 (Wooden Planks)</option>
+<option>#ORD-2343 (Cement Bags 50kg)</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+</div>
+</div>
+</div>
+<!-- END: SectionClientOrderDetails -->
+<!-- BEGIN: SectionLineItemsTable -->
+<div class="space-y-2.5" data-purpose="line-items-section">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-slate-900 tracking-tight uppercase">Invoice Items Breakdown</span>
+<span class="text-[11px] text-slate-500">3 line items included</span>
+</div>
+<!-- Table Container with custom borders -->
+<div class="border border-slate-200 rounded-xl overflow-hidden shadow-subtle bg-white">
+<table class="w-full text-left border-collapse" id="invoice-items-table">
+<thead>
+<tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-semibold text-slate-600 tracking-wide uppercase">
+<th class="py-2.5 px-3">Item Description</th>
+<th class="py-2.5 px-3 w-28">SKU / Code</th>
+<th class="py-2.5 px-2 text-right w-20">Qty</th>
+<th class="py-2.5 px-3 text-right w-24">Price ($)</th>
+<th class="py-2.5 px-2 text-right w-20">Disc.</th>
+<th class="py-2.5 px-3 text-right w-28">Total</th>
+<th class="py-2.5 px-2 text-center w-10"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 text-xs">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="py-2.5 px-3">
+<input class="w-full text-xs font-medium border-0 p-0 text-slate-900 focus:ring-0 bg-transparent placeholder-slate-400" type="text" value="Concrete Blocks (High Grade Pre-cast)"/>
+<span class="text-[10px] text-slate-400 block mt-0.5">Heavy industrial grade 40x20x20cm</span>
+</td>
+<td class="py-2.5 px-3 font-mono text-[11px] text-slate-600">
+<input class="w-full text-[11px] font-mono border-0 p-0 text-slate-500 focus:ring-0 bg-transparent" type="text" value="SKU-CB-800"/>
+</td>
+<td class="py-2.5 px-2 text-right">
+<input class="w-16 text-right text-xs font-medium border-0 p-0 text-slate-900 focus:ring-0 bg-transparent" type="number" value="800"/>
+</td>
+<td class="py-2.5 px-3 text-right">
+<input class="w-20 text-right text-xs font-medium border-0 p-0 text-slate-900 focus:ring-0 bg-transparent" type="text" value="2.50"/>
+</td>
+<td class="py-2.5 px-2 text-right text-slate-400">0%</td>
+<td class="py-2.5 px-3 text-right font-semibold text-slate-900">$2,000.00</td>
+<td class="py-2.5 px-2 text-center">
+<button class="text-slate-300 hover:text-red-500 transition-colors p-1" title="Remove line item" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="py-2.5 px-3">
+<input class="w-full text-xs font-medium border-0 p-0 text-slate-900 focus:ring-0 bg-transparent placeholder-slate-400" type="text" value="Wooden Planks (Teak Treated 2x4)"/>
+<span class="text-[10px] text-slate-400 block mt-0.5">Kiln dried structural grade timber</span>
+</td>
+<td class="py-2.5 px-3 font-mono text-[11px] text-slate-600">
+<input class="w-full text-[11px] font-mono border-0 p-0 text-slate-500 focus:ring-0 bg-transparent" type="text" value="SKU-WP-500"/>
+</td>
+<td class="py-2.5 px-2 text-right">
+<input class="w-16 text-right text-xs font-medium border-0 p-0 text-slate-900 focus:ring-0 bg-transparent" type="number" value="500"/>
+</td>
+<td class="py-2.5 px-3 text-right">
+<input class="w-20 text-right text-xs font-medium border-0 p-0 text-slate-900 focus:ring-0 bg-transparent" type="text" value="4.20"/>
+</td>
+<td class="py-2.5 px-2 text-right text-amber-600 font-medium">5%</td>
+<td class="py-2.5 px-3 text-right font-semibold text-slate-900">$1,995.00</td>
+<td class="py-2.5 px-2 text-center">
+<button class="text-slate-300 hover:text-red-500 transition-colors p-1" title="Remove line item" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="py-2.5 px-3">
+<input class="w-full text-xs font-medium border-0 p-0 text-slate-900 focus:ring-0 bg-transparent placeholder-slate-400" type="text" value="Cement Bags (Portland Type 1, 50kg)"/>
+<span class="text-[10px] text-slate-400 block mt-0.5">Standard hydraulic cement bags</span>
+</td>
+<td class="py-2.5 px-3 font-mono text-[11px] text-slate-600">
+<input class="w-full text-[11px] font-mono border-0 p-0 text-slate-500 focus:ring-0 bg-transparent" type="text" value="SKU-CB-300"/>
+</td>
+<td class="py-2.5 px-2 text-right">
+<input class="w-16 text-right text-xs font-medium border-0 p-0 text-slate-900 focus:ring-0 bg-transparent" type="number" value="300"/>
+</td>
+<td class="py-2.5 px-3 text-right">
+<input class="w-20 text-right text-xs font-medium border-0 p-0 text-slate-900 focus:ring-0 bg-transparent" type="text" value="8.00"/>
+</td>
+<td class="py-2.5 px-2 text-right text-slate-400">0%</td>
+<td class="py-2.5 px-3 text-right font-semibold text-slate-900">$2,400.00</td>
+<td class="py-2.5 px-2 text-center">
+<button class="text-slate-300 hover:text-red-500 transition-colors p-1" title="Remove line item" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Add Line Action Strip -->
+<div class="p-2 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between">
+<button class="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-800 hover:text-black px-3 py-1.5 rounded-lg border border-dashed border-slate-300 hover:border-slate-400 bg-white transition-all" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Add Line Item</span>
+</button>
+<span class="text-[11px] text-slate-400">Taxes calculated automatically via ERP engine</span>
+</div>
+</div>
+</div>
+<!-- END: SectionLineItemsTable -->
+<!-- BEGIN: SectionTermsAndCalculation -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-1" data-purpose="terms-and-calculation-layout">
+<!-- Left Side: Notes & Document Attachment -->
+<div class="space-y-3.5">
+<!-- Payment Terms & Instructions -->
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-slate-700">Payment Terms &amp; Instructions</label>
+<textarea class="w-full text-xs font-normal bg-slate-50/70 border border-slate-200 rounded-xl p-2.5 text-slate-800 focus:bg-white focus:border-slate-800 focus:ring-0 placeholder-slate-400" placeholder="Payment via wire transfer within 30 days. Include #INV-2025-0842 in reference. Bank Central Asia: 802-990-2134." rows="2">Payment via wire transfer within 30 days. Include #INV-2025-0842 in wire transfer reference notes.</textarea>
+</div>
+<!-- Drag and drop zone for Order Slip / PO -->
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-slate-700">Attach Purchase Order / Receipt</label>
+<div class="border-2 border-dashed border-slate-200 hover:border-slate-300 rounded-xl p-3 bg-slate-50/50 flex items-center justify-center space-x-3 cursor-pointer transition-colors">
+<div class="w-7 h-7 rounded-lg bg-white shadow-xs border border-slate-200 flex items-center justify-center text-slate-500">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+<div>
+<p class="text-xs font-medium text-slate-700">Drop purchase order slip here, or <span class="text-slate-900 underline font-semibold">browse</span></p>
+<p class="text-[10px] text-slate-400">PDF, PNG, JPG up to 10MB</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Side: Calculation Breakdown Card -->
+<div class="bg-slate-50/70 border border-slate-200/90 rounded-2xl p-4 flex flex-col justify-between">
+<div class="space-y-2 text-xs">
+<div class="flex justify-between text-slate-600">
+<span>Subtotal</span>
+<span class="font-medium text-slate-900 font-mono">$6,395.00</span>
+</div>
+<div class="flex justify-between text-slate-600">
+<span class="flex items-center space-x-1">
+<span>Discount (Applied Teak 5%)</span>
+</span>
+<span class="font-medium text-emerald-600 font-mono">-$99.75</span>
+</div>
+<div class="flex justify-between text-slate-600">
+<span>Tax (VAT 10%)</span>
+<span class="font-medium text-slate-900 font-mono">$629.53</span>
+</div>
+<div class="flex justify-between text-slate-600">
+<span>Shipping &amp; Heavy Freight</span>
+<span class="font-medium text-slate-900 font-mono">$120.00</span>
+</div>
+</div>
+<!-- Total Amount Highlight -->
+<div class="pt-3 mt-3 border-t border-slate-200/80 flex items-baseline justify-between">
+<div>
+<span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Total Amount Due</span>
+<span class="text-[10px] text-slate-400">Net terms payable in USD</span>
+</div>
+<div class="text-right">
+<span class="text-2xl font-bold tracking-tight text-slate-950 font-mono">$7,044.78</span>
+</div>
+</div>
+</div>
+</div>
+<!-- END: SectionTermsAndCalculation -->
+</div>
+<!-- END: ModalScrollableFormBody -->
+<!-- BEGIN: ModalFooter -->
+<footer class="px-6 py-4 bg-slate-50/90 border-t border-slate-100 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 flex-shrink-0">
+<!-- Draft status left button -->
+<button class="px-4 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors shadow-2xs inline-flex items-center justify-center space-x-1.5" type="button">
+<svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Save as Draft</span>
+</button>
+<!-- Right Action Buttons -->
+<div class="flex items-center space-x-2.5 justify-end">
+<!-- Cancel Button -->
+<button class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition-colors" type="button">
+              Cancel
+            </button>
+<!-- Preview PDF Button -->
+<button class="px-4 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors shadow-2xs inline-flex items-center space-x-1.5" type="button">
+<svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Preview PDF</span>
+</button>
+<!-- Primary Generate & Send Button -->
+<button class="px-5 py-2 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-semibold shadow-md hover:shadow-lg transition-all inline-flex items-center space-x-2 active:scale-95" type="button">
+<svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Generate &amp; Send Invoice</span>
+</button>
+</div>
+</footer>
+<!-- END: ModalFooter -->
+</section>
+<!-- END: InvoiceModalDialog -->
+</div>
+<!-- END: ModalOverlay -->
+</div>
+<!-- END: BrowserFrameContainer -->
+</body></html>

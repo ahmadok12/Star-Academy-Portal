@@ -9,6 +9,7 @@ import { DashboardPage } from './features/dashboard/DashboardPage';
 import { AcademicYearsPage } from './features/academic-years/AcademicYearsPage';
 import { ClassesPage } from './features/classes/ClassesPage';
 import { SectionsPage } from './features/sections/SectionsPage';
+import { BatchesPage } from './features/batches/BatchesPage';
 import { ClassSectionsPage } from './features/class-sections/ClassSectionsPage';
 import { SubjectsPage } from './features/subjects/SubjectsPage';
 import { ClassSubjectsPage } from './features/class-subjects/ClassSubjectsPage';
@@ -119,6 +120,7 @@ const MainAppContent: React.FC = () => {
       {currentTab === 'academic-years' && <AcademicYearsPage />}
       {currentTab === 'classes' && <ClassesPage />}
       {currentTab === 'sections' && <SectionsPage />}
+      {currentTab === 'batches' && <BatchesPage />}
       {currentTab === 'class-sections' && <ClassSectionsPage />}
       {currentTab === 'subjects' && <SubjectsPage />}
       {currentTab === 'class-subjects' && <ClassSubjectsPage />}

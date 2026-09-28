@@ -8,6 +8,8 @@ import {
   SubjectItem,
   ClassSubject,
   EntityStatus,
+  BatchItem,
+  EnrollmentType,
   StudentInquiry,
   Student,
   StudentAcademicRecord,
@@ -68,6 +70,39 @@ const INITIAL_SECTIONS: SectionItem[] = [
   { id: 's0000000-0000-0000-0000-000000000001', name: 'A', code: 'SEC-A', display_order: 1, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
   { id: 's0000000-0000-0000-0000-000000000002', name: 'B', code: 'SEC-B', display_order: 2, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
   { id: 's0000000-0000-0000-0000-000000000003', name: 'C', code: 'SEC-C', display_order: 3, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() }
+];
+
+const INITIAL_BATCHES: BatchItem[] = [
+  {
+    id: 'b0000000-0000-0000-0000-000000000001',
+    name: 'Advance Batch',
+    code: 'ADV',
+    description: 'Accelerated curriculum and high-performance academic coaching',
+    display_order: 1,
+    status: 'active',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'b0000000-0000-0000-0000-000000000002',
+    name: 'Regular Batch',
+    code: 'REG',
+    description: 'Standard institutional curriculum and board examination preparation',
+    display_order: 2,
+    status: 'active',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'b0000000-0000-0000-0000-000000000003',
+    name: 'ICU Batch',
+    code: 'ICU',
+    description: 'Intensive Care Unit / academic reinforcement and rescue coaching for struggling students',
+    display_order: 3,
+    status: 'active',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
 ];
 
 const INITIAL_SUBJECTS: SubjectItem[] = [
@@ -194,6 +229,8 @@ const INITIAL_ACADEMIC_RECORDS: StudentAcademicRecord[] = [
     academic_year_id: 'a0000000-0000-0000-0000-000000000001', // 2026-27
     class_id: 'c0000000-0000-0000-0000-000000000002', // Class 9
     section_id: 's0000000-0000-0000-0000-000000000001', // Section A
+    batch_id: 'b0000000-0000-0000-0000-000000000001', // Advance Batch
+    enrollment_type: 'regular',
     roll_no: '01',
     status: 'active',
     enrollment_date: '2026-05-01',
@@ -206,6 +243,8 @@ const INITIAL_ACADEMIC_RECORDS: StudentAcademicRecord[] = [
     academic_year_id: 'a0000000-0000-0000-0000-000000000001', // 2026-27
     class_id: 'c0000000-0000-0000-0000-000000000002', // Class 9
     section_id: 's0000000-0000-0000-0000-000000000002', // Section B
+    batch_id: 'b0000000-0000-0000-0000-000000000002', // Regular Batch
+    enrollment_type: 'regular',
     roll_no: '02',
     status: 'active',
     enrollment_date: '2026-05-01',
@@ -218,6 +257,10 @@ const INITIAL_ACADEMIC_RECORDS: StudentAcademicRecord[] = [
     academic_year_id: 'a0000000-0000-0000-0000-000000000001', // 2026-27
     class_id: 'c0000000-0000-0000-0000-000000000003', // Class 10
     section_id: 's0000000-0000-0000-0000-000000000001', // Section A
+    batch_id: 'b0000000-0000-0000-0000-000000000003', // ICU Batch
+    enrollment_type: 'supplementary',
+    supplementary_subject_ids: ['b0000000-0000-0000-0000-000000000003'], // Mathematics
+    supplementary_notes: 'Preparing for BISE Supplementary Examination in Mathematics',
     roll_no: '01',
     status: 'active',
     enrollment_date: '2026-05-01',
@@ -447,6 +490,7 @@ const STORAGE_KEYS = {
   YEARS: 'star_academy_years',
   CLASSES: 'star_academy_classes',
   SECTIONS: 'star_academy_sections',
+  BATCHES: 'star_academy_batches',
   CLASS_SECTIONS: 'star_academy_class_sections',
   SUBJECTS: 'star_academy_subjects',
   CLASS_SUBJECTS: 'star_academy_class_subjects',
@@ -942,6 +986,111 @@ export const databaseService = {
     const list = await this.getSections();
     const filtered = list.filter(s => s.id !== id);
     saveToStorage(STORAGE_KEYS.SECTIONS, filtered);
+  },
+
+  // --------------------------------------------------------------------------
+  // Batches Master
+  // --------------------------------------------------------------------------
+  async getBatches(): Promise<BatchItem[]> {
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('batches')
+          .select('*')
+          .order('display_order', { ascending: true });
+        if (!error && data) return data as BatchItem[];
+      } catch (e) {
+        console.warn('Supabase batches query failed, falling back locally', e);
+      }
+    }
+    const batches = loadFromStorage<BatchItem[]>(STORAGE_KEYS.BATCHES, INITIAL_BATCHES);
+    return batches.sort((a, b) => a.display_order - b.display_order);
+  },
+
+  async createBatch(payload: Omit<BatchItem, 'id' | 'created_at' | 'updated_at'>): Promise<BatchItem> {
+    const batches = await this.getBatches();
+    if (batches.some(b => b.code.trim().toUpperCase() === payload.code.trim().toUpperCase())) {
+      throw new Error(`A batch with code "${payload.code}" already exists.`);
+    }
+    if (batches.some(b => b.name.trim().toLowerCase() === payload.name.trim().toLowerCase())) {
+      throw new Error(`A batch named "${payload.name}" already exists.`);
+    }
+
+    const now = new Date().toISOString();
+    const newBatch: BatchItem = {
+      ...payload,
+      id: crypto.randomUUID(),
+      code: payload.code.trim().toUpperCase(),
+      created_at: now,
+      updated_at: now
+    };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('batches')
+          .insert(newBatch)
+          .select()
+          .single();
+        if (!error && data) return data as BatchItem;
+      } catch (e) {
+        console.warn('Supabase batch insert failed, saving locally', e);
+      }
+    }
+
+    const all = loadFromStorage<BatchItem[]>(STORAGE_KEYS.BATCHES, INITIAL_BATCHES);
+    all.push(newBatch);
+    saveToStorage(STORAGE_KEYS.BATCHES, all);
+    return newBatch;
+  },
+
+  async updateBatch(id: string, updates: Partial<BatchItem>): Promise<BatchItem> {
+    const now = new Date().toISOString();
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('batches')
+          .update({ ...updates, updated_at: now })
+          .eq('id', id)
+          .select()
+          .single();
+        if (!error && data) return data as BatchItem;
+      } catch (e) {
+        console.warn('Supabase batch update failed, saving locally', e);
+      }
+    }
+
+    const list = loadFromStorage<BatchItem[]>(STORAGE_KEYS.BATCHES, INITIAL_BATCHES);
+    const index = list.findIndex(b => b.id === id);
+    if (index === -1) throw new Error('Batch not found');
+    list[index] = { ...list[index], ...updates, updated_at: now };
+    saveToStorage(STORAGE_KEYS.BATCHES, list);
+    return list[index];
+  },
+
+  async updateBatchStatus(id: string, status: EntityStatus): Promise<BatchItem> {
+    return this.updateBatch(id, { status });
+  },
+
+  async deleteBatch(id: string): Promise<void> {
+    const allRecords = loadFromStorage<StudentAcademicRecord[]>(STORAGE_KEYS.STUDENT_ACADEMIC_RECORDS, INITIAL_ACADEMIC_RECORDS);
+    const inUse = allRecords.some(r => r.batch_id === id);
+    if (inUse) {
+      throw new Error('Cannot delete this batch: Students are currently or historically enrolled in it. Please deactivate the batch instead.');
+    }
+
+    if (isSupabaseConfigured) {
+      try {
+        const { error } = await supabase.from('batches').delete().eq('id', id);
+        if (!error) return;
+      } catch (e) {
+        console.warn('Supabase batch delete failed', e);
+      }
+    }
+
+    const list = loadFromStorage<BatchItem[]>(STORAGE_KEYS.BATCHES, INITIAL_BATCHES);
+    const filtered = list.filter(b => b.id !== id);
+    saveToStorage(STORAGE_KEYS.BATCHES, filtered);
   },
 
   // --------------------------------------------------------------------------
@@ -1500,7 +1649,9 @@ export const databaseService = {
     academicYearId?: string,
     classId?: string,
     sectionId?: string,
-    search?: string
+    search?: string,
+    batchId?: string,
+    enrollmentType?: string
   ): Promise<StudentWithEnrollment[]> {
     if (isSupabaseConfigured) {
       try {
@@ -1512,20 +1663,27 @@ export const databaseService = {
             student:students(*),
             class:classes(*),
             section:sections(*),
-            academic_year:academic_years(*)
+            academic_year:academic_years(*),
+            batch:batches(*)
           `);
 
         if (academicYearId) query = query.eq('academic_year_id', academicYearId);
         if (classId && classId !== 'all') query = query.eq('class_id', classId);
         if (sectionId && sectionId !== 'all') query = query.eq('section_id', sectionId);
+        if (batchId && batchId !== 'all') query = query.eq('batch_id', batchId);
+        if (enrollmentType && enrollmentType !== 'all') query = query.eq('enrollment_type', enrollmentType);
 
         const { data, error } = await query;
         if (!error && data) {
+          const subjects = await this.getSubjects();
           const results: StudentWithEnrollment[] = data
             .filter((rec: any) => rec.student)
             .map((rec: any) => ({
               ...rec.student,
-              currentEnrollment: rec
+              currentEnrollment: {
+                ...rec,
+                supplementary_subjects: subjects.filter(s => rec.supplementary_subject_ids?.includes(s.id))
+              }
             }));
 
           if (search) {
@@ -1549,6 +1707,8 @@ export const databaseService = {
     const classes = await this.getClasses();
     const sections = await this.getSections();
     const years = await this.getAcademicYears();
+    const batches = await this.getBatches();
+    const subjects = await this.getSubjects();
 
     // Map each student to their enrollment in the requested academic year
     let matched: StudentWithEnrollment[] = [];
@@ -1561,12 +1721,16 @@ export const databaseService = {
 
         if (classId && classId !== 'all' && rec.class_id !== classId) continue;
         if (sectionId && sectionId !== 'all' && rec.section_id !== sectionId) continue;
+        if (batchId && batchId !== 'all' && rec.batch_id !== batchId) continue;
+        if (enrollmentType && enrollmentType !== 'all' && (rec.enrollment_type || 'regular') !== enrollmentType) continue;
 
         const hydratedRec: StudentAcademicRecord = {
           ...rec,
           class: classes.find(c => c.id === rec.class_id),
           section: sections.find(s => s.id === rec.section_id),
           academic_year: years.find(y => y.id === rec.academic_year_id),
+          batch: batches.find(b => b.id === rec.batch_id),
+          supplementary_subjects: subjects.filter(s => rec.supplementary_subject_ids?.includes(s.id)),
           student: student
         };
 
@@ -1584,7 +1748,9 @@ export const databaseService = {
             ...r,
             class: classes.find(c => c.id === r.class_id),
             section: sections.find(s => s.id === r.section_id),
-            academic_year: years.find(y => y.id === r.academic_year_id)
+            academic_year: years.find(y => y.id === r.academic_year_id),
+            batch: batches.find(b => b.id === r.batch_id),
+            supplementary_subjects: subjects.filter(s => r.supplementary_subject_ids?.includes(s.id))
           }));
         return {
           ...student,
@@ -1616,6 +1782,8 @@ export const databaseService = {
     const classes = await this.getClasses();
     const sections = await this.getSections();
     const years = await this.getAcademicYears();
+    const batches = await this.getBatches();
+    const subjects = await this.getSubjects();
 
     const studentEnrollments = allRecords
       .filter(r => r.student_id === id)
@@ -1623,7 +1791,9 @@ export const databaseService = {
         ...r,
         class: classes.find(c => c.id === r.class_id),
         section: sections.find(s => s.id === r.section_id),
-        academic_year: years.find(y => y.id === r.academic_year_id)
+        academic_year: years.find(y => y.id === r.academic_year_id),
+        batch: batches.find(b => b.id === r.batch_id),
+        supplementary_subjects: subjects.filter(s => r.supplementary_subject_ids?.includes(s.id))
       }));
 
     return {
@@ -1639,6 +1809,10 @@ export const databaseService = {
       academic_year_id: string;
       class_id: string;
       section_id: string;
+      batch_id?: string | null;
+      enrollment_type?: EnrollmentType;
+      supplementary_subject_ids?: string[];
+      supplementary_notes?: string | null;
       roll_no?: string;
       enrollment_date?: string;
     },
@@ -1669,6 +1843,10 @@ export const databaseService = {
       academic_year_id: enrollmentData.academic_year_id,
       class_id: enrollmentData.class_id,
       section_id: enrollmentData.section_id,
+      batch_id: enrollmentData.batch_id || null,
+      enrollment_type: enrollmentData.enrollment_type || 'regular',
+      supplementary_subject_ids: enrollmentData.supplementary_subject_ids || [],
+      supplementary_notes: enrollmentData.supplementary_notes || null,
       roll_no: enrollmentData.roll_no || null,
       status: 'active',
       enrollment_date: enrollmentData.enrollment_date || new Date().toISOString().split('T')[0],
@@ -1705,6 +1883,8 @@ export const databaseService = {
     const classes = await this.getClasses();
     const sections = await this.getSections();
     const years = await this.getAcademicYears();
+    const batches = await this.getBatches();
+    const subjects = await this.getSubjects();
 
     return {
       ...newStudent,
@@ -1712,7 +1892,9 @@ export const databaseService = {
         ...newEnrollment,
         class: classes.find(c => c.id === newEnrollment.class_id),
         section: sections.find(s => s.id === newEnrollment.section_id),
-        academic_year: years.find(y => y.id === newEnrollment.academic_year_id)
+        academic_year: years.find(y => y.id === newEnrollment.academic_year_id),
+        batch: batches.find(b => b.id === newEnrollment.batch_id),
+        supplementary_subjects: subjects.filter(s => newEnrollment.supplementary_subject_ids?.includes(s.id))
       }
     };
   },
@@ -1747,6 +1929,9 @@ export const databaseService = {
     targetAcademicYearId: string;
     targetClassId: string;
     targetSectionId: string;
+    targetBatchId?: string | null;
+    enrollmentType?: EnrollmentType;
+    supplementarySubjectIds?: string[];
     studentIds: string[];
     enrollmentDate?: string;
   }): Promise<{ promotedCount: number }> {
@@ -1773,6 +1958,15 @@ export const databaseService = {
         // Update target
         allRecords[existingTargetIndex].class_id = payload.targetClassId;
         allRecords[existingTargetIndex].section_id = payload.targetSectionId;
+        if (payload.targetBatchId !== undefined) {
+          allRecords[existingTargetIndex].batch_id = payload.targetBatchId;
+        }
+        if (payload.enrollmentType) {
+          allRecords[existingTargetIndex].enrollment_type = payload.enrollmentType;
+        }
+        if (payload.supplementarySubjectIds) {
+          allRecords[existingTargetIndex].supplementary_subject_ids = payload.supplementarySubjectIds;
+        }
         allRecords[existingTargetIndex].status = 'active';
         allRecords[existingTargetIndex].updated_at = now;
       } else {
@@ -1783,6 +1977,9 @@ export const databaseService = {
           academic_year_id: payload.targetAcademicYearId,
           class_id: payload.targetClassId,
           section_id: payload.targetSectionId,
+          batch_id: payload.targetBatchId || null,
+          enrollment_type: payload.enrollmentType || 'regular',
+          supplementary_subject_ids: payload.supplementarySubjectIds || [],
           status: 'active',
           enrollment_date: payload.enrollmentDate || new Date().toISOString().split('T')[0],
           created_at: now,
@@ -1810,6 +2007,9 @@ export const databaseService = {
               academic_year_id: payload.targetAcademicYearId,
               class_id: payload.targetClassId,
               section_id: payload.targetSectionId,
+              batch_id: payload.targetBatchId || null,
+              enrollment_type: payload.enrollmentType || 'regular',
+              supplementary_subject_ids: payload.supplementarySubjectIds || [],
               status: 'active',
               enrollment_date: payload.enrollmentDate || new Date().toISOString().split('T')[0],
               updated_at: now
@@ -1821,6 +2021,54 @@ export const databaseService = {
     }
 
     return { promotedCount: count };
+  },
+
+  async updateStudentEnrollment(
+    recordId: string,
+    updates: Partial<StudentAcademicRecord>
+  ): Promise<StudentAcademicRecord> {
+    const now = new Date().toISOString();
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('student_academic_records')
+          .update({ ...updates, updated_at: now })
+          .eq('id', recordId)
+          .select(`
+            *,
+            class:classes(*),
+            section:sections(*),
+            academic_year:academic_years(*),
+            batch:batches(*)
+          `)
+          .single();
+        if (!error && data) return data as StudentAcademicRecord;
+      } catch (e) {
+        console.warn('Supabase enrollment update failed, saving locally', e);
+      }
+    }
+
+    const allRecords = loadFromStorage<StudentAcademicRecord[]>(STORAGE_KEYS.STUDENT_ACADEMIC_RECORDS, INITIAL_ACADEMIC_RECORDS);
+    const index = allRecords.findIndex(r => r.id === recordId);
+    if (index === -1) throw new Error('Enrollment record not found');
+    allRecords[index] = { ...allRecords[index], ...updates, updated_at: now };
+    saveToStorage(STORAGE_KEYS.STUDENT_ACADEMIC_RECORDS, allRecords);
+
+    const classes = await this.getClasses();
+    const sections = await this.getSections();
+    const years = await this.getAcademicYears();
+    const batches = await this.getBatches();
+    const subjects = await this.getSubjects();
+
+    const rec = allRecords[index];
+    return {
+      ...rec,
+      class: classes.find(c => c.id === rec.class_id),
+      section: sections.find(s => s.id === rec.section_id),
+      academic_year: years.find(y => y.id === rec.academic_year_id),
+      batch: batches.find(b => b.id === rec.batch_id),
+      supplementary_subjects: subjects.filter(s => rec.supplementary_subject_ids?.includes(s.id))
+    };
   },
 
   async uploadStudentPhoto(file: File): Promise<string> {

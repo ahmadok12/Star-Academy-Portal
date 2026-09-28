@@ -210,6 +210,7 @@ Academy Profile
 Academic Years
 Classes
 Sections
+Batches (Advance, Regular, ICU)
 Subjects
 Class Subjects
 Grading System
@@ -363,7 +364,40 @@ created_at
 updated_at
 ```
 
-This allows different classes to have different subjects.
+---
+
+# 10B. Batches (Dynamic Batches Architecture)
+
+The academy groups students into dynamic performance and pacing cohorts called **Batches**.
+
+At system launch, three initial batches are established:
+1. **Advance Batch**: High-performance, fast-track students needing advanced syllabus depth.
+2. **Regular Batch**: Standard curriculum pace for the general student cohort.
+3. **ICU Batch**: Intensive Care Unit / Remedial batch for struggling students requiring daily intervention and focused review.
+
+### Dynamic Settings Rule
+Batches must NOT be hardcoded. The system includes a dynamic **Batches Master** settings management interface allowing administrators to:
+- Create new batches (e.g. `Weekend Batch`, `Crash Course Batch`, `MDCAT Preparation Batch`)
+- Edit batch names, short codes, and descriptions
+- Activate / deactivate batches
+- Soft delete / remove batches
+
+### Multi-Batch Mapping (Class + Section + Batch)
+Batches cut across classes and sections. Multiple batches can operate concurrently within the same class and section.
+
+Example:
+```text
+Class 9th
+└── Section Science
+    ├── Advance Batch (Cohort A - Fast Track)
+    ├── Regular Batch (Cohort B - Standard)
+    └── ICU Batch     (Cohort C - Remedial Assistance)
+```
+
+Each student's enrollment record links to their assigned batch, enabling:
+- Batch-filtered student rosters and attendance sheets
+- Targeted exam papers, tests, and homework delivery
+- Batch-specific performance analytics and teacher assignments
 
 ---
 
@@ -495,7 +529,12 @@ student_id
 academic_year_id
 class_id
 section_id
-status
+batch_id                     -- UUID linking to batches table (e.g. Advance, Regular, ICU)
+enrollment_type              -- 'regular' | 'supplementary'
+supplementary_subject_ids    -- JSON/Array of subject UUIDs the student is taking supplementary exams in
+supplementary_notes          -- Optional remarks regarding exam session or special arrangements
+roll_no
+status                       -- 'active' | 'promoted' | 'completed' | 'withdrawn' | 'transferred'
 enrollment_date
 leaving_date
 created_at
@@ -508,17 +547,17 @@ Example:
 Ali
 
 2025-26
-Class 7 / Section A
+Class 7 / Section A / Regular Batch
 
 2026-27
-Class 8 / Section B
+Class 8 / Section B / Advance Batch
 ```
 
-This preserves the student's complete academic history.
+This preserves the student's complete academic history and batch progression.
 
 ---
 
-# 16. Previous Academic Year Enrollment
+# 16. Previous Academic Year Enrollment & Promotion
 
 Provide an admin workflow to enroll/promote students from the previous academic year.
 
@@ -529,12 +568,32 @@ Example:
 Class 7 / Section A
         ↓
 2026-27
-Class 8 / Section B
+Class 8 / Section B (Target Batch: Advance / Regular / ICU)
 ```
 
-The system should create a new academic enrollment record.
+The system should create a new academic enrollment record in the target cycle.
 
 It must NOT modify or overwrite the previous year's record.
+
+---
+
+# 16B. Supplementary Students System
+
+Some students fail in one or more subjects during regular academic assessments or board exams and enroll at the academy specifically for supplementary examination preparation.
+
+### Core Domain Rules:
+1. **Academic Year & Class Separation**:
+   - Technically, a supplementary student's failed subjects belong to their previous academic year / previous class syllabus.
+   - However, in the current academic session, they must be registered and tracked actively without confusing them with regular full-curriculum students.
+2. **Distinct Categorization**:
+   - Every enrollment record designates `enrollment_type` as either `'regular'` or `'supplementary'`.
+   - The system tracks which specific subjects the student is retaking (`supplementary_subject_ids`).
+3. **Multi-Module Impact**:
+   - **Student Directory**: Clear visual identification badge ("Supplementary Student") with immediate tags for each failed subject (e.g., `[Math] [Physics]`). Filter students by Regular vs. Supplementary category.
+   - **Admission & Re-enrollment**: Support direct admission as Supplementary or re-enrollment from previous academic cycles.
+   - **Timetable & Attendance**: Supplementary students only attend lectures for their registered supplementary subjects, rather than the entire class timetable.
+   - **Fee Structure**: Enable per-subject supplementary fee calculation or customized voucher amounts separate from full-term tuition.
+   - **Examination & Marks**: Generate test results and datesheets tailored to their failed subject list.
 
 ---
 
@@ -1607,6 +1666,7 @@ ACADEMIC SETTINGS
 Academic Years
 Classes
 Sections
+Batches (Advance, Regular, ICU)
 Subjects
 Class Subjects
 ```
@@ -1618,11 +1678,11 @@ Student Inquiry
 ↓
 Student Master
 ↓
-Student Admission
+Student Admission (with Batch allocation & Regular / Supplementary selection)
 ↓
 Academic Enrollment
 ↓
-Previous-Year Enrollment
+Previous-Year Enrollment & Batch Promotion
 ```
 
 Then continue through the development sequence defined above.

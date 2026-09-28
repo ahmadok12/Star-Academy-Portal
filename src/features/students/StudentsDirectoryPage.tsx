@@ -8,20 +8,26 @@ import {
   Phone,
   MapPin,
   Clock,
-  UserCheck
+  UserCheck,
+  Sparkles,
+  SlidersHorizontal,
+  AlertCircle
 } from 'lucide-react';
 import { PageHeader } from '../../components/common/PageHeader';
 import { DataTable, Column } from '../../components/common/DataTable';
 import { SearchInput } from '../../components/common/SearchInput';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { FormDialog } from '../../components/common/FormDialog';
+import { ManageEnrollmentModal } from './ManageEnrollmentModal';
 import { useAcademicYear } from '../../context/AcademicYearContext';
 import { databaseService } from '../../lib/database-service';
 import { useToast } from '../../context/ToastContext';
 import {
   StudentWithEnrollment,
   ClassItem,
-  SectionItem
+  SectionItem,
+  BatchItem,
+  SubjectItem
 } from '../../types/database.types';
 
 interface StudentsDirectoryPageProps {
@@ -39,35 +45,52 @@ export const StudentsDirectoryPage: React.FC<StudentsDirectoryPageProps> = ({
   const [students, setStudents] = useState<StudentWithEnrollment[]>([]);
   const [classes, setClasses] = useState<ClassItem[]>([]);
   const [sections, setSections] = useState<SectionItem[]>([]);
+  const [batches, setBatches] = useState<BatchItem[]>([]);
+  const [subjects, setSubjects] = useState<SubjectItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Filters
   const [search, setSearch] = useState('');
   const [classFilter, setClassFilter] = useState('all');
   const [sectionFilter, setSectionFilter] = useState('all');
+  const [batchFilter, setBatchFilter] = useState('all');
+  const [enrollmentTypeFilter, setEnrollmentTypeFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
 
   // Selected student for Profile modal
   const [viewStudent, setViewStudent] = useState<StudentWithEnrollment | null>(null);
+  // Selected student for Quick Batch/Enrollment edit modal
+  const [manageStudent, setManageStudent] = useState<StudentWithEnrollment | null>(null);
 
   const loadData = useCallback(async () => {
     if (!selectedAcademicYear) return;
     try {
       setIsLoading(true);
-      const [sList, cList, secList] = await Promise.all([
-        databaseService.getStudents(selectedAcademicYear.id, classFilter, sectionFilter, search),
+      const [sList, cList, secList, bList, subList] = await Promise.all([
+        databaseService.getStudents(
+          selectedAcademicYear.id,
+          classFilter,
+          sectionFilter,
+          search,
+          batchFilter,
+          enrollmentTypeFilter
+        ),
         databaseService.getClasses(),
         databaseService.getSections(),
+        databaseService.getBatches(),
+        databaseService.getSubjects(),
       ]);
       setStudents(sList);
       setClasses(cList);
       setSections(secList);
+      setBatches(bList);
+      setSubjects(subList);
     } catch (e: any) {
       toast.error('Failed to load students', e.message);
     } finally {
       setIsLoading(false);
     }
-  }, [selectedAcademicYear, classFilter, sectionFilter, search, toast]);
+  }, [selectedAcademicYear, classFilter, sectionFilter, search, batchFilter, enrollmentTypeFilter, toast]);
 
   useEffect(() => {
     loadData();
@@ -86,6 +109,39 @@ export const StudentsDirectoryPage: React.FC<StudentsDirectoryPageProps> = ({
     const matchesStatus = statusFilter === 'all' || s.status === statusFilter;
     return matchesStatus;
   });
+
+  const getBatchBadge = (batch?: BatchItem) => {
+    if (!batch) {
+      return (
+        <span className="text-[10px] font-medium bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full border border-slate-200">
+          Unassigned
+        </span>
+      );
+    }
+    switch (batch.code) {
+      case 'ADV':
+        return (
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-purple-50 text-purple-700 px-2 py-0.5 rounded-lg border border-purple-200">
+            <Sparkles className="w-3 h-3 text-purple-600" />
+            <span>{batch.name}</span>
+          </span>
+        );
+      case 'ICU':
+        return (
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-rose-50 text-rose-700 px-2 py-0.5 rounded-lg border border-rose-200">
+            <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+            <span>{batch.name}</span>
+          </span>
+        );
+      case 'REG':
+      default:
+        return (
+          <span className="inline-flex items-center gap-1 text-[11px] font-medium bg-blue-50 text-blue-700 px-2 py-0.5 rounded-lg border border-blue-200">
+            <span>{batch.name}</span>
+          </span>
+        );
+    }
+  };
 
   const columns: Column<StudentWithEnrollment>[] = [
     {
@@ -136,6 +192,41 @@ export const StudentsDirectoryPage: React.FC<StudentsDirectoryPageProps> = ({
       ),
     },
     {
+      header: 'Batch',
+      cell: (row) => getBatchBadge(row.currentEnrollment?.batch),
+    },
+    {
+      header: 'Category',
+      cell: (row) => {
+        const isSupple = row.currentEnrollment?.enrollment_type === 'supplementary';
+        if (isSupple) {
+          const subs = row.currentEnrollment?.supplementary_subjects || [];
+          return (
+            <div>
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-amber-50 text-amber-800 px-2 py-0.5 rounded-lg border border-amber-200">
+                <AlertCircle className="w-3 h-3 text-amber-600 shrink-0" />
+                <span>Supplementary</span>
+              </span>
+              {subs.length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {subs.map(s => (
+                    <span key={s.id} className="text-[9px] font-semibold bg-amber-100/70 text-amber-900 px-1.5 py-0.2 rounded font-mono">
+                      {s.code}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        }
+        return (
+          <span className="text-[11px] font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/80">
+            Regular
+          </span>
+        );
+      },
+    },
+    {
       header: 'Contact',
       cell: (row) => (
         <div className="flex items-center space-x-1 text-slate-600 font-mono text-xs">
@@ -153,6 +244,15 @@ export const StudentsDirectoryPage: React.FC<StudentsDirectoryPageProps> = ({
       className: 'text-right',
       cell: (row) => (
         <div className="flex items-center justify-end space-x-1.5">
+          <button
+            onClick={() => setManageStudent(row)}
+            title="Manage Batch Placement & Supplementary Category"
+            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg shadow-2xs transition"
+            type="button"
+          >
+            <SlidersHorizontal className="w-3 h-3 text-slate-500" />
+            <span>Placement</span>
+          </button>
           <button
             onClick={() => handleOpenProfile(row)}
             title="View Full Student Profile & Academic History"
@@ -266,6 +366,32 @@ export const StudentsDirectoryPage: React.FC<StudentsDirectoryPageProps> = ({
           </div>
 
           <div className="flex items-center space-x-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+            <select
+              value={batchFilter}
+              onChange={(e) => setBatchFilter(e.target.value)}
+              className="text-xs bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-slate-800 font-medium focus:ring-slate-900"
+            >
+              <option value="all">All Batches</option>
+              {batches.map(b => (
+                <option key={b.id} value={b.id}>{b.name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center space-x-1.5">
+            <select
+              value={enrollmentTypeFilter}
+              onChange={(e) => setEnrollmentTypeFilter(e.target.value)}
+              className="text-xs bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-slate-800 font-medium focus:ring-slate-900"
+            >
+              <option value="all">All Categories</option>
+              <option value="regular">Regular Only</option>
+              <option value="supplementary">Supplementary Only</option>
+            </select>
+          </div>
+
+          <div className="flex items-center space-x-1.5">
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -286,6 +412,16 @@ export const StudentsDirectoryPage: React.FC<StudentsDirectoryPageProps> = ({
         keyExtractor={(row) => row.id}
         isLoading={isLoading}
         emptyMessage="No students found enrolled in this cycle matching filters."
+      />
+
+      {/* Manage Placement & Supplementary Modal */}
+      <ManageEnrollmentModal
+        isOpen={!!manageStudent}
+        onClose={() => setManageStudent(null)}
+        student={manageStudent}
+        batches={batches}
+        subjects={subjects}
+        onEnrollmentUpdated={loadData}
       />
 
       {/* Student Profile Dialog with Academic History Timeline */}
@@ -340,6 +476,49 @@ export const StudentsDirectoryPage: React.FC<StudentsDirectoryPageProps> = ({
                     </span>
                   )}
                 </div>
+
+                {/* Batch & Category Highlights */}
+                <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-slate-200/60">
+                  <div className="flex items-center gap-1 text-xs">
+                    <span className="text-slate-400 font-semibold text-[11px]">Batch:</span>
+                    {getBatchBadge(viewStudent.currentEnrollment?.batch)}
+                  </div>
+
+                  <div className="flex items-center gap-1 text-xs ml-2">
+                    <span className="text-slate-400 font-semibold text-[11px]">Category:</span>
+                    {viewStudent.currentEnrollment?.enrollment_type === 'supplementary' ? (
+                      <span className="text-xs font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-lg border border-amber-300">
+                        ⚡ Supplementary Student
+                      </span>
+                    ) : (
+                      <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-lg border border-slate-200">
+                        Regular Student
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Supplementary Subjects Details in Profile */}
+                {viewStudent.currentEnrollment?.enrollment_type === 'supplementary' && (
+                  <div className="mt-3 p-3 bg-amber-50/80 border border-amber-200 rounded-xl space-y-1 text-xs text-amber-950">
+                    <div className="font-bold flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5 text-amber-700" />
+                      <span>Supplementary Retake Subjects (Previous Academic Cycle):</span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {(viewStudent.currentEnrollment?.supplementary_subjects || []).map(s => (
+                        <span key={s.id} className="bg-amber-600 text-white font-bold text-[11px] px-2 py-0.5 rounded-md">
+                          {s.name} ({s.code})
+                        </span>
+                      ))}
+                    </div>
+                    {viewStudent.currentEnrollment?.supplementary_notes && (
+                      <p className="text-[11px] text-amber-800 mt-1 italic">
+                        Exam Note: {viewStudent.currentEnrollment.supplementary_notes}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -370,6 +549,16 @@ export const StudentsDirectoryPage: React.FC<StudentsDirectoryPageProps> = ({
                           <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600 font-medium">
                             Enrolled: {rec?.enrollment_date}
                           </span>
+                          {rec?.batch && (
+                            <span className="text-[10px] font-bold bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded border border-indigo-200">
+                              {rec.batch.name}
+                            </span>
+                          )}
+                          {rec?.enrollment_type === 'supplementary' && (
+                            <span className="text-[10px] font-bold bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded border border-amber-200">
+                              Supple
+                            </span>
+                          )}
                         </div>
                         <p className="text-xs text-slate-600 mt-0.5">
                           Class: <strong>{rec?.class?.name}</strong> • Section: <strong>{rec?.section?.name}</strong> • Roll #: <strong>{rec?.roll_no || '—'}</strong>

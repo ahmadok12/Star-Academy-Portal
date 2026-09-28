@@ -99,12 +99,27 @@ export interface ClassSubject {
 }
 
 // ============================================================================
+// BATCHES MASTER TYPES
+// ============================================================================
+export interface BatchItem {
+  id: string;
+  name: string;
+  code: string;
+  description?: string | null;
+  display_order: number;
+  status: EntityStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+// ============================================================================
 // PHASE 3: STUDENTS MODULE TYPES
 // ============================================================================
 export type InquiryStatus = 'New' | 'Contacted' | 'Follow-up' | 'Enrolled' | 'Rejected' | 'Lost';
 export type Gender = 'Male' | 'Female' | 'Other';
 export type StudentStatus = 'active' | 'inactive' | 'passed_out' | 'struck_off';
 export type EnrollmentStatus = 'active' | 'promoted' | 'retained' | 'left';
+export type EnrollmentType = 'regular' | 'supplementary';
 
 export interface StudentInquiry {
   id: string;
@@ -114,6 +129,7 @@ export interface StudentInquiry {
   father_name?: string | null;
   contact: string;
   interested_class_id?: string | null;
+  enrollment_type?: EnrollmentType;
   source: string;
   status: InquiryStatus;
   remarks?: string | null;
@@ -149,7 +165,11 @@ export interface StudentAcademicRecord {
   academic_year_id: string;
   class_id: string;
   section_id: string;
+  batch_id?: string | null;
   roll_no?: string | null;
+  enrollment_type?: EnrollmentType;
+  supplementary_subject_ids?: string[] | null;
+  supplementary_notes?: string | null;
   status: EnrollmentStatus;
   enrollment_date: string;
   leaving_date?: string | null;
@@ -160,6 +180,8 @@ export interface StudentAcademicRecord {
   academic_year?: AcademicYear;
   class?: ClassItem;
   section?: SectionItem;
+  batch?: BatchItem;
+  supplementary_subjects?: SubjectItem[];
 }
 
 export interface StudentWithEnrollment extends Student {

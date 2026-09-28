@@ -35,6 +35,10 @@ jobs:
         run: npm ci || npm install
 
       - name: Build Production Assets
+        env:
+          VITE_SUPABASE_URL: https://uabmraigtipjomnpclkd.supabase.co
+          VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhYm1yYWlndGlwam9tbnBjbGtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkwMjgwMjQsImV4cCI6MjEwNDYwNDAyNH0._Twe7n4G_U8hmLUVLgvrUTwut3YWDrKeeeqnN2DTi3o
+          VITE_ENABLE_DEMO_MODE: 'false'
         run: npm run build
 
       - name: Setup Pages

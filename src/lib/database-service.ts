@@ -67,9 +67,9 @@ const INITIAL_CLASSES: ClassItem[] = [
 ];
 
 const INITIAL_SECTIONS: SectionItem[] = [
-  { id: 's0000000-0000-0000-0000-000000000001', name: 'A', code: 'SEC-A', display_order: 1, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
-  { id: 's0000000-0000-0000-0000-000000000002', name: 'B', code: 'SEC-B', display_order: 2, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
-  { id: 's0000000-0000-0000-0000-000000000003', name: 'C', code: 'SEC-C', display_order: 3, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() }
+  { id: 'e0000000-0000-0000-0000-000000000001', name: 'A', code: 'SEC-A', display_order: 1, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'e0000000-0000-0000-0000-000000000002', name: 'B', code: 'SEC-B', display_order: 2, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'e0000000-0000-0000-0000-000000000003', name: 'C', code: 'SEC-C', display_order: 3, status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() }
 ];
 
 const INITIAL_BATCHES: BatchItem[] = [
@@ -115,11 +115,11 @@ const INITIAL_SUBJECTS: SubjectItem[] = [
 ];
 
 const INITIAL_CLASS_SECTIONS: ClassSection[] = [
-  { id: 'cs000000-0000-0000-0000-000000000001', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000002', section_id: 's0000000-0000-0000-0000-000000000001', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
-  { id: 'cs000000-0000-0000-0000-000000000002', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000002', section_id: 's0000000-0000-0000-0000-000000000002', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
-  { id: 'cs000000-0000-0000-0000-000000000003', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000003', section_id: 's0000000-0000-0000-0000-000000000001', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
-  { id: 'cs000000-0000-0000-0000-000000000004', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000003', section_id: 's0000000-0000-0000-0000-000000000002', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
-  { id: 'cs000000-0000-0000-0000-000000000005', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000003', section_id: 's0000000-0000-0000-0000-000000000003', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() }
+  { id: 'cs000000-0000-0000-0000-000000000001', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000002', section_id: 'e0000000-0000-0000-0000-000000000001', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'cs000000-0000-0000-0000-000000000002', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000002', section_id: 'e0000000-0000-0000-0000-000000000002', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'cs000000-0000-0000-0000-000000000003', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000003', section_id: 'e0000000-0000-0000-0000-000000000001', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'cs000000-0000-0000-0000-000000000004', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000003', section_id: 'e0000000-0000-0000-0000-000000000002', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: 'cs000000-0000-0000-0000-000000000005', academic_year_id: 'a0000000-0000-0000-0000-000000000001', class_id: 'c0000000-0000-0000-0000-000000000003', section_id: 'e0000000-0000-0000-0000-000000000003', status: 'active', created_at: new Date().toISOString(), updated_at: new Date().toISOString() }
 ];
 
 const INITIAL_CLASS_SUBJECTS: ClassSubject[] = [
@@ -228,7 +228,7 @@ const INITIAL_ACADEMIC_RECORDS: StudentAcademicRecord[] = [
     student_id: 'd0000000-0000-0000-0000-000000000001',
     academic_year_id: 'a0000000-0000-0000-0000-000000000001', // 2026-27
     class_id: 'c0000000-0000-0000-0000-000000000002', // Class 9
-    section_id: 's0000000-0000-0000-0000-000000000001', // Section A
+    section_id: 'e0000000-0000-0000-0000-000000000001', // Section A
     batch_id: 'b0000000-0000-0000-0000-000000000001', // Advance Batch
     enrollment_type: 'regular',
     roll_no: '01',
@@ -242,7 +242,7 @@ const INITIAL_ACADEMIC_RECORDS: StudentAcademicRecord[] = [
     student_id: 'd0000000-0000-0000-0000-000000000002',
     academic_year_id: 'a0000000-0000-0000-0000-000000000001', // 2026-27
     class_id: 'c0000000-0000-0000-0000-000000000002', // Class 9
-    section_id: 's0000000-0000-0000-0000-000000000002', // Section B
+    section_id: 'e0000000-0000-0000-0000-000000000002', // Section B
     batch_id: 'b0000000-0000-0000-0000-000000000002', // Regular Batch
     enrollment_type: 'regular',
     roll_no: '02',
@@ -256,7 +256,7 @@ const INITIAL_ACADEMIC_RECORDS: StudentAcademicRecord[] = [
     student_id: 'd0000000-0000-0000-0000-000000000003',
     academic_year_id: 'a0000000-0000-0000-0000-000000000001', // 2026-27
     class_id: 'c0000000-0000-0000-0000-000000000003', // Class 10
-    section_id: 's0000000-0000-0000-0000-000000000001', // Section A
+    section_id: 'e0000000-0000-0000-0000-000000000001', // Section A
     batch_id: 'b0000000-0000-0000-0000-000000000003', // ICU Batch
     enrollment_type: 'supplementary',
     supplementary_subject_ids: ['b0000000-0000-0000-0000-000000000003'], // Mathematics
@@ -439,7 +439,7 @@ const INITIAL_TEACHER_ASSIGNMENTS: TeacherSubjectAssignment[] = [
     academic_year_id: 'a0000000-0000-0000-0000-000000000001', // 2026-27
     teacher_id: '30000000-0000-0000-0000-000000000001', // Prof Tariq
     class_id: 'c0000000-0000-0000-0000-000000000001', // Class 9
-    section_id: 's0000000-0000-0000-0000-000000000001', // Section A
+    section_id: 'e0000000-0000-0000-0000-000000000001', // Section A
     subject_id: 'sub00000-0000-0000-0000-000000000001', // Mathematics
     is_class_teacher: true,
     status: 'active',
@@ -451,7 +451,7 @@ const INITIAL_TEACHER_ASSIGNMENTS: TeacherSubjectAssignment[] = [
     academic_year_id: 'a0000000-0000-0000-0000-000000000001', // 2026-27
     teacher_id: '30000000-0000-0000-0000-000000000002', // Dr. Sarah
     class_id: 'c0000000-0000-0000-0000-000000000001', // Class 9
-    section_id: 's0000000-0000-0000-0000-000000000001', // Section A
+    section_id: 'e0000000-0000-0000-0000-000000000001', // Section A
     subject_id: 'sub00000-0000-0000-0000-000000000002', // Physics
     is_class_teacher: false,
     status: 'active',
@@ -463,7 +463,7 @@ const INITIAL_TEACHER_ASSIGNMENTS: TeacherSubjectAssignment[] = [
     academic_year_id: 'a0000000-0000-0000-0000-000000000001', // 2026-27
     teacher_id: '30000000-0000-0000-0000-000000000003', // Engr. Bilal
     class_id: 'c0000000-0000-0000-0000-000000000001', // Class 9
-    section_id: 's0000000-0000-0000-0000-000000000001', // Section A
+    section_id: 'e0000000-0000-0000-0000-000000000001', // Section A
     subject_id: 'sub00000-0000-0000-0000-000000000003', // Chemistry
     is_class_teacher: false,
     status: 'active',
@@ -475,7 +475,7 @@ const INITIAL_TEACHER_ASSIGNMENTS: TeacherSubjectAssignment[] = [
     academic_year_id: 'a0000000-0000-0000-0000-000000000001', // 2026-27
     teacher_id: '30000000-0000-0000-0000-000000000004', // Ms. Ayesha
     class_id: 'c0000000-0000-0000-0000-000000000001', // Class 9
-    section_id: 's0000000-0000-0000-0000-000000000001', // Section A
+    section_id: 'e0000000-0000-0000-0000-000000000001', // Section A
     subject_id: 'sub00000-0000-0000-0000-000000000004', // English
     is_class_teacher: false,
     status: 'active',

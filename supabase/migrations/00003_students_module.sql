@@ -76,40 +76,16 @@ ALTER TABLE public.students ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.student_academic_records ENABLE ROW LEVEL SECURITY;
 
 -- Student Inquiries Policies
-CREATE POLICY "Authenticated users can read student inquiries"
-    ON public.student_inquiries FOR SELECT
-    TO authenticated
-    USING (true);
-
-CREATE POLICY "Admins can modify student inquiries"
-    ON public.student_inquiries FOR ALL
-    TO authenticated
-    USING (public.is_admin())
-    WITH CHECK (public.is_admin());
+CREATE POLICY "Allow public read student inquiries" ON public.student_inquiries FOR SELECT USING (true);
+CREATE POLICY "Allow public modify student inquiries" ON public.student_inquiries FOR ALL USING (true);
 
 -- Students Policies
-CREATE POLICY "Authenticated users can read students"
-    ON public.students FOR SELECT
-    TO authenticated
-    USING (true);
-
-CREATE POLICY "Admins can modify students"
-    ON public.students FOR ALL
-    TO authenticated
-    USING (public.is_admin())
-    WITH CHECK (public.is_admin());
+CREATE POLICY "Allow public read students" ON public.students FOR SELECT USING (true);
+CREATE POLICY "Allow public modify students" ON public.students FOR ALL USING (true);
 
 -- Student Academic Records Policies
-CREATE POLICY "Authenticated users can read student academic records"
-    ON public.student_academic_records FOR SELECT
-    TO authenticated
-    USING (true);
-
-CREATE POLICY "Admins can modify student academic records"
-    ON public.student_academic_records FOR ALL
-    TO authenticated
-    USING (public.is_admin())
-    WITH CHECK (public.is_admin());
+CREATE POLICY "Allow public read student academic records" ON public.student_academic_records FOR SELECT USING (true);
+CREATE POLICY "Allow public modify student academic records" ON public.student_academic_records FOR ALL USING (true);
 
 -- ============================================================================
 -- 5. SEED DATA FOR STUDENTS MODULE (Development & Verification)
@@ -135,7 +111,7 @@ ON CONFLICT (admission_no) DO NOTHING;
 INSERT INTO public.student_academic_records (
     student_id, academic_year_id, class_id, section_id, roll_no, status, enrollment_date
 ) VALUES
-    ('d0000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000002', 's0000000-0000-0000-0000-000000000001', '01', 'active', '2026-05-01'),
-    ('d0000000-0000-0000-0000-000000000002', 'a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000002', 's0000000-0000-0000-0000-000000000002', '02', 'active', '2026-05-01'),
-    ('d0000000-0000-0000-0000-000000000003', 'a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000003', 's0000000-0000-0000-0000-000000000001', '01', 'active', '2026-05-01')
+    ('d0000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000002', 'e0000000-0000-0000-0000-000000000001', '01', 'active', '2026-05-01'),
+    ('d0000000-0000-0000-0000-000000000002', 'a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000002', 'e0000000-0000-0000-0000-000000000002', '02', 'active', '2026-05-01'),
+    ('d0000000-0000-0000-0000-000000000003', 'a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000003', 'e0000000-0000-0000-0000-000000000001', '01', 'active', '2026-05-01')
 ON CONFLICT (student_id, academic_year_id) DO NOTHING;

@@ -28,6 +28,7 @@ import { ParentPortalPage } from './features/parent-portal/ParentPortalPage';
 import { ExamsAndContentPage } from './features/exams/ExamsAndContentPage';
 import { FeesPage } from './features/fees/FeesPage';
 import { FinancePage } from './features/finance/FinancePage';
+import { ReportsPage } from './features/reports/ReportsPage';
 import { databaseService } from './lib/database-service';
 import { AcademySettings, StudentInquiry } from './types/database.types';
 
@@ -139,6 +140,9 @@ const MainAppContent: React.FC = () => {
 
       {/* Finance & Payroll (Phase 11) */}
       {currentTab === 'finance' && <FinancePage settings={settings} />}
+
+      {/* Reports & Analytics (Phase 12) */}
+      {currentTab === 'reports' && <ReportsPage settings={settings} />}
 
       {/* Academic Setup */}
       {currentTab === 'academic-years' && <AcademicYearsPage />}

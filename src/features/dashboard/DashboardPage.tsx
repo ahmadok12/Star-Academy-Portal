@@ -17,7 +17,8 @@ import {
   Award,
   Smartphone,
   ShieldCheck,
-  DollarSign
+  DollarSign,
+  BarChart3
 } from 'lucide-react';
 import { useAcademicYear } from '../../context/AcademicYearContext';
 import { databaseService } from '../../lib/database-service';
@@ -373,6 +374,32 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
                   {loading ? '...' : `Rs. ${(stats.liquidReserves / 1000).toFixed(0)}k`}
                 </p>
                 <p className="text-[10px] text-blue-600 font-medium">Liquid reserves</p>
+              </div>
+              <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
+            </div>
+          </div>
+
+          {/* Phase 12: Central Reports & Analytics */}
+          <div
+            onClick={() => onNavigate('reports')}
+            className="bg-white rounded-2xl p-4 border border-slate-200/70 shadow-xs hover:border-slate-300 transition cursor-pointer group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-700 group-hover:bg-indigo-600 group-hover:text-white transition">
+                  <BarChart3 className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-mono text-indigo-700 font-bold bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200/50">P12</span>
+              </div>
+              <h3 className="font-bold text-slate-900 text-xs mt-3">Central Reports</h3>
+              <p className="text-[11px] text-slate-400 mt-0.5">8 Modules, CSV export &amp; print</p>
+            </div>
+            <div className="mt-4 flex items-end justify-between pt-2 border-t border-slate-100">
+              <div>
+                <p className="text-2xl font-black text-slate-900 tracking-tight font-mono">
+                  8
+                </p>
+                <p className="text-[10px] text-indigo-600 font-medium">Audit report suites</p>
               </div>
               <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
             </div>

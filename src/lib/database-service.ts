@@ -4999,13 +4999,13 @@ export const databaseService = {
   // ============================================================================
 
   async getDailyAttendance(params: {
-    academic_year_id: string;
+    academic_year_id?: string;
     date?: string;
     class_id?: string;
     section_id?: string;
     batch_id?: string;
     student_id?: string;
-  }): Promise<DailyAttendance[]> {
+  } = {}): Promise<DailyAttendance[]> {
     if (isSupabaseConfigured) {
       try {
         let query = supabase
@@ -5017,9 +5017,9 @@ export const databaseService = {
             section:sections(*),
             batch:batches(*),
             recorded_by_staff:staff(*)
-          `)
-          .eq('academic_year_id', params.academic_year_id);
+          `);
 
+        if (params.academic_year_id) query = query.eq('academic_year_id', params.academic_year_id);
         if (params.date) query = query.eq('date', params.date);
         if (params.class_id) query = query.eq('class_id', params.class_id);
         if (params.section_id) query = query.eq('section_id', params.section_id);
@@ -5043,7 +5043,7 @@ export const databaseService = {
 
     return list
       .filter(item => {
-        if (item.academic_year_id !== params.academic_year_id) return false;
+        if (params.academic_year_id && item.academic_year_id !== params.academic_year_id) return false;
         if (params.date && item.date !== params.date) return false;
         if (params.class_id && item.class_id !== params.class_id) return false;
         if (params.section_id && item.section_id !== params.section_id) return false;

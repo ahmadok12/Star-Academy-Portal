@@ -27,6 +27,7 @@ export type NavTab =
   | 'exams-marks'
   | 'fees'
   | 'finance'
+  | 'reports'
   | 'student-inquiries'
   | 'students-directory'
   | 'student-admission'
@@ -406,6 +407,32 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </ul>
             </div>
 
+            {/* Reports & Analytics (Phase 12) */}
+            <div>
+              <p className="text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-2 px-3 flex items-center justify-between">
+                <span>Reports &amp; Analytics</span>
+                <span className="text-[9px] bg-indigo-50 text-indigo-700 font-semibold px-1.5 py-0.5 rounded border border-indigo-200/60">P12</span>
+              </p>
+              <ul className="space-y-1">
+                <li>
+                  <button
+                    onClick={() => handleNavClick('reports')}
+                    className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl font-medium text-xs transition ${
+                      currentTab === 'reports'
+                        ? 'bg-slate-100 text-slate-900 font-semibold'
+                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <BarChart3 className="w-4 h-4 shrink-0 text-indigo-600" />
+                      <span className="font-semibold text-slate-900">Central Reports</span>
+                    </div>
+                    <span className="text-[9px] font-mono text-indigo-700 bg-indigo-50 px-1 py-0.5 rounded font-semibold border border-indigo-200/50">P12</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+
             {/* Future Modules (Coming Soon) */}
             <div>
               <p className="text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-2 px-3 flex items-center justify-between">
@@ -414,7 +441,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </p>
               <ul className="space-y-1 opacity-55">
                 {[
-                  { label: 'Central Reports', icon: BarChart3, tag: 'P12' },
+                  { label: 'Mobile Admin App', icon: Smartphone, tag: 'P13' },
                 ].map((item, i) => {
                   const Icon = item.icon;
                   return (

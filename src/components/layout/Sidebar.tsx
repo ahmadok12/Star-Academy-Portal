@@ -8,15 +8,18 @@ import {
   ArrowRightLeft,
   ClipboardList,
   Clock,
-  FileSpreadsheet,
   DollarSign,
   Briefcase,
-  BarChart3
+  BarChart3,
+  Award,
+  Smartphone
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export type NavTab = 
   | 'dashboard'
+  | 'teacher-portal'
+  | 'exams-marks'
   | 'student-inquiries'
   | 'students-directory'
   | 'student-admission'
@@ -133,11 +136,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </ul>
             </div>
 
-            {/* Operations & Schedule (Phase 5 & 6) */}
+            {/* Operations & Schedule (Phase 5, 6 & 7) */}
             <div>
               <p className="text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-2 px-3 flex items-center justify-between">
-                <span>Operations &amp; Schedule</span>
-                <span className="text-[9px] bg-emerald-50 text-emerald-700 font-semibold px-1.5 py-0.5 rounded border border-emerald-200/60">Phase 5 &amp; 6</span>
+                <span>Operations &amp; Portals</span>
+                <span className="text-[9px] bg-emerald-50 text-emerald-700 font-semibold px-1.5 py-0.5 rounded border border-emerald-200/60">P5, P6 &amp; P7</span>
               </p>
               <ul className="space-y-1">
                 <li>
@@ -171,6 +174,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       <span>Attendance &amp; Registers</span>
                     </div>
                     <span className="text-[9px] font-mono text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded font-semibold">P6</span>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    onClick={() => handleNavClick('teacher-portal')}
+                    className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl font-medium text-xs transition ${
+                      currentTab === 'teacher-portal'
+                        ? 'bg-slate-100 text-slate-900 font-semibold'
+                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <Smartphone className="w-4 h-4 shrink-0 text-amber-500" />
+                      <span className="font-semibold text-slate-900">Teacher Portal</span>
+                    </div>
+                    <span className="text-[9px] font-mono text-amber-700 bg-amber-50 px-1 py-0.5 rounded font-semibold border border-amber-200/50">P7</span>
                   </button>
                 </li>
               </ul>
@@ -276,6 +296,32 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </ul>
             </div>
 
+            {/* Academic & Examination (Phase 8) */}
+            <div>
+              <p className="text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-2 px-3 flex items-center justify-between">
+                <span>Academics &amp; Exams</span>
+                <span className="text-[9px] bg-blue-50 text-blue-700 font-semibold px-1.5 py-0.5 rounded border border-blue-200/60">Phase 8</span>
+              </p>
+              <ul className="space-y-1">
+                <li>
+                  <button
+                    onClick={() => handleNavClick('exams-marks')}
+                    className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl font-medium text-xs transition ${
+                      currentTab === 'exams-marks'
+                        ? 'bg-slate-100 text-slate-900 font-semibold'
+                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <Award className="w-4 h-4 shrink-0 text-amber-500" />
+                      <span className="font-semibold text-slate-900">Exams &amp; Marksheets</span>
+                    </div>
+                    <span className="text-[9px] font-mono text-blue-700 bg-blue-50 px-1 py-0.5 rounded font-semibold border border-blue-200/50">P8</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+
             {/* Future Modules (Coming Soon) */}
             <div>
               <p className="text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-2 px-3 flex items-center justify-between">
@@ -284,7 +330,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </p>
               <ul className="space-y-1 opacity-55">
                 {[
-                  { label: 'Exams & Marks', icon: FileSpreadsheet },
                   { label: 'Fees & Finance', icon: DollarSign },
                   { label: 'Central Reports', icon: BarChart3 },
                 ].map((item, i) => {

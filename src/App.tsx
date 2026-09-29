@@ -22,6 +22,8 @@ import { StaffDirectoryPage } from './features/staff/StaffDirectoryPage';
 import { TeacherAssignmentsPage } from './features/staff/TeacherAssignmentsPage';
 import { TimetablePage } from './features/timetable/TimetablePage';
 import { AttendancePage } from './features/attendance/AttendancePage';
+import { TeacherPortalPage } from './features/teacher-portal/TeacherPortalPage';
+import { ExamsAndContentPage } from './features/exams/ExamsAndContentPage';
 import { databaseService } from './lib/database-service';
 import { AcademySettings, StudentInquiry } from './types/database.types';
 
@@ -118,9 +120,13 @@ const MainAppContent: React.FC = () => {
       {currentTab === 'staff-directory' && <StaffDirectoryPage />}
       {currentTab === 'teacher-assignments' && <TeacherAssignmentsPage />}
 
-      {/* Operations & Schedule (Phase 5 & 6) */}
+      {/* Operations & Schedule (Phase 5, 6 & 7) */}
       {currentTab === 'timetable' && <TimetablePage />}
       {currentTab === 'attendance' && <AttendancePage />}
+      {currentTab === 'teacher-portal' && <TeacherPortalPage settings={settings} />}
+
+      {/* Academics & Examination (Phase 8) */}
+      {currentTab === 'exams-marks' && <ExamsAndContentPage settings={settings} />}
 
       {/* Academic Setup */}
       {currentTab === 'academic-years' && <AcademicYearsPage />}

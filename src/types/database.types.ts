@@ -380,4 +380,129 @@ export interface StudentAttendanceSummary {
   records: Record<string, AttendanceStatus>;
 }
 
+// ============================================================================
+// PHASE 7 & 8: SCHEME OF STUDY, SUBJECT CONTENT, EXAMS & MARKS
+// ============================================================================
+
+export type SOSStatus = 'planned' | 'in_progress' | 'completed';
+
+export interface SchemeOfStudy {
+  id: string;
+  academic_year_id: string;
+  class_id: string;
+  subject_id: string;
+  month_name: string;
+  order_index: number;
+  chapter_title: string;
+  topics_covered: string;
+  learning_objectives?: string | null;
+  status: SOSStatus;
+  created_at?: string;
+  updated_at?: string;
+  // Joined
+  academic_year?: AcademicYear;
+  class?: ClassItem;
+  subject?: SubjectItem;
+}
+
+export type ContentType = 'syllabus' | 'notes' | 'assignment' | 'past_paper' | 'worksheet' | 'reference';
+
+export interface SubjectContent {
+  id: string;
+  academic_year_id: string;
+  class_id: string;
+  subject_id: string;
+  title: string;
+  content_type: ContentType;
+  chapter_ref?: string | null;
+  description?: string | null;
+  file_url?: string | null;
+  is_published: boolean;
+  created_by?: string | null;
+  created_at?: string;
+  updated_at?: string;
+  // Joined
+  academic_year?: AcademicYear;
+  class?: ClassItem;
+  subject?: SubjectItem;
+  creator?: Staff;
+}
+
+export type AssessmentType = 'monthly_test' | 'midterm' | 'final' | 'quiz' | 'pre_board' | 'supplementary_exam';
+export type AssessmentStatus = 'scheduled' | 'completed' | 'cancelled';
+
+export interface Assessment {
+  id: string;
+  academic_year_id: string;
+  class_id: string;
+  section_id?: string | null;
+  subject_id: string;
+  title: string;
+  assessment_type: AssessmentType;
+  total_marks: number;
+  passing_marks: number;
+  test_date: string;
+  start_time?: string | null;
+  end_time?: string | null;
+  room_number?: string | null;
+  status: AssessmentStatus;
+  created_at?: string;
+  updated_at?: string;
+  // Joined
+  academic_year?: AcademicYear;
+  class?: ClassItem;
+  section?: SectionItem;
+  subject?: SubjectItem;
+}
+
+export interface StudentMark {
+  id: string;
+  assessment_id: string;
+  student_id: string;
+  obtained_marks?: number | null;
+  is_absent: boolean;
+  percentage?: number | null;
+  grade?: string | null;
+  remarks?: string | null;
+  created_at?: string;
+  updated_at?: string;
+  // Joined
+  student?: Student;
+  assessment?: Assessment;
+}
+
+export interface StudentMarksheetSubjectResult {
+  assessment_id: string;
+  assessment_title: string;
+  assessment_type: AssessmentType;
+  test_date: string;
+  subject_id: string;
+  subject_name: string;
+  subject_code: string;
+  total_marks: number;
+  passing_marks: number;
+  obtained_marks: number | null;
+  is_absent: boolean;
+  percentage: number | null;
+  grade: string | null;
+  is_passed: boolean;
+  remarks?: string | null;
+}
+
+export interface StudentReportCard {
+  student: Student;
+  academic_year?: AcademicYear;
+  class?: ClassItem;
+  section?: SectionItem;
+  batch?: BatchItem;
+  results: StudentMarksheetSubjectResult[];
+  total_maximum_marks: number;
+  total_obtained_marks: number;
+  overall_percentage: number;
+  overall_grade: string;
+  overall_result: 'PASS' | 'FAIL';
+  class_rank?: number;
+}
+
+
 

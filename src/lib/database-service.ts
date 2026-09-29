@@ -23,7 +23,13 @@ import {
   LectureAttendance,
   AttendanceStatus,
   AttendanceKPIStats,
-  StudentAttendanceSummary
+  StudentAttendanceSummary,
+  SchemeOfStudy,
+  SubjectContent,
+  Assessment,
+  StudentMark,
+  StudentMarksheetSubjectResult,
+  StudentReportCard
 } from '../types/database.types';
 
 // ============================================================================
@@ -1906,6 +1912,315 @@ const INITIAL_LECTURE_ATTENDANCE: LectureAttendance[] = [
   }
 ];
 
+// Phase 7 & 8: Initial Seeds
+const INITIAL_SCHEME_OF_STUDIES: SchemeOfStudy[] = [
+  {
+    id: '90000000-0000-0000-0000-000000000001',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    subject_id: 'b0000000-0000-0000-0000-000000000003',
+    month_name: 'April',
+    order_index: 1,
+    chapter_title: 'Matrices and Determinants',
+    topics_covered: 'Types of Matrices, Addition, Multiplication, Inverses & Cramer Rule',
+    learning_objectives: 'Understand linear equations solving using matrices',
+    status: 'completed',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '90000000-0000-0000-0000-000000000002',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    subject_id: 'b0000000-0000-0000-0000-000000000003',
+    month_name: 'May',
+    order_index: 2,
+    chapter_title: 'Real and Complex Numbers',
+    topics_covered: 'Radicals and Radicands, Laws of Exponents, Complex Numbers',
+    learning_objectives: 'Master complex number operations and algebraic simplification',
+    status: 'completed',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '90000000-0000-0000-0000-000000000003',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    subject_id: 'b0000000-0000-0000-0000-000000000003',
+    month_name: 'June',
+    order_index: 3,
+    chapter_title: 'Logarithms',
+    topics_covered: 'Scientific Notation, Common Logarithm, Characteristic & Mantissa, Laws of Logarithms',
+    learning_objectives: 'Perform multi-step calculations using log tables and laws',
+    status: 'in_progress',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '90000000-0000-0000-0000-000000000004',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    subject_id: 'b0000000-0000-0000-0000-000000000003',
+    month_name: 'July',
+    order_index: 4,
+    chapter_title: 'Algebraic Expressions & Formulas',
+    topics_covered: 'Algebraic Identities, Rational Expressions, Surds and their Conjugates',
+    learning_objectives: 'Factorization and polynomial expansion mastery',
+    status: 'planned',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '90000000-0000-0000-0000-000000000005',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    subject_id: 'b0000000-0000-0000-0000-000000000007',
+    month_name: 'April',
+    order_index: 1,
+    chapter_title: 'Physical Quantities & Measurement',
+    topics_covered: 'International System of Units, Vernier Callipers, Screw Gauge, Significant Figures',
+    learning_objectives: 'Lab measurement instruments and uncertainty calculation',
+    status: 'completed',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '90000000-0000-0000-0000-000000000006',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    subject_id: 'b0000000-0000-0000-0000-000000000007',
+    month_name: 'May',
+    order_index: 2,
+    chapter_title: 'Kinematics',
+    topics_covered: 'Speed, Velocity, Acceleration, Equations of Motion, Motion under Gravity',
+    learning_objectives: 'Derive and apply motion formulas for constant acceleration',
+    status: 'completed',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '90000000-0000-0000-0000-000000000007',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    subject_id: 'b0000000-0000-0000-0000-000000000007',
+    month_name: 'June',
+    order_index: 3,
+    chapter_title: 'Dynamics',
+    topics_covered: 'Newtons Laws of Motion, Momentum, Friction, Centripetal Force',
+    learning_objectives: 'Analyze force diagrams and friction coefficient problems',
+    status: 'in_progress',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
+const INITIAL_SUBJECT_CONTENTS: SubjectContent[] = [
+  {
+    id: '91000000-0000-0000-0000-000000000001',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    subject_id: 'b0000000-0000-0000-0000-000000000003',
+    title: 'Complete Matric Math Course Syllabus 2026-27',
+    content_type: 'syllabus',
+    chapter_ref: 'General',
+    description: 'Annual Board syllabus breakdown, chapter weightage, and paper pattern',
+    is_published: true,
+    created_by: '30000000-0000-0000-0000-000000000001',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '91000000-0000-0000-0000-000000000002',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    subject_id: 'b0000000-0000-0000-0000-000000000003',
+    title: 'Unit 1 Matrices & Determinants Handouts',
+    content_type: 'notes',
+    chapter_ref: 'Chapter 1',
+    description: 'Comprehensive theoretical derivations, solved numericals and shortcuts for Cramer Rule',
+    is_published: true,
+    created_by: '30000000-0000-0000-0000-000000000001',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '91000000-0000-0000-0000-000000000003',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    subject_id: 'b0000000-0000-0000-0000-000000000007',
+    title: 'Kinematics 3 Equations of Motion Practice Worksheet',
+    content_type: 'worksheet',
+    chapter_ref: 'Chapter 2',
+    description: '20 high-frequency board questions with step-by-step graphical proofs',
+    is_published: true,
+    created_by: '30000000-0000-0000-0000-000000000003',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
+const INITIAL_ASSESSMENTS: Assessment[] = [
+  {
+    id: '92000000-0000-0000-0000-000000000001',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    section_id: 'e0000000-0000-0000-0000-000000000001',
+    subject_id: 'b0000000-0000-0000-0000-000000000003',
+    title: 'Monthly Assessment 1 (Math)',
+    assessment_type: 'monthly_test',
+    total_marks: 50,
+    passing_marks: 20,
+    test_date: '2026-05-15',
+    start_time: '09:00:00',
+    end_time: '10:30:00',
+    room_number: 'Hall A',
+    status: 'completed',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '92000000-0000-0000-0000-000000000002',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    section_id: 'e0000000-0000-0000-0000-000000000001',
+    subject_id: 'b0000000-0000-0000-0000-000000000007',
+    title: 'Monthly Assessment 1 (Physics)',
+    assessment_type: 'monthly_test',
+    total_marks: 50,
+    passing_marks: 20,
+    test_date: '2026-05-18',
+    start_time: '09:00:00',
+    end_time: '10:30:00',
+    room_number: 'Hall A',
+    status: 'completed',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '92000000-0000-0000-0000-000000000003',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    section_id: 'e0000000-0000-0000-0000-000000000001',
+    subject_id: 'b0000000-0000-0000-0000-000000000008',
+    title: 'Monthly Assessment 1 (Chemistry)',
+    assessment_type: 'monthly_test',
+    total_marks: 50,
+    passing_marks: 20,
+    test_date: '2026-05-20',
+    start_time: '09:00:00',
+    end_time: '10:30:00',
+    room_number: 'Hall A',
+    status: 'completed',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '92000000-0000-0000-0000-000000000004',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    section_id: 'e0000000-0000-0000-0000-000000000001',
+    subject_id: 'b0000000-0000-0000-0000-000000000001',
+    title: 'Monthly Assessment 1 (English)',
+    assessment_type: 'monthly_test',
+    total_marks: 50,
+    passing_marks: 20,
+    test_date: '2026-05-22',
+    start_time: '09:00:00',
+    end_time: '10:30:00',
+    room_number: 'Hall A',
+    status: 'completed',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '92000000-0000-0000-0000-000000000005',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    section_id: 'e0000000-0000-0000-0000-000000000001',
+    subject_id: 'b0000000-0000-0000-0000-000000000003',
+    title: 'Mid-Term Examination 2026 (Math)',
+    assessment_type: 'midterm',
+    total_marks: 75,
+    passing_marks: 25,
+    test_date: '2026-10-10',
+    start_time: '08:30:00',
+    end_time: '11:30:00',
+    room_number: 'Exam Hall 1',
+    status: 'scheduled',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '92000000-0000-0000-0000-000000000006',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    section_id: 'e0000000-0000-0000-0000-000000000001',
+    subject_id: 'b0000000-0000-0000-0000-000000000007',
+    title: 'Mid-Term Examination 2026 (Physics)',
+    assessment_type: 'midterm',
+    total_marks: 75,
+    passing_marks: 25,
+    test_date: '2026-10-12',
+    start_time: '08:30:00',
+    end_time: '11:30:00',
+    room_number: 'Exam Hall 1',
+    status: 'scheduled',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
+const INITIAL_STUDENT_MARKS: StudentMark[] = [
+  {
+    id: '93000000-0000-0000-0000-000000000001',
+    assessment_id: '92000000-0000-0000-0000-000000000001',
+    student_id: 'd0000000-0000-0000-0000-000000000001',
+    obtained_marks: 46.5,
+    is_absent: false,
+    percentage: 93.0,
+    grade: 'A+',
+    remarks: 'Outstanding performance in Cramer rule & matrices',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '93000000-0000-0000-0000-000000000002',
+    assessment_id: '92000000-0000-0000-0000-000000000002',
+    student_id: 'd0000000-0000-0000-0000-000000000001',
+    obtained_marks: 42.0,
+    is_absent: false,
+    percentage: 84.0,
+    grade: 'A+',
+    remarks: 'Very good conceptual grasp of Kinematics',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '93000000-0000-0000-0000-000000000003',
+    assessment_id: '92000000-0000-0000-0000-000000000003',
+    student_id: 'd0000000-0000-0000-0000-000000000001',
+    obtained_marks: 39.0,
+    is_absent: false,
+    percentage: 78.0,
+    grade: 'A',
+    remarks: 'Good attempt, review chemical bonding equations',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '93000000-0000-0000-0000-000000000004',
+    assessment_id: '92000000-0000-0000-0000-000000000004',
+    student_id: 'd0000000-0000-0000-0000-000000000001',
+    obtained_marks: 44.0,
+    is_absent: false,
+    percentage: 88.0,
+    grade: 'A+',
+    remarks: 'Excellent grammar and comprehension writing',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
 // Local storage keys
 const STORAGE_KEYS = {
   SETTINGS: 'star_academy_settings',
@@ -1925,6 +2240,10 @@ const STORAGE_KEYS = {
   TIMETABLE_SLOTS: 'star_academy_timetable_slots',
   DAILY_ATTENDANCE: 'star_academy_daily_attendance',
   LECTURE_ATTENDANCE: 'star_academy_lecture_attendance',
+  SCHEME_OF_STUDIES: 'star_academy_scheme_of_studies',
+  SUBJECT_CONTENTS: 'star_academy_subject_contents',
+  ASSESSMENTS: 'star_academy_assessments',
+  STUDENT_MARKS: 'star_academy_student_marks',
 };
 
 // Safe storage access helper (supports browser localStorage and Node test environments)
@@ -4727,6 +5046,701 @@ export const databaseService = {
     }
 
     return summaries.sort((a, b) => a.attendance_percentage - b.attendance_percentage);
+  },
+
+  // ============================================================================
+  // PHASE 7 & 8: SCHEME OF STUDY (SOS)
+  // ============================================================================
+  async getSchemeOfStudies(
+    academic_year_id: string,
+    class_id?: string,
+    subject_id?: string
+  ): Promise<SchemeOfStudy[]> {
+    if (isSupabaseConfigured) {
+      try {
+        let query = supabase
+          .from('scheme_of_studies')
+          .select('*, class:classes(*), subject:subjects(*), academic_year:academic_years(*)')
+          .eq('academic_year_id', academic_year_id)
+          .order('order_index', { ascending: true });
+
+        if (class_id) query = query.eq('class_id', class_id);
+        if (subject_id) query = query.eq('subject_id', subject_id);
+
+        const { data, error } = await query;
+        if (!error && data) return data as SchemeOfStudy[];
+      } catch (e) {
+        console.warn('Supabase fetch scheme_of_studies failed, using local cache', e);
+      }
+    }
+
+    const list = loadFromStorage<SchemeOfStudy[]>(STORAGE_KEYS.SCHEME_OF_STUDIES, INITIAL_SCHEME_OF_STUDIES);
+    const classes = loadFromStorage<ClassItem[]>(STORAGE_KEYS.CLASSES, INITIAL_CLASSES);
+    const subjects = loadFromStorage<SubjectItem[]>(STORAGE_KEYS.SUBJECTS, INITIAL_SUBJECTS);
+    const years = loadFromStorage<AcademicYear[]>(STORAGE_KEYS.YEARS, INITIAL_ACADEMIC_YEARS);
+
+    return list
+      .filter(item => {
+        if (item.academic_year_id !== academic_year_id) return false;
+        if (class_id && item.class_id !== class_id) return false;
+        if (subject_id && item.subject_id !== subject_id) return false;
+        return true;
+      })
+      .sort((a, b) => a.order_index - b.order_index)
+      .map(item => ({
+        ...item,
+        class: classes.find(c => c.id === item.class_id),
+        subject: subjects.find(s => s.id === item.subject_id),
+        academic_year: years.find(y => y.id === item.academic_year_id)
+      }));
+  },
+
+  async createSchemeOfStudy(
+    data: Omit<SchemeOfStudy, 'id' | 'created_at' | 'updated_at'>
+  ): Promise<SchemeOfStudy> {
+    const now = new Date().toISOString();
+    const id = `90000000-0000-0000-0000-${Date.now().toString().slice(-12).padStart(12, '0')}`;
+    const newRecord: SchemeOfStudy = {
+      ...data,
+      id,
+      created_at: now,
+      updated_at: now
+    };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data: inserted, error } = await supabase
+          .from('scheme_of_studies')
+          .insert({
+            academic_year_id: data.academic_year_id,
+            class_id: data.class_id,
+            subject_id: data.subject_id,
+            month_name: data.month_name,
+            order_index: data.order_index,
+            chapter_title: data.chapter_title,
+            topics_covered: data.topics_covered,
+            learning_objectives: data.learning_objectives,
+            status: data.status
+          })
+          .select('*, class:classes(*), subject:subjects(*), academic_year:academic_years(*)')
+          .single();
+
+        if (!error && inserted) {
+          const list = loadFromStorage<SchemeOfStudy[]>(STORAGE_KEYS.SCHEME_OF_STUDIES, INITIAL_SCHEME_OF_STUDIES);
+          saveToStorage(STORAGE_KEYS.SCHEME_OF_STUDIES, [...list, inserted]);
+          return inserted as SchemeOfStudy;
+        }
+      } catch (e) {
+        console.warn('Supabase create scheme_of_studies failed, saving to local cache', e);
+      }
+    }
+
+    const list = loadFromStorage<SchemeOfStudy[]>(STORAGE_KEYS.SCHEME_OF_STUDIES, INITIAL_SCHEME_OF_STUDIES);
+    saveToStorage(STORAGE_KEYS.SCHEME_OF_STUDIES, [...list, newRecord]);
+    return newRecord;
+  },
+
+  async updateSchemeOfStudy(id: string, updates: Partial<SchemeOfStudy>): Promise<SchemeOfStudy> {
+    const now = new Date().toISOString();
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('scheme_of_studies')
+          .update({ ...updates, updated_at: now })
+          .eq('id', id)
+          .select('*, class:classes(*), subject:subjects(*), academic_year:academic_years(*)')
+          .single();
+
+        if (!error && data) {
+          const list = loadFromStorage<SchemeOfStudy[]>(STORAGE_KEYS.SCHEME_OF_STUDIES, INITIAL_SCHEME_OF_STUDIES);
+          const idx = list.findIndex(i => i.id === id);
+          if (idx >= 0) list[idx] = data as SchemeOfStudy;
+          saveToStorage(STORAGE_KEYS.SCHEME_OF_STUDIES, list);
+          return data as SchemeOfStudy;
+        }
+      } catch (e) {
+        console.warn('Supabase update scheme_of_studies failed', e);
+      }
+    }
+
+    const list = loadFromStorage<SchemeOfStudy[]>(STORAGE_KEYS.SCHEME_OF_STUDIES, INITIAL_SCHEME_OF_STUDIES);
+    const idx = list.findIndex(i => i.id === id);
+    if (idx === -1) throw new Error('Scheme of study record not found');
+    list[idx] = { ...list[idx], ...updates, updated_at: now };
+    saveToStorage(STORAGE_KEYS.SCHEME_OF_STUDIES, list);
+    return list[idx];
+  },
+
+  async deleteSchemeOfStudy(id: string): Promise<void> {
+    if (isSupabaseConfigured) {
+      try {
+        await supabase.from('scheme_of_studies').delete().eq('id', id);
+      } catch (e) {
+        console.warn('Supabase delete scheme_of_studies failed', e);
+      }
+    }
+    const list = loadFromStorage<SchemeOfStudy[]>(STORAGE_KEYS.SCHEME_OF_STUDIES, INITIAL_SCHEME_OF_STUDIES);
+    saveToStorage(STORAGE_KEYS.SCHEME_OF_STUDIES, list.filter(i => i.id !== id));
+  },
+
+  // ============================================================================
+  // PHASE 7 & 8: SUBJECT CONTENTS & STUDY MATERIALS
+  // ============================================================================
+  async getSubjectContents(
+    academic_year_id: string,
+    class_id?: string,
+    subject_id?: string,
+    content_type?: string
+  ): Promise<SubjectContent[]> {
+    if (isSupabaseConfigured) {
+      try {
+        let query = supabase
+          .from('subject_contents')
+          .select('*, class:classes(*), subject:subjects(*), academic_year:academic_years(*), creator:staff(*)')
+          .eq('academic_year_id', academic_year_id)
+          .order('created_at', { ascending: false });
+
+        if (class_id) query = query.eq('class_id', class_id);
+        if (subject_id) query = query.eq('subject_id', subject_id);
+        if (content_type) query = query.eq('content_type', content_type);
+
+        const { data, error } = await query;
+        if (!error && data) return data as SubjectContent[];
+      } catch (e) {
+        console.warn('Supabase fetch subject_contents failed, using local cache', e);
+      }
+    }
+
+    const list = loadFromStorage<SubjectContent[]>(STORAGE_KEYS.SUBJECT_CONTENTS, INITIAL_SUBJECT_CONTENTS);
+    const classes = loadFromStorage<ClassItem[]>(STORAGE_KEYS.CLASSES, INITIAL_CLASSES);
+    const subjects = loadFromStorage<SubjectItem[]>(STORAGE_KEYS.SUBJECTS, INITIAL_SUBJECTS);
+    const staff = loadFromStorage<Staff[]>(STORAGE_KEYS.STAFF, INITIAL_STAFF);
+
+    return list
+      .filter(item => {
+        if (item.academic_year_id !== academic_year_id) return false;
+        if (class_id && item.class_id !== class_id) return false;
+        if (subject_id && item.subject_id !== subject_id) return false;
+        if (content_type && item.content_type !== content_type) return false;
+        return true;
+      })
+      .map(item => ({
+        ...item,
+        class: classes.find(c => c.id === item.class_id),
+        subject: subjects.find(s => s.id === item.subject_id),
+        creator: staff.find(st => st.id === item.created_by)
+      }));
+  },
+
+  async createSubjectContent(
+    data: Omit<SubjectContent, 'id' | 'created_at' | 'updated_at'>
+  ): Promise<SubjectContent> {
+    const now = new Date().toISOString();
+    const id = `91000000-0000-0000-0000-${Date.now().toString().slice(-12).padStart(12, '0')}`;
+    const newRecord: SubjectContent = {
+      ...data,
+      id,
+      created_at: now,
+      updated_at: now
+    };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data: inserted, error } = await supabase
+          .from('subject_contents')
+          .insert({
+            academic_year_id: data.academic_year_id,
+            class_id: data.class_id,
+            subject_id: data.subject_id,
+            title: data.title,
+            content_type: data.content_type,
+            chapter_ref: data.chapter_ref,
+            description: data.description,
+            file_url: data.file_url,
+            is_published: data.is_published,
+            created_by: data.created_by
+          })
+          .select('*, class:classes(*), subject:subjects(*), academic_year:academic_years(*), creator:staff(*)')
+          .single();
+
+        if (!error && inserted) {
+          const list = loadFromStorage<SubjectContent[]>(STORAGE_KEYS.SUBJECT_CONTENTS, INITIAL_SUBJECT_CONTENTS);
+          saveToStorage(STORAGE_KEYS.SUBJECT_CONTENTS, [...list, inserted]);
+          return inserted as SubjectContent;
+        }
+      } catch (e) {
+        console.warn('Supabase create subject_contents failed', e);
+      }
+    }
+
+    const list = loadFromStorage<SubjectContent[]>(STORAGE_KEYS.SUBJECT_CONTENTS, INITIAL_SUBJECT_CONTENTS);
+    saveToStorage(STORAGE_KEYS.SUBJECT_CONTENTS, [...list, newRecord]);
+    return newRecord;
+  },
+
+  async updateSubjectContent(id: string, updates: Partial<SubjectContent>): Promise<SubjectContent> {
+    const now = new Date().toISOString();
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('subject_contents')
+          .update({ ...updates, updated_at: now })
+          .eq('id', id)
+          .select('*, class:classes(*), subject:subjects(*), academic_year:academic_years(*), creator:staff(*)')
+          .single();
+
+        if (!error && data) {
+          const list = loadFromStorage<SubjectContent[]>(STORAGE_KEYS.SUBJECT_CONTENTS, INITIAL_SUBJECT_CONTENTS);
+          const idx = list.findIndex(i => i.id === id);
+          if (idx >= 0) list[idx] = data as SubjectContent;
+          saveToStorage(STORAGE_KEYS.SUBJECT_CONTENTS, list);
+          return data as SubjectContent;
+        }
+      } catch (e) {
+        console.warn('Supabase update subject_contents failed', e);
+      }
+    }
+
+    const list = loadFromStorage<SubjectContent[]>(STORAGE_KEYS.SUBJECT_CONTENTS, INITIAL_SUBJECT_CONTENTS);
+    const idx = list.findIndex(i => i.id === id);
+    if (idx === -1) throw new Error('Subject content record not found');
+    list[idx] = { ...list[idx], ...updates, updated_at: now };
+    saveToStorage(STORAGE_KEYS.SUBJECT_CONTENTS, list);
+    return list[idx];
+  },
+
+  async deleteSubjectContent(id: string): Promise<void> {
+    if (isSupabaseConfigured) {
+      try {
+        await supabase.from('subject_contents').delete().eq('id', id);
+      } catch (e) {
+        console.warn('Supabase delete subject_contents failed', e);
+      }
+    }
+    const list = loadFromStorage<SubjectContent[]>(STORAGE_KEYS.SUBJECT_CONTENTS, INITIAL_SUBJECT_CONTENTS);
+    saveToStorage(STORAGE_KEYS.SUBJECT_CONTENTS, list.filter(i => i.id !== id));
+  },
+
+  // ============================================================================
+  // PHASE 8: ASSESSMENTS / EXAMS / DATESHEETS
+  // ============================================================================
+  async getAssessments(
+    academic_year_id: string,
+    class_id?: string,
+    section_id?: string,
+    subject_id?: string
+  ): Promise<Assessment[]> {
+    if (isSupabaseConfigured) {
+      try {
+        let query = supabase
+          .from('assessments')
+          .select('*, class:classes(*), section:sections(*), subject:subjects(*), academic_year:academic_years(*)')
+          .eq('academic_year_id', academic_year_id)
+          .order('test_date', { ascending: true });
+
+        if (class_id) query = query.eq('class_id', class_id);
+        if (section_id) query = query.eq('section_id', section_id);
+        if (subject_id) query = query.eq('subject_id', subject_id);
+
+        const { data, error } = await query;
+        if (!error && data) return data as Assessment[];
+      } catch (e) {
+        console.warn('Supabase fetch assessments failed, using local cache', e);
+      }
+    }
+
+    const list = loadFromStorage<Assessment[]>(STORAGE_KEYS.ASSESSMENTS, INITIAL_ASSESSMENTS);
+    const classes = loadFromStorage<ClassItem[]>(STORAGE_KEYS.CLASSES, INITIAL_CLASSES);
+    const sections = loadFromStorage<SectionItem[]>(STORAGE_KEYS.SECTIONS, INITIAL_SECTIONS);
+    const subjects = loadFromStorage<SubjectItem[]>(STORAGE_KEYS.SUBJECTS, INITIAL_SUBJECTS);
+    const years = loadFromStorage<AcademicYear[]>(STORAGE_KEYS.YEARS, INITIAL_ACADEMIC_YEARS);
+
+    return list
+      .filter(item => {
+        if (item.academic_year_id !== academic_year_id) return false;
+        if (class_id && item.class_id !== class_id) return false;
+        if (section_id && item.section_id && item.section_id !== section_id) return false;
+        if (subject_id && item.subject_id !== subject_id) return false;
+        return true;
+      })
+      .sort((a, b) => new Date(a.test_date).getTime() - new Date(b.test_date).getTime())
+      .map(item => ({
+        ...item,
+        class: classes.find(c => c.id === item.class_id),
+        section: sections.find(s => s.id === item.section_id),
+        subject: subjects.find(s => s.id === item.subject_id),
+        academic_year: years.find(y => y.id === item.academic_year_id)
+      }));
+  },
+
+  async createAssessment(
+    data: Omit<Assessment, 'id' | 'created_at' | 'updated_at'>
+  ): Promise<Assessment> {
+    const now = new Date().toISOString();
+    const id = `92000000-0000-0000-0000-${Date.now().toString().slice(-12).padStart(12, '0')}`;
+    const newRecord: Assessment = {
+      ...data,
+      id,
+      created_at: now,
+      updated_at: now
+    };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data: inserted, error } = await supabase
+          .from('assessments')
+          .insert({
+            academic_year_id: data.academic_year_id,
+            class_id: data.class_id,
+            section_id: data.section_id || null,
+            subject_id: data.subject_id,
+            title: data.title,
+            assessment_type: data.assessment_type,
+            total_marks: data.total_marks,
+            passing_marks: data.passing_marks,
+            test_date: data.test_date,
+            start_time: data.start_time || null,
+            end_time: data.end_time || null,
+            room_number: data.room_number || null,
+            status: data.status
+          })
+          .select('*, class:classes(*), section:sections(*), subject:subjects(*), academic_year:academic_years(*)')
+          .single();
+
+        if (!error && inserted) {
+          const list = loadFromStorage<Assessment[]>(STORAGE_KEYS.ASSESSMENTS, INITIAL_ASSESSMENTS);
+          saveToStorage(STORAGE_KEYS.ASSESSMENTS, [...list, inserted]);
+          return inserted as Assessment;
+        }
+      } catch (e) {
+        console.warn('Supabase create assessments failed', e);
+      }
+    }
+
+    const list = loadFromStorage<Assessment[]>(STORAGE_KEYS.ASSESSMENTS, INITIAL_ASSESSMENTS);
+    saveToStorage(STORAGE_KEYS.ASSESSMENTS, [...list, newRecord]);
+    return newRecord;
+  },
+
+  async updateAssessment(id: string, updates: Partial<Assessment>): Promise<Assessment> {
+    const now = new Date().toISOString();
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('assessments')
+          .update({ ...updates, updated_at: now })
+          .eq('id', id)
+          .select('*, class:classes(*), section:sections(*), subject:subjects(*), academic_year:academic_years(*)')
+          .single();
+
+        if (!error && data) {
+          const list = loadFromStorage<Assessment[]>(STORAGE_KEYS.ASSESSMENTS, INITIAL_ASSESSMENTS);
+          const idx = list.findIndex(i => i.id === id);
+          if (idx >= 0) list[idx] = data as Assessment;
+          saveToStorage(STORAGE_KEYS.ASSESSMENTS, list);
+          return data as Assessment;
+        }
+      } catch (e) {
+        console.warn('Supabase update assessments failed', e);
+      }
+    }
+
+    const list = loadFromStorage<Assessment[]>(STORAGE_KEYS.ASSESSMENTS, INITIAL_ASSESSMENTS);
+    const idx = list.findIndex(i => i.id === id);
+    if (idx === -1) throw new Error('Assessment not found');
+    list[idx] = { ...list[idx], ...updates, updated_at: now };
+    saveToStorage(STORAGE_KEYS.ASSESSMENTS, list);
+    return list[idx];
+  },
+
+  async deleteAssessment(id: string): Promise<void> {
+    if (isSupabaseConfigured) {
+      try {
+        await supabase.from('assessments').delete().eq('id', id);
+      } catch (e) {
+        console.warn('Supabase delete assessments failed', e);
+      }
+    }
+    const list = loadFromStorage<Assessment[]>(STORAGE_KEYS.ASSESSMENTS, INITIAL_ASSESSMENTS);
+    saveToStorage(STORAGE_KEYS.ASSESSMENTS, list.filter(i => i.id !== id));
+  },
+
+  // ============================================================================
+  // PHASE 8: MARKS ENTRY, MARKSHEETS & REPORT CARDS
+  // ============================================================================
+  calculateGradeAndPercentage(obtained: number | null | undefined, total: number, is_absent: boolean): { percentage: number | null; grade: string } {
+    if (is_absent || obtained === null || obtained === undefined) {
+      return { percentage: is_absent ? 0 : null, grade: is_absent ? 'ABS' : '-' };
+    }
+    const percentage = Math.round((obtained / total) * 100 * 100) / 100;
+    let grade = 'F';
+    if (percentage >= 80) grade = 'A+';
+    else if (percentage >= 70) grade = 'A';
+    else if (percentage >= 60) grade = 'B';
+    else if (percentage >= 50) grade = 'C';
+    else if (percentage >= 40) grade = 'D';
+    return { percentage, grade };
+  },
+
+  async getStudentMarks(assessment_id: string): Promise<StudentMark[]> {
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('student_marks')
+          .select('*, student:students(*)')
+          .eq('assessment_id', assessment_id);
+
+        if (!error && data) return data as StudentMark[];
+      } catch (e) {
+        console.warn('Supabase fetch student_marks failed', e);
+      }
+    }
+
+    const list = loadFromStorage<StudentMark[]>(STORAGE_KEYS.STUDENT_MARKS, INITIAL_STUDENT_MARKS);
+    const students = loadFromStorage<Student[]>(STORAGE_KEYS.STUDENTS, INITIAL_STUDENTS);
+
+    return list
+      .filter(item => item.assessment_id === assessment_id)
+      .map(item => ({
+        ...item,
+        student: students.find(s => s.id === item.student_id)
+      }));
+  },
+
+  async saveStudentMarksBatch(
+    assessment_id: string,
+    total_marks: number,
+    marksList: Array<{
+      student_id: string;
+      obtained_marks?: number | null;
+      is_absent: boolean;
+      remarks?: string | null;
+    }>
+  ): Promise<StudentMark[]> {
+    const now = new Date().toISOString();
+    const preparedRecords = marksList.map(item => {
+      const { percentage, grade } = this.calculateGradeAndPercentage(item.obtained_marks, total_marks, item.is_absent);
+      return {
+        assessment_id,
+        student_id: item.student_id,
+        obtained_marks: item.is_absent ? 0 : item.obtained_marks ?? null,
+        is_absent: item.is_absent,
+        percentage,
+        grade,
+        remarks: item.remarks || null,
+        updated_at: now
+      };
+    });
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('student_marks')
+          .upsert(preparedRecords, { onConflict: 'assessment_id,student_id' })
+          .select('*, student:students(*)');
+
+        if (!error && data) {
+          const list = loadFromStorage<StudentMark[]>(STORAGE_KEYS.STUDENT_MARKS, INITIAL_STUDENT_MARKS);
+          const others = list.filter(m => m.assessment_id !== assessment_id);
+          saveToStorage(STORAGE_KEYS.STUDENT_MARKS, [...others, ...(data as StudentMark[])]);
+          return data as StudentMark[];
+        }
+      } catch (e) {
+        console.warn('Supabase save student_marks batch failed, falling back to local storage', e);
+      }
+    }
+
+    const list = loadFromStorage<StudentMark[]>(STORAGE_KEYS.STUDENT_MARKS, INITIAL_STUDENT_MARKS);
+    const updated: StudentMark[] = [];
+
+    for (const prep of preparedRecords) {
+      const idx = list.findIndex(m => m.assessment_id === assessment_id && m.student_id === prep.student_id);
+      if (idx >= 0) {
+        list[idx] = { ...list[idx], ...prep };
+        updated.push(list[idx]);
+      } else {
+        const newMark: StudentMark = {
+          id: `93000000-0000-0000-0000-${Date.now().toString().slice(-12).padStart(12, '0')}`,
+          ...prep,
+          created_at: now
+        };
+        list.push(newMark);
+        updated.push(newMark);
+      }
+    }
+
+    saveToStorage(STORAGE_KEYS.STUDENT_MARKS, list);
+    return updated;
+  },
+
+  async getStudentReportCard(
+    academic_year_id: string,
+    student_id: string
+  ): Promise<StudentReportCard | null> {
+    const studentsWithEnrollment = await this.getStudents(academic_year_id);
+    const student = studentsWithEnrollment.find(s => s.id === student_id);
+    if (!student || !student.academic_record) return null;
+
+    const class_id = student.academic_record.class_id;
+    const section_id = student.academic_record.section_id;
+
+    const allAssessments = await this.getAssessments(academic_year_id, class_id);
+    const relevantAssessments = allAssessments.filter(a => !a.section_id || a.section_id === section_id);
+
+    // Fetch marks for each assessment
+    let allStudentMarks: StudentMark[] = [];
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('student_marks')
+          .select('*')
+          .eq('student_id', student_id);
+        if (!error && data) allStudentMarks = data as StudentMark[];
+      } catch (e) {
+        console.warn('Supabase fetch student report marks failed', e);
+      }
+    }
+
+    if (allStudentMarks.length === 0) {
+      const local = loadFromStorage<StudentMark[]>(STORAGE_KEYS.STUDENT_MARKS, INITIAL_STUDENT_MARKS);
+      allStudentMarks = local.filter(m => m.student_id === student_id);
+    }
+
+    const results: StudentMarksheetSubjectResult[] = [];
+    let totalMax = 0;
+    let totalObt = 0;
+    let passedCount = 0;
+
+    for (const a of relevantAssessments) {
+      const mark = allStudentMarks.find(m => m.assessment_id === a.id);
+      const obt = mark ? mark.obtained_marks : null;
+      const isAbsent = mark?.is_absent || false;
+      const isPassed = !isAbsent && (obt !== null && obt !== undefined) ? obt >= a.passing_marks : false;
+
+      totalMax += Number(a.total_marks);
+      if (obt !== null && !isAbsent) totalObt += Number(obt);
+      if (isPassed) passedCount++;
+
+      results.push({
+        assessment_id: a.id,
+        assessment_title: a.title,
+        assessment_type: a.assessment_type,
+        test_date: a.test_date,
+        subject_id: a.subject_id,
+        subject_name: a.subject?.name || 'Subject',
+        subject_code: a.subject?.code || 'SUB',
+        total_marks: Number(a.total_marks),
+        passing_marks: Number(a.passing_marks),
+        obtained_marks: obt ?? null,
+        is_absent: isAbsent,
+        percentage: mark?.percentage ?? (obt !== null && obt !== undefined ? Math.round((Number(obt) / Number(a.total_marks)) * 100) : null),
+        grade: mark?.grade ?? (isAbsent ? 'ABS' : '-'),
+        is_passed: isPassed,
+        remarks: mark?.remarks || null
+      });
+    }
+
+    const overallPercentage = totalMax > 0 ? Math.round((totalObt / totalMax) * 100 * 100) / 100 : 0;
+    let overallGrade = 'F';
+    if (overallPercentage >= 80) overallGrade = 'A+';
+    else if (overallPercentage >= 70) overallGrade = 'A';
+    else if (overallPercentage >= 60) overallGrade = 'B';
+    else if (overallPercentage >= 50) overallGrade = 'C';
+    else if (overallPercentage >= 40) overallGrade = 'D';
+
+    return {
+      student,
+      academic_year: student.academic_record.academic_year,
+      class: student.academic_record.class,
+      section: student.academic_record.section,
+      batch: student.academic_record.batch,
+      results,
+      total_maximum_marks: totalMax,
+      total_obtained_marks: totalObt,
+      overall_percentage: overallPercentage,
+      overall_grade: overallGrade,
+      overall_result: overallGrade !== 'F' ? 'PASS' : 'FAIL',
+      class_rank: 1
+    };
+  },
+
+  // ============================================================================
+  // PHASE 7: TEACHER PORTAL OVERVIEW
+  // ============================================================================
+  async getTeacherPortalOverview(teacher_id: string, academic_year_id: string) {
+    const staffMembers = await this.getStaff();
+    const teacher = staffMembers.find(s => s.id === teacher_id);
+
+    const assignments = await this.getTeacherAssignments({ academicYearId: academic_year_id, teacherId: teacher_id });
+    const teacherAssignments = assignments.filter(a => a.status === 'active');
+
+    // Days mapping
+    const dayNames: DayOfWeek[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const todayIndex = new Date().getDay();
+    const todayDayName = dayNames[todayIndex] || 'Monday';
+    const todayDateStr = new Date().toISOString().split('T')[0];
+
+    const allSlots = await this.getTimetableSlots({ academicYearId: academic_year_id, teacherId: teacher_id });
+    const teacherSlots = allSlots.filter(s => s.status === 'active');
+    const todaySlots = teacherSlots
+      .filter(s => s.day_of_week === todayDayName)
+      .sort((a, b) => a.period_number - b.period_number);
+
+    // Check attendance status for today's slots
+    const todaySlotIds = todaySlots.map(s => s.id);
+    let todayLecturesAttended: LectureAttendance[] = [];
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('lecture_attendance')
+          .select('*')
+          .eq('academic_year_id', academic_year_id)
+          .eq('date', todayDateStr)
+          .in('timetable_slot_id', todaySlotIds);
+        if (!error && data) todayLecturesAttended = data as LectureAttendance[];
+      } catch (e) {
+        console.warn('Supabase fetch teacher attendance status failed', e);
+      }
+    }
+
+    if (todayLecturesAttended.length === 0) {
+      const local = loadFromStorage<LectureAttendance[]>(STORAGE_KEYS.LECTURE_ATTENDANCE, INITIAL_LECTURE_ATTENDANCE);
+      todayLecturesAttended = local.filter(l => l.academic_year_id === academic_year_id && l.date === todayDateStr && todaySlotIds.includes(l.timetable_slot_id || ''));
+    }
+
+    const slotsWithAttendanceStatus = todaySlots.map(slot => {
+      const hasAttendance = todayLecturesAttended.some(la => la.timetable_slot_id === slot.id);
+      return {
+        ...slot,
+        isAttendanceMarked: hasAttendance
+      };
+    });
+
+    const pendingAttendanceCount = slotsWithAttendanceStatus.filter(s => !s.isAttendanceMarked).length;
+
+    // Assigned subjects and classes
+    const assignedSubjectIds = Array.from(new Set(teacherAssignments.map(a => a.subject_id)));
+    const assignedClassIds = Array.from(new Set(teacherAssignments.map(a => a.class_id)));
+
+    // Scheme of studies for teacher's subjects
+    const allSOS = await this.getSchemeOfStudies(academic_year_id);
+    const teacherSOS = allSOS.filter(s => assignedSubjectIds.includes(s.subject_id) && assignedClassIds.includes(s.class_id));
+
+    // Assessments for teacher's subjects
+    const allAssessments = await this.getAssessments(academic_year_id);
+    const teacherAssessments = allAssessments.filter(a => assignedSubjectIds.includes(a.subject_id) && assignedClassIds.includes(a.class_id));
+
+    return {
+      teacher,
+      teacherAssignments,
+      todayDayName,
+      todayDateStr,
+      todaySlots: slotsWithAttendanceStatus,
+      weeklySlots: teacherSlots,
+      pendingAttendanceCount,
+      teacherSOS,
+      teacherAssessments
+    };
   }
 };
 

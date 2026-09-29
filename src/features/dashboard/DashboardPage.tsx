@@ -13,7 +13,9 @@ import {
   ClipboardList,
   UserPlus,
   Briefcase,
-  Clock
+  Clock,
+  Award,
+  Smartphone
 } from 'lucide-react';
 import { useAcademicYear } from '../../context/AcademicYearContext';
 import { databaseService } from '../../lib/database-service';
@@ -41,6 +43,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
     assignmentsCount: 0,
     timetableSlotsCount: 0,
     periodsCount: 0,
+    assessmentsCount: 0,
+    sosUnitsCount: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -70,9 +74,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
           databaseService.getTeacherAssignments({ academicYearId: selectedAcademicYear?.id }),
         ]);
 
-        const [slotsList, periodsList] = await Promise.all([
+        const [slotsList, periodsList, assessmentsList, sosList] = await Promise.all([
           databaseService.getTimetableSlots({ academicYearId: selectedAcademicYear?.id }),
           databaseService.getTimetablePeriods(),
+          databaseService.getAssessments(selectedAcademicYear?.id || ''),
+          databaseService.getSchemeOfStudies(selectedAcademicYear?.id || ''),
         ]);
 
         setStats({
@@ -88,6 +94,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
           assignmentsCount: assignmentsList.length,
           timetableSlotsCount: slotsList.length,
           periodsCount: periodsList.filter(p => !p.is_break).length,
+          assessmentsCount: assessmentsList.length,
+          sosUnitsCount: sosList.length,
         });
       } catch (e) {
         console.error('Error loading dashboard stats:', e);
@@ -135,82 +143,122 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
         </div>
       </div>
 
-      {/* Operations & Schedule Highlights (Phase 5 & 6) */}
+      {/* Operations, Portals & Examination Highlights (Phase 5, 6, 7 & 8) */}
       <div>
         <div className="flex items-center justify-between mb-3 px-1">
           <div className="flex items-center gap-2">
             <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
-              Operations &amp; Schedules
+              Operations, Portals &amp; Academics
             </h2>
             <span className="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full border border-emerald-200/60">
-              Phase 5 &amp; 6 Live
+              Phase 5, 6, 7 &amp; 8 Live
             </span>
           </div>
-          <span className="text-xs text-slate-400">Timetable &amp; Attendance</span>
+          <span className="text-xs text-slate-400">Classroom, Schedules &amp; Exams</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Phase 5: Timetable Card */}
           <div
             onClick={() => onNavigate('timetable')}
-            className="bg-white rounded-2xl p-5 border border-slate-200/70 shadow-xs hover:border-slate-300 transition cursor-pointer group"
+            className="bg-white rounded-2xl p-4 border border-slate-200/70 shadow-xs hover:border-slate-300 transition cursor-pointer group flex flex-col justify-between"
           >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2.5 text-slate-700 font-semibold text-xs">
+            <div>
+              <div className="flex items-center justify-between">
                 <div className="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-800 group-hover:bg-slate-900 group-hover:text-white transition">
                   <Calendar className="w-4 h-4" />
                 </div>
-                <div>
-                  <span className="font-bold text-slate-900 block">Timetable &amp; Schedules</span>
-                  <span className="text-[10px] text-slate-400 font-normal">Conflict-Free Master Engine</span>
-                </div>
+                <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded">P5</span>
               </div>
-              <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
+              <h3 className="font-bold text-slate-900 text-xs mt-3">Timetable &amp; Schedule</h3>
+              <p className="text-[11px] text-slate-400 mt-0.5">Master lecture engine</p>
             </div>
-            <div className="mt-4 flex items-end justify-between">
+            <div className="mt-4 flex items-end justify-between pt-2 border-t border-slate-100">
               <div>
-                <p className="text-3xl font-black text-slate-900 tracking-tight">
+                <p className="text-2xl font-black text-slate-900 tracking-tight font-mono">
                   {loading ? '...' : stats.timetableSlotsCount}
                 </p>
-                <p className="text-[11px] text-slate-400 mt-1">
-                  Active lecture slots &bull; {stats.periodsCount} periods daily
-                </p>
+                <p className="text-[10px] text-slate-400">{stats.periodsCount} periods/day</p>
               </div>
-              <span className="text-[11px] font-semibold text-slate-700 bg-slate-50 border border-slate-200 px-2 py-1 rounded-lg group-hover:bg-slate-900 group-hover:text-white group-hover:border-slate-900 transition">
-                Manage Timetable &rarr;
-              </span>
+              <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
             </div>
           </div>
 
           {/* Phase 6: Attendance Card */}
           <div
             onClick={() => onNavigate('attendance')}
-            className="bg-white rounded-2xl p-5 border border-slate-200/70 shadow-xs hover:border-slate-300 transition cursor-pointer group"
+            className="bg-white rounded-2xl p-4 border border-slate-200/70 shadow-xs hover:border-slate-300 transition cursor-pointer group flex flex-col justify-between"
           >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2.5 text-slate-700 font-semibold text-xs">
+            <div>
+              <div className="flex items-center justify-between">
                 <div className="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-800 group-hover:bg-slate-900 group-hover:text-white transition">
                   <Clock className="w-4 h-4" />
                 </div>
-                <div>
-                  <span className="font-bold text-slate-900 block">Attendance &amp; Registers</span>
-                  <span className="text-[10px] text-slate-400 font-normal">Daily &amp; Lecture Attendance</span>
-                </div>
+                <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded">P6</span>
+              </div>
+              <h3 className="font-bold text-slate-900 text-xs mt-3">Attendance &amp; Registers</h3>
+              <p className="text-[11px] text-slate-400 mt-0.5">Daily &amp; lecture tracking</p>
+            </div>
+            <div className="mt-4 flex items-end justify-between pt-2 border-t border-slate-100">
+              <div>
+                <p className="text-2xl font-black text-slate-900 tracking-tight font-mono">
+                  {loading ? '...' : stats.studentsCount}
+                </p>
+                <p className="text-[10px] text-slate-400">&lt;75% alert system</p>
               </div>
               <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
             </div>
-            <div className="mt-4 flex items-end justify-between">
-              <div>
-                <p className="text-3xl font-black text-slate-900 tracking-tight">
-                  {loading ? '...' : stats.studentsCount}
-                </p>
-                <p className="text-[11px] text-slate-400 mt-1">
-                  Students tracked &bull; Defaulters alerts (&lt;75%)
-                </p>
+          </div>
+
+          {/* Phase 7: Teacher Portal Card */}
+          <div
+            onClick={() => onNavigate('teacher-portal')}
+            className="bg-white rounded-2xl p-4 border border-slate-200/70 shadow-xs hover:border-slate-300 transition cursor-pointer group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-xl bg-amber-50 flex items-center justify-center text-amber-700 group-hover:bg-amber-500 group-hover:text-white transition">
+                  <Smartphone className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-mono text-amber-700 font-bold bg-amber-50 px-1.5 py-0.5 rounded">P7</span>
               </div>
-              <span className="text-[11px] font-semibold text-slate-700 bg-slate-50 border border-slate-200 px-2 py-1 rounded-lg group-hover:bg-slate-900 group-hover:text-white group-hover:border-slate-900 transition">
-                Take Attendance &rarr;
-              </span>
+              <h3 className="font-bold text-slate-900 text-xs mt-3">Teacher Portal</h3>
+              <p className="text-[11px] text-slate-400 mt-0.5">Mobile lecture roll-call &amp; SOS</p>
+            </div>
+            <div className="mt-4 flex items-end justify-between pt-2 border-t border-slate-100">
+              <div>
+                <p className="text-2xl font-black text-slate-900 tracking-tight font-mono">
+                  {loading ? '...' : stats.teachersCount}
+                </p>
+                <p className="text-[10px] text-slate-400">Classroom faculty</p>
+              </div>
+              <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
+            </div>
+          </div>
+
+          {/* Phase 8: Exams & Marksheets Card */}
+          <div
+            onClick={() => onNavigate('exams-marks')}
+            className="bg-white rounded-2xl p-4 border border-slate-200/70 shadow-xs hover:border-slate-300 transition cursor-pointer group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center text-blue-700 group-hover:bg-blue-600 group-hover:text-white transition">
+                  <Award className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-mono text-blue-700 font-bold bg-blue-50 px-1.5 py-0.5 rounded">P8</span>
+              </div>
+              <h3 className="font-bold text-slate-900 text-xs mt-3">Exams &amp; Marksheets</h3>
+              <p className="text-[11px] text-slate-400 mt-0.5">Datesheet, Marks &amp; Report cards</p>
+            </div>
+            <div className="mt-4 flex items-end justify-between pt-2 border-t border-slate-100">
+              <div>
+                <p className="text-2xl font-black text-slate-900 tracking-tight font-mono">
+                  {loading ? '...' : stats.assessmentsCount}
+                </p>
+                <p className="text-[10px] text-slate-400">{stats.sosUnitsCount} SOS units</p>
+              </div>
+              <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
             </div>
           </div>
         </div>

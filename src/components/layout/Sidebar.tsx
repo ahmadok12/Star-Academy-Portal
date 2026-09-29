@@ -12,23 +12,16 @@ import {
   Briefcase,
   BarChart3,
   Award,
-  Smartphone,
-  GraduationCap,
-  ShieldCheck,
   Building2
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export type NavTab = 
   | 'dashboard'
-  | 'teacher-portal'
-  | 'student-portal'
-  | 'parent-portal'
   | 'exams-marks'
   | 'fees'
   | 'finance'
   | 'reports'
-  | 'mobile-admin'
   | 'student-inquiries'
   | 'students-directory'
   | 'student-admission'
@@ -145,11 +138,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </ul>
             </div>
 
-            {/* Operations & Schedule (Phase 5, 6 & 7) */}
+            {/* Academy Operations (Phase 5 & 6) */}
             <div>
               <p className="text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-2 px-3 flex items-center justify-between">
-                <span>Operations &amp; Portals</span>
-                <span className="text-[9px] bg-emerald-50 text-emerald-700 font-semibold px-1.5 py-0.5 rounded border border-emerald-200/60">P5, P6 &amp; P7</span>
+                <span>Academy Operations</span>
+                <span className="text-[9px] bg-emerald-50 text-emerald-700 font-semibold px-1.5 py-0.5 rounded border border-emerald-200/60">P5 &amp; P6</span>
               </p>
               <ul className="space-y-1">
                 <li>
@@ -183,57 +176,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       <span>Attendance &amp; Registers</span>
                     </div>
                     <span className="text-[9px] font-mono text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded font-semibold">P6</span>
-                  </button>
-                </li>
-
-                <li>
-                  <button
-                    onClick={() => handleNavClick('teacher-portal')}
-                    className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl font-medium text-xs transition ${
-                      currentTab === 'teacher-portal'
-                        ? 'bg-slate-100 text-slate-900 font-semibold'
-                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <Smartphone className="w-4 h-4 shrink-0 text-amber-500" />
-                      <span className="font-semibold text-slate-900">Teacher Portal</span>
-                    </div>
-                    <span className="text-[9px] font-mono text-amber-700 bg-amber-50 px-1 py-0.5 rounded font-semibold border border-amber-200/50">P7</span>
-                  </button>
-                </li>
-
-                <li>
-                  <button
-                    onClick={() => handleNavClick('student-portal')}
-                    className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl font-medium text-xs transition ${
-                      currentTab === 'student-portal'
-                        ? 'bg-slate-100 text-slate-900 font-semibold'
-                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <GraduationCap className="w-4 h-4 shrink-0 text-indigo-500" />
-                      <span className="font-semibold text-slate-900">Student Portal</span>
-                    </div>
-                    <span className="text-[9px] font-mono text-indigo-700 bg-indigo-50 px-1 py-0.5 rounded font-semibold border border-indigo-200/50">P9</span>
-                  </button>
-                </li>
-
-                <li>
-                  <button
-                    onClick={() => handleNavClick('parent-portal')}
-                    className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl font-medium text-xs transition ${
-                      currentTab === 'parent-portal'
-                        ? 'bg-slate-100 text-slate-900 font-semibold'
-                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <ShieldCheck className="w-4 h-4 shrink-0 text-teal-600" />
-                      <span className="font-semibold text-slate-900">Parent Portal</span>
-                    </div>
-                    <span className="text-[9px] font-mono text-teal-700 bg-teal-50 px-1 py-0.5 rounded font-semibold border border-teal-200/50">P9</span>
                   </button>
                 </li>
               </ul>
@@ -408,11 +350,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </ul>
             </div>
 
-            {/* Reports & Analytics (Phase 12 & 13) */}
+            {/* Reports & Analytics (Phase 12) */}
             <div>
               <p className="text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-2 px-3 flex items-center justify-between">
                 <span>Reports &amp; Analytics</span>
-                <span className="text-[9px] bg-indigo-50 text-indigo-700 font-semibold px-1.5 py-0.5 rounded border border-indigo-200/60">P12 &amp; P13</span>
+                <span className="text-[9px] bg-indigo-50 text-indigo-700 font-semibold px-1.5 py-0.5 rounded border border-indigo-200/60">P12</span>
               </p>
               <ul className="space-y-1">
                 <li>
@@ -429,23 +371,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       <span className="font-semibold text-slate-900">Central Reports</span>
                     </div>
                     <span className="text-[9px] font-mono text-indigo-700 bg-indigo-50 px-1 py-0.5 rounded font-semibold border border-indigo-200/50">P12</span>
-                  </button>
-                </li>
-
-                <li>
-                  <button
-                    onClick={() => handleNavClick('mobile-admin')}
-                    className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl font-medium text-xs transition ${
-                      currentTab === 'mobile-admin'
-                        ? 'bg-slate-100 text-slate-900 font-semibold'
-                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <Smartphone className="w-4 h-4 shrink-0 text-indigo-600" />
-                      <span className="font-semibold text-slate-900">Mobile Admin App</span>
-                    </div>
-                    <span className="text-[9px] font-mono text-indigo-700 bg-indigo-50 px-1 py-0.5 rounded font-semibold border border-indigo-200/50">P13</span>
                   </button>
                 </li>
               </ul>

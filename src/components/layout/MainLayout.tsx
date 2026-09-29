@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Sidebar, NavTab } from './Sidebar';
-import { Header } from './Header';
+import { Header, StandaloneApp } from './Header';
 import { AcademySettings } from '../../types/database.types';
 
 interface MainLayoutProps {
@@ -8,6 +8,7 @@ interface MainLayoutProps {
   currentTab: NavTab;
   onSelectTab: (tab: NavTab) => void;
   settings?: AcademySettings | null;
+  onOpenApp?: (app: StandaloneApp) => void;
 }
 
 export const MainLayout: React.FC<MainLayoutProps> = ({
@@ -15,6 +16,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
   currentTab,
   onSelectTab,
   settings,
+  onOpenApp,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -37,6 +39,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
           academyName={settings?.academy_name}
           currentTab={currentTab}
           onSelectTab={onSelectTab}
+          onOpenApp={onOpenApp}
         />
 
         <main className="flex-1 overflow-y-auto custom-scroll p-4 sm:p-6 lg:p-8 bg-[#F7F8FA]">

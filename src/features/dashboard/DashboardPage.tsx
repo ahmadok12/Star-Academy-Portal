@@ -24,13 +24,15 @@ import { useAcademicYear } from '../../context/AcademicYearContext';
 import { databaseService } from '../../lib/database-service';
 import { AcademySettings } from '../../types/database.types';
 import { NavTab } from '../../components/layout/Sidebar';
+import { StandaloneApp } from '../../components/layout/Header';
 
 interface DashboardPageProps {
   onNavigate: (tab: NavTab) => void;
   settings: AcademySettings | null;
+  onOpenApp?: (app: StandaloneApp) => void;
 }
 
-export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settings }) => {
+export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settings, onOpenApp }) => {
   const { currentAcademicYear, selectedAcademicYear } = useAcademicYear();
 
   const [stats, setStats] = useState({
@@ -221,31 +223,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
             </div>
           </div>
 
-          {/* Phase 7: Teacher Portal Card */}
-          <div
-            onClick={() => onNavigate('teacher-portal')}
-            className="bg-white rounded-2xl p-4 border border-slate-200/70 shadow-xs hover:border-slate-300 transition cursor-pointer group flex flex-col justify-between"
-          >
-            <div>
-              <div className="flex items-center justify-between">
-                <div className="w-8 h-8 rounded-xl bg-amber-50 flex items-center justify-center text-amber-700 group-hover:bg-amber-500 group-hover:text-white transition">
-                  <Smartphone className="w-4 h-4" />
-                </div>
-                <span className="text-[10px] font-mono text-amber-700 font-bold bg-amber-50 px-1.5 py-0.5 rounded">P7</span>
-              </div>
-              <h3 className="font-bold text-slate-900 text-xs mt-3">Teacher Portal</h3>
-              <p className="text-[11px] text-slate-400 mt-0.5">Mobile lecture roll-call &amp; SOS</p>
-            </div>
-            <div className="mt-4 flex items-end justify-between pt-2 border-t border-slate-100">
-              <div>
-                <p className="text-2xl font-black text-slate-900 tracking-tight font-mono">
-                  {loading ? '...' : stats.teachersCount}
-                </p>
-                <p className="text-[10px] text-slate-400">Classroom faculty</p>
-              </div>
-              <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
-            </div>
-          </div>
 
           {/* Phase 8: Exams & Marksheets Card */}
           <div
@@ -273,57 +250,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
             </div>
           </div>
 
-          {/* Phase 9: Student Portal Card */}
-          <div
-            onClick={() => onNavigate('student-portal')}
-            className="bg-white rounded-2xl p-4 border border-slate-200/70 shadow-xs hover:border-slate-300 transition cursor-pointer group flex flex-col justify-between"
-          >
-            <div>
-              <div className="flex items-center justify-between">
-                <div className="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-700 group-hover:bg-indigo-600 group-hover:text-white transition">
-                  <GraduationCap className="w-4 h-4" />
-                </div>
-                <span className="text-[10px] font-mono text-indigo-700 font-bold bg-indigo-50 px-1.5 py-0.5 rounded">P9</span>
-              </div>
-              <h3 className="font-bold text-slate-900 text-xs mt-3">Student Portal</h3>
-              <p className="text-[11px] text-slate-400 mt-0.5">Lectures, notes &amp; marks</p>
-            </div>
-            <div className="mt-4 flex items-end justify-between pt-2 border-t border-slate-100">
-              <div>
-                <p className="text-2xl font-black text-slate-900 tracking-tight font-mono">
-                  {loading ? '...' : stats.studentsCount}
-                </p>
-                <p className="text-[10px] text-slate-400">Enrolled learners</p>
-              </div>
-              <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
-            </div>
-          </div>
-
-          {/* Phase 9: Parent Portal Card */}
-          <div
-            onClick={() => onNavigate('parent-portal')}
-            className="bg-white rounded-2xl p-4 border border-slate-200/70 shadow-xs hover:border-slate-300 transition cursor-pointer group flex flex-col justify-between"
-          >
-            <div>
-              <div className="flex items-center justify-between">
-                <div className="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-700 group-hover:bg-teal-600 group-hover:text-white transition">
-                  <ShieldCheck className="w-4 h-4" />
-                </div>
-                <span className="text-[10px] font-mono text-teal-700 font-bold bg-teal-50 px-1.5 py-0.5 rounded">P9</span>
-              </div>
-              <h3 className="font-bold text-slate-900 text-xs mt-3">Parent Portal</h3>
-              <p className="text-[11px] text-slate-400 mt-0.5">Multi-child switcher</p>
-            </div>
-            <div className="mt-4 flex items-end justify-between pt-2 border-t border-slate-100">
-              <div>
-                <p className="text-2xl font-black text-slate-900 tracking-tight font-mono">
-                  3
-                </p>
-                <p className="text-[10px] text-slate-400">Linked guardians</p>
-              </div>
-              <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
-            </div>
-          </div>
 
           {/* Phase 10: Fee Management Card */}
           <div
@@ -404,30 +330,109 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
               <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Phase 13: Mobile Admin Reports App */}
+      {/* Mobile Portals Ecosystem (Separate Client Mobile Apps) */}
+      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-5 sm:p-6 text-white shadow-md">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/10">
+          <div>
+            <div className="flex items-center space-x-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <h2 className="text-sm font-bold tracking-tight uppercase">
+                Mobile Portals Ecosystem
+              </h2>
+              <span className="text-[10px] font-mono bg-white/10 px-2 py-0.5 rounded-full border border-white/10 text-indigo-200">
+                Independent Apps • Shared DB
+              </span>
+            </div>
+            <p className="text-xs text-slate-300 mt-0.5">
+              Client mobile web applications for teachers, students, parents, and executives connected to the same Supabase database.
+            </p>
+          </div>
+          <span className="text-xs text-indigo-300 font-mono">
+            4 Standalone Apps
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mt-4">
+          {/* Teacher Portal App */}
           <div
-            onClick={() => onNavigate('mobile-admin')}
-            className="bg-white rounded-2xl p-4 border border-slate-200/70 shadow-xs hover:border-slate-300 transition cursor-pointer group flex flex-col justify-between"
+            onClick={() => onOpenApp ? onOpenApp('teacher') : (window.location.search = '?app=teacher')}
+            className="bg-white/5 hover:bg-white/10 p-4 rounded-2xl border border-white/10 transition cursor-pointer group flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between">
-                <div className="w-8 h-8 rounded-xl bg-purple-50 flex items-center justify-center text-purple-700 group-hover:bg-purple-600 group-hover:text-white transition">
+                <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center group-hover:scale-105 transition">
                   <Smartphone className="w-4 h-4" />
                 </div>
-                <span className="text-[10px] font-mono text-purple-700 font-bold bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200/50">P13</span>
+                <span className="text-[9px] font-mono text-amber-300 font-bold bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20">Phase 7</span>
               </div>
-              <h3 className="font-bold text-slate-900 text-xs mt-3">Mobile Admin App</h3>
-              <p className="text-[11px] text-slate-400 mt-0.5">Executive pulse &amp; phone shell</p>
+              <h3 className="font-bold text-white text-xs mt-3">Teacher Mobile App</h3>
+              <p className="text-[11px] text-slate-300 mt-0.5">Schedule, lecture roll-call &amp; test marks</p>
             </div>
-            <div className="mt-4 flex items-end justify-between pt-2 border-t border-slate-100">
-              <div>
-                <p className="text-2xl font-black text-slate-900 tracking-tight font-mono">
-                  Live
-                </p>
-                <p className="text-[10px] text-purple-600 font-medium">Executive mobile KPIs</p>
+            <div className="mt-4 pt-2 border-t border-white/10 flex items-center justify-between text-[11px] font-semibold text-amber-300 group-hover:underline">
+              <span>Launch Standalone &rarr;</span>
+            </div>
+          </div>
+
+          {/* Student Portal App */}
+          <div
+            onClick={() => onOpenApp ? onOpenApp('student') : (window.location.search = '?app=student')}
+            className="bg-white/5 hover:bg-white/10 p-4 rounded-2xl border border-white/10 transition cursor-pointer group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center group-hover:scale-105 transition">
+                  <GraduationCap className="w-4 h-4" />
+                </div>
+                <span className="text-[9px] font-mono text-indigo-300 font-bold bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/20">Phase 9</span>
               </div>
-              <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
+              <h3 className="font-bold text-white text-xs mt-3">Student Mobile App</h3>
+              <p className="text-[11px] text-slate-300 mt-0.5">Timetable, attendance &amp; report cards</p>
+            </div>
+            <div className="mt-4 pt-2 border-t border-white/10 flex items-center justify-between text-[11px] font-semibold text-indigo-300 group-hover:underline">
+              <span>Launch Standalone &rarr;</span>
+            </div>
+          </div>
+
+          {/* Parent Portal App */}
+          <div
+            onClick={() => onOpenApp ? onOpenApp('parent') : (window.location.search = '?app=parent')}
+            className="bg-white/5 hover:bg-white/10 p-4 rounded-2xl border border-white/10 transition cursor-pointer group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-xl bg-teal-500/20 text-teal-300 flex items-center justify-center group-hover:scale-105 transition">
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
+                <span className="text-[9px] font-mono text-teal-300 font-bold bg-teal-500/10 px-1.5 py-0.5 rounded border border-teal-500/20">Phase 9</span>
+              </div>
+              <h3 className="font-bold text-white text-xs mt-3">Parent Mobile App</h3>
+              <p className="text-[11px] text-slate-300 mt-0.5">Multi-child switcher, fees &amp; results</p>
+            </div>
+            <div className="mt-4 pt-2 border-t border-white/10 flex items-center justify-between text-[11px] font-semibold text-teal-300 group-hover:underline">
+              <span>Launch Standalone &rarr;</span>
+            </div>
+          </div>
+
+          {/* Executive Mobile Reports */}
+          <div
+            onClick={() => onOpenApp ? onOpenApp('mobile-admin') : (window.location.search = '?app=mobile-admin')}
+            className="bg-white/5 hover:bg-white/10 p-4 rounded-2xl border border-white/10 transition cursor-pointer group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center group-hover:scale-105 transition">
+                  <BarChart3 className="w-4 h-4" />
+                </div>
+                <span className="text-[9px] font-mono text-purple-300 font-bold bg-purple-500/10 px-1.5 py-0.5 rounded border border-purple-500/20">Phase 13</span>
+              </div>
+              <h3 className="font-bold text-white text-xs mt-3">Executive Mobile Reports</h3>
+              <p className="text-[11px] text-slate-300 mt-0.5">Daily pulse, defaulters &amp; liquid reserves</p>
+            </div>
+            <div className="mt-4 pt-2 border-t border-white/10 flex items-center justify-between text-[11px] font-semibold text-purple-300 group-hover:underline">
+              <span>Launch Standalone &rarr;</span>
             </div>
           </div>
         </div>

@@ -11,24 +11,32 @@ import {
   Layers,
   BookOpen,
   Link2,
-  CalendarRange
+  CalendarRange,
+  Smartphone,
+  ShieldCheck,
+  UserCheck,
+  BarChart3
 } from 'lucide-react';
 import { useAcademicYear } from '../../context/AcademicYearContext';
 import { isSupabaseConfigured } from '../../lib/supabase';
 import { NavTab } from './Sidebar';
+
+export type StandaloneApp = 'teacher' | 'student' | 'parent' | 'mobile-admin';
 
 interface HeaderProps {
   onOpenMobileMenu: () => void;
   academyName?: string;
   currentTab: NavTab;
   onSelectTab: (tab: NavTab) => void;
+  onOpenApp?: (app: StandaloneApp) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   onOpenMobileMenu,
   academyName = 'Star Academy ERP',
   currentTab,
-  onSelectTab
+  onSelectTab,
+  onOpenApp
 }) => {
   const {
     academicYears,
@@ -38,9 +46,11 @@ export const Header: React.FC<HeaderProps> = ({
 
   const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
   const [settingsDropdownOpen, setSettingsDropdownOpen] = useState(false);
+  const [portalsDropdownOpen, setPortalsDropdownOpen] = useState(false);
 
   const yearDropdownRef = useRef<HTMLDivElement>(null);
   const settingsDropdownRef = useRef<HTMLDivElement>(null);
+  const portalsDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -49,6 +59,9 @@ export const Header: React.FC<HeaderProps> = ({
       }
       if (settingsDropdownRef.current && !settingsDropdownRef.current.contains(event.target as Node)) {
         setSettingsDropdownOpen(false);
+      }
+      if (portalsDropdownRef.current && !portalsDropdownRef.current.contains(event.target as Node)) {
+        setPortalsDropdownOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -197,6 +210,117 @@ export const Header: React.FC<HeaderProps> = ({
                     </button>
                   );
                 })}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Standalone Mobile Portals Launcher Button */}
+        <div className="relative" ref={portalsDropdownRef}>
+          <button
+            onClick={() => {
+              setPortalsDropdownOpen(!portalsDropdownOpen);
+              setYearDropdownOpen(false);
+              setSettingsDropdownOpen(false);
+            }}
+            title="Launch Separate Mobile Portals"
+            className="flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl border border-slate-200/90 bg-slate-50 hover:bg-slate-100 text-slate-700 transition shadow-xs text-xs font-semibold"
+            type="button"
+          >
+            <Smartphone className="w-4 h-4 text-indigo-600" />
+            <span className="hidden sm:inline">Mobile Portals</span>
+            <ChevronDown className={`w-3.5 h-3.5 transition-transform ${portalsDropdownOpen ? 'rotate-180' : ''} text-slate-400`} />
+          </button>
+
+          {/* Portals Launcher Dropdown */}
+          {portalsDropdownOpen && (
+            <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-slate-200/90 py-2.5 z-50 animate-modal-in">
+              <div className="px-3.5 py-1.5 border-b border-slate-100 mb-1.5">
+                <div className="flex items-center justify-between">
+                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                    Mobile Portals Ecosystem
+                  </p>
+                  <span className="text-[9px] bg-indigo-50 text-indigo-700 font-bold px-1.5 py-0.5 rounded border border-indigo-200/60">
+                    Standalone Apps
+                  </span>
+                </div>
+                <p className="text-[10px] text-slate-500 mt-0.5">
+                  Independent mobile-first client applications connected to the same Supabase database.
+                </p>
+              </div>
+
+              <div className="px-2 space-y-1">
+                {[
+                  {
+                    app: 'teacher' as const,
+                    title: 'Teacher Mobile Portal',
+                    desc: 'Timetable, lecture attendance roll-call & tests',
+                    icon: UserCheck,
+                    badge: 'Phase 7'
+                  },
+                  {
+                    app: 'student' as const,
+                    title: 'Student Mobile Portal',
+                    desc: 'Personal schedule, attendance records & report cards',
+                    icon: GraduationCap,
+                    badge: 'Phase 9'
+                  },
+                  {
+                    app: 'parent' as const,
+                    title: 'Parent Mobile Portal',
+                    desc: 'Multi-child switcher, fee vouchers & academic results',
+                    icon: ShieldCheck,
+                    badge: 'Phase 9'
+                  },
+                  {
+                    app: 'mobile-admin' as const,
+                    title: 'Executive Mobile Reports',
+                    desc: 'Director KPI pulse, fee defaulters & liquid reserves',
+                    icon: BarChart3,
+                    badge: 'Phase 13'
+                  },
+                ].map(portal => {
+                  const Icon = portal.icon;
+                  return (
+                    <button
+                      key={portal.app}
+                      onClick={() => {
+                        setPortalsDropdownOpen(false);
+                        if (onOpenApp) {
+                          onOpenApp(portal.app);
+                        } else {
+                          window.location.search = `?app=${portal.app}`;
+                        }
+                      }}
+                      className="w-full flex items-start space-x-3 p-2.5 rounded-xl hover:bg-slate-50 transition text-left group"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 group-hover:bg-indigo-600 group-hover:text-white flex items-center justify-center shrink-0 transition mt-0.5">
+                        <Icon className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-slate-900 group-hover:text-indigo-600 transition">
+                            {portal.title}
+                          </span>
+                          <span className="text-[9px] font-mono bg-slate-100 text-slate-500 px-1 py-0.2 rounded font-semibold">
+                            {portal.badge}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-500 leading-tight mt-0.5 truncate">
+                          {portal.desc}
+                        </p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="mt-2 pt-2 border-t border-slate-100 px-3 flex items-center justify-between text-[10px] text-slate-400">
+                <span>Direct URL: <code className="font-mono text-slate-600">?app=teacher</code></span>
+                <span className="text-emerald-600 font-semibold flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  Shared DB
+                </span>
               </div>
             </div>
           )}

@@ -112,6 +112,33 @@ export const LoginPage: React.FC = () => {
             <span>Role-Based Access Protected</span>
           </div>
         </div>
+
+        {/* Mobile Client Portals Access Links */}
+        <div className="mt-5 pt-4 border-t border-slate-100 text-center">
+          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+            Separate Mobile Portals
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <a
+              href="?app=teacher"
+              className="text-[11px] font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 px-2.5 py-1 rounded-lg border border-amber-200/60 transition"
+            >
+              Teacher App
+            </a>
+            <a
+              href="?app=student"
+              className="text-[11px] font-bold text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded-lg border border-indigo-200/60 transition"
+            >
+              Student App
+            </a>
+            <a
+              href="?app=parent"
+              className="text-[11px] font-bold text-teal-800 bg-teal-50 hover:bg-teal-100 px-2.5 py-1 rounded-lg border border-teal-200/60 transition"
+            >
+              Parent App
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );

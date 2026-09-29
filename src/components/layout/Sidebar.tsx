@@ -28,6 +28,7 @@ export type NavTab =
   | 'fees'
   | 'finance'
   | 'reports'
+  | 'mobile-admin'
   | 'student-inquiries'
   | 'students-directory'
   | 'student-admission'
@@ -407,11 +408,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </ul>
             </div>
 
-            {/* Reports & Analytics (Phase 12) */}
+            {/* Reports & Analytics (Phase 12 & 13) */}
             <div>
               <p className="text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-2 px-3 flex items-center justify-between">
                 <span>Reports &amp; Analytics</span>
-                <span className="text-[9px] bg-indigo-50 text-indigo-700 font-semibold px-1.5 py-0.5 rounded border border-indigo-200/60">P12</span>
+                <span className="text-[9px] bg-indigo-50 text-indigo-700 font-semibold px-1.5 py-0.5 rounded border border-indigo-200/60">P12 &amp; P13</span>
               </p>
               <ul className="space-y-1">
                 <li>
@@ -430,31 +431,39 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <span className="text-[9px] font-mono text-indigo-700 bg-indigo-50 px-1 py-0.5 rounded font-semibold border border-indigo-200/50">P12</span>
                   </button>
                 </li>
+
+                <li>
+                  <button
+                    onClick={() => handleNavClick('mobile-admin')}
+                    className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl font-medium text-xs transition ${
+                      currentTab === 'mobile-admin'
+                        ? 'bg-slate-100 text-slate-900 font-semibold'
+                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <Smartphone className="w-4 h-4 shrink-0 text-indigo-600" />
+                      <span className="font-semibold text-slate-900">Mobile Admin App</span>
+                    </div>
+                    <span className="text-[9px] font-mono text-indigo-700 bg-indigo-50 px-1 py-0.5 rounded font-semibold border border-indigo-200/50">P13</span>
+                  </button>
+                </li>
               </ul>
             </div>
 
-            {/* Future Modules (Coming Soon) */}
+            {/* System Status */}
             <div>
               <p className="text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-2 px-3 flex items-center justify-between">
-                <span>Future Modules</span>
-                <span className="text-[9px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-400 font-normal">Next Phases</span>
+                <span>System Status</span>
+                <span className="text-[9px] bg-emerald-50 text-emerald-700 font-semibold px-1.5 py-0.5 rounded border border-emerald-200/60">Phases 1-13</span>
               </p>
-              <ul className="space-y-1 opacity-55">
-                {[
-                  { label: 'Mobile Admin App', icon: Smartphone, tag: 'P13' },
-                ].map((item, i) => {
-                  const Icon = item.icon;
-                  return (
-                    <li key={i} className="flex items-center justify-between px-3.5 py-1.5 text-xs text-slate-400 cursor-not-allowed">
-                      <div className="flex items-center space-x-3">
-                        <Icon className="w-3.5 h-3.5 shrink-0" />
-                        <span>{item.label}</span>
-                      </div>
-                      <span className="text-[10px] text-slate-400 font-mono">{item.tag}</span>
-                    </li>
-                  );
-                })}
-              </ul>
+              <div className="mx-2 px-3 py-2 rounded-xl bg-slate-50 border border-slate-200/70 text-[11px] text-slate-600 flex items-center justify-between">
+                <span className="flex items-center space-x-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span className="font-bold text-slate-800">All Modules Complete</span>
+                </span>
+                <span className="font-mono text-[10px] text-emerald-700 font-bold">100%</span>
+              </div>
             </div>
           </div>
 

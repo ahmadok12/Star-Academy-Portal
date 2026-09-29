@@ -29,6 +29,7 @@ import { ExamsAndContentPage } from './features/exams/ExamsAndContentPage';
 import { FeesPage } from './features/fees/FeesPage';
 import { FinancePage } from './features/finance/FinancePage';
 import { ReportsPage } from './features/reports/ReportsPage';
+import { MobileAdminReportsPage } from './features/mobile-admin/MobileAdminReportsPage';
 import { databaseService } from './lib/database-service';
 import { AcademySettings, StudentInquiry } from './types/database.types';
 
@@ -143,6 +144,9 @@ const MainAppContent: React.FC = () => {
 
       {/* Reports & Analytics (Phase 12) */}
       {currentTab === 'reports' && <ReportsPage settings={settings} />}
+
+      {/* Mobile Admin Reports (Phase 13) */}
+      {currentTab === 'mobile-admin' && <MobileAdminReportsPage settings={settings} />}
 
       {/* Academic Setup */}
       {currentTab === 'academic-years' && <AcademicYearsPage />}

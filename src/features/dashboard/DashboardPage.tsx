@@ -404,6 +404,32 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
               <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
             </div>
           </div>
+
+          {/* Phase 13: Mobile Admin Reports App */}
+          <div
+            onClick={() => onNavigate('mobile-admin')}
+            className="bg-white rounded-2xl p-4 border border-slate-200/70 shadow-xs hover:border-slate-300 transition cursor-pointer group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-xl bg-purple-50 flex items-center justify-center text-purple-700 group-hover:bg-purple-600 group-hover:text-white transition">
+                  <Smartphone className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-mono text-purple-700 font-bold bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200/50">P13</span>
+              </div>
+              <h3 className="font-bold text-slate-900 text-xs mt-3">Mobile Admin App</h3>
+              <p className="text-[11px] text-slate-400 mt-0.5">Executive pulse &amp; phone shell</p>
+            </div>
+            <div className="mt-4 flex items-end justify-between pt-2 border-t border-slate-100">
+              <div>
+                <p className="text-2xl font-black text-slate-900 tracking-tight font-mono">
+                  Live
+                </p>
+                <p className="text-[10px] text-purple-600 font-medium">Executive mobile KPIs</p>
+              </div>
+              <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
+            </div>
+          </div>
         </div>
       </div>
 

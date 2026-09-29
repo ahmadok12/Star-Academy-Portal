@@ -26,6 +26,7 @@ import { TeacherPortalPage } from './features/teacher-portal/TeacherPortalPage';
 import { StudentPortalPage } from './features/student-portal/StudentPortalPage';
 import { ParentPortalPage } from './features/parent-portal/ParentPortalPage';
 import { ExamsAndContentPage } from './features/exams/ExamsAndContentPage';
+import { FeesPage } from './features/fees/FeesPage';
 import { databaseService } from './lib/database-service';
 import { AcademySettings, StudentInquiry } from './types/database.types';
 
@@ -131,6 +132,9 @@ const MainAppContent: React.FC = () => {
 
       {/* Academics & Examination (Phase 8) */}
       {currentTab === 'exams-marks' && <ExamsAndContentPage settings={settings} />}
+
+      {/* Fees & Billing (Phase 10) */}
+      {currentTab === 'fees' && <FeesPage settings={settings} />}
 
       {/* Academic Setup */}
       {currentTab === 'academic-years' && <AcademicYearsPage />}

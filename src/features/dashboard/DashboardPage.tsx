@@ -16,7 +16,8 @@ import {
   Clock,
   Award,
   Smartphone,
-  ShieldCheck
+  ShieldCheck,
+  DollarSign
 } from 'lucide-react';
 import { useAcademicYear } from '../../context/AcademicYearContext';
 import { databaseService } from '../../lib/database-service';
@@ -46,6 +47,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
     periodsCount: 0,
     assessmentsCount: 0,
     sosUnitsCount: 0,
+    feeInvoicesCount: 0,
+    pendingFeesAmount: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -75,11 +78,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
           databaseService.getTeacherAssignments({ academicYearId: selectedAcademicYear?.id }),
         ]);
 
-        const [slotsList, periodsList, assessmentsList, sosList] = await Promise.all([
+        const [slotsList, periodsList, assessmentsList, sosList, feeKPIs] = await Promise.all([
           databaseService.getTimetableSlots({ academicYearId: selectedAcademicYear?.id }),
           databaseService.getTimetablePeriods(),
           databaseService.getAssessments(selectedAcademicYear?.id || ''),
           databaseService.getSchemeOfStudies(selectedAcademicYear?.id || ''),
+          databaseService.getFeeKPIStats(selectedAcademicYear?.id).catch(() => ({ totalInvoices: 0, pendingAmount: 0 } as any)),
         ]);
 
         setStats({
@@ -97,6 +101,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
           periodsCount: periodsList.filter(p => !p.is_break).length,
           assessmentsCount: assessmentsList.length,
           sosUnitsCount: sosList.length,
+          feeInvoicesCount: feeKPIs?.totalInvoices || 0,
+          pendingFeesAmount: feeKPIs?.pendingAmount || 0,
         });
       } catch (e) {
         console.error('Error loading dashboard stats:', e);
@@ -310,6 +316,34 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
                   3
                 </p>
                 <p className="text-[10px] text-slate-400">Linked guardians</p>
+              </div>
+              <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
+            </div>
+          </div>
+
+          {/* Phase 10: Fee Management Card */}
+          <div
+            onClick={() => onNavigate('fees')}
+            className="bg-white rounded-2xl p-4 border border-slate-200/70 shadow-xs hover:border-slate-300 transition cursor-pointer group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 group-hover:bg-emerald-600 group-hover:text-white transition">
+                  <DollarSign className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200/50">P10</span>
+              </div>
+              <h3 className="font-bold text-slate-900 text-xs mt-3">Fees &amp; Invoices</h3>
+              <p className="text-[11px] text-slate-400 mt-0.5">Vouchers, challans &amp; receipts</p>
+            </div>
+            <div className="mt-4 flex items-end justify-between pt-2 border-t border-slate-100">
+              <div>
+                <p className="text-2xl font-black text-slate-900 tracking-tight font-mono">
+                  {loading ? '...' : stats.feeInvoicesCount}
+                </p>
+                <p className="text-[10px] text-emerald-600 font-medium">
+                  {stats.pendingFeesAmount > 0 ? `Rs. ${stats.pendingFeesAmount.toLocaleString()} pending` : 'All cleared'}
+                </p>
               </div>
               <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
             </div>

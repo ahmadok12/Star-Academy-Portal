@@ -561,3 +561,84 @@ export interface ParentPortalOverview {
   parent: Parent;
   children: ParentPortalChildSummary[];
 }
+
+// ============================================================================
+// PHASE 10: FEES & INVOICING MODULE
+// ============================================================================
+
+export type FeeBillingFrequency = 'monthly' | 'term' | 'annual' | 'one_time';
+export type FeeInvoiceStatus = 'unpaid' | 'partial' | 'paid' | 'overdue' | 'cancelled';
+export type PaymentMethod = 'Cash' | 'Bank Transfer' | 'Cheque' | 'Online / Mobile Wallet';
+
+export interface FeeStructure {
+  id: string;
+  academic_year_id: string;
+  class_id: string;
+  title: string;
+  tuition_fee: number;
+  admission_fee: number;
+  exam_fee: number;
+  lab_fee: number;
+  other_fee: number;
+  total_amount: number;
+  billing_frequency: FeeBillingFrequency;
+  status: EntityStatus;
+  created_at?: string;
+  updated_at?: string;
+  class?: ClassItem;
+}
+
+export interface FeeInvoice {
+  id: string;
+  invoice_no: string;
+  academic_year_id: string;
+  student_id: string;
+  class_id: string;
+  section_id?: string | null;
+  fee_structure_id?: string | null;
+  month: string;
+  issue_date: string;
+  due_date: string;
+  subtotal: number;
+  discount: number;
+  discount_reason?: string | null;
+  fine: number;
+  total_amount: number;
+  paid_amount: number;
+  balance_amount: number;
+  status: FeeInvoiceStatus;
+  notes?: string | null;
+  created_at?: string;
+  updated_at?: string;
+  student?: Student;
+  class?: ClassItem;
+  section?: SectionItem;
+  fee_structure?: FeeStructure;
+  payments?: FeePayment[];
+}
+
+export interface FeePayment {
+  id: string;
+  receipt_no: string;
+  invoice_id: string;
+  student_id: string;
+  academic_year_id: string;
+  amount: number;
+  payment_date: string;
+  payment_method: PaymentMethod;
+  transaction_reference?: string | null;
+  collected_by?: string | null;
+  remarks?: string | null;
+  created_at?: string;
+  student?: Student;
+  invoice?: FeeInvoice;
+}
+
+export interface FeeKPIStats {
+  totalInvoiced: number;
+  totalCollected: number;
+  totalOutstanding: number;
+  totalDefaulters: number;
+  collectionPercentage: number;
+}
+

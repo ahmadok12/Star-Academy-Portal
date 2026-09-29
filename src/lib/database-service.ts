@@ -34,7 +34,11 @@ import {
   ParentStudent,
   StudentPortalOverview,
   ParentPortalOverview,
-  ParentPortalChildSummary
+  ParentPortalChildSummary,
+  FeeStructure,
+  FeeInvoice,
+  FeePayment,
+  FeeKPIStats
 } from '../types/database.types';
 
 // ============================================================================
@@ -2306,6 +2310,144 @@ const INITIAL_PARENT_STUDENTS: ParentStudent[] = [
   }
 ];
 
+const INITIAL_FEE_STRUCTURES: FeeStructure[] = [
+  {
+    id: 'e1000000-0000-0000-0000-000000000001',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000001',
+    title: 'Matric Science Standard Fee',
+    tuition_fee: 5000.0,
+    admission_fee: 0.0,
+    exam_fee: 500.0,
+    lab_fee: 500.0,
+    other_fee: 0.0,
+    total_amount: 6000.0,
+    billing_frequency: 'monthly',
+    status: 'active',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'e1000000-0000-0000-0000-000000000002',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    title: 'Matric Science 10th Fee',
+    tuition_fee: 5500.0,
+    admission_fee: 0.0,
+    exam_fee: 500.0,
+    lab_fee: 500.0,
+    other_fee: 0.0,
+    total_amount: 6500.0,
+    billing_frequency: 'monthly',
+    status: 'active',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
+const INITIAL_FEE_INVOICES: FeeInvoice[] = [
+  {
+    id: 'e2000000-0000-0000-0000-000000000001',
+    invoice_no: 'INV-2026-0001',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    student_id: 'd0000000-0000-0000-0000-000000000001',
+    class_id: 'c0000000-0000-0000-0000-000000000001',
+    section_id: 'e0000000-0000-0000-0000-000000000001',
+    fee_structure_id: 'e1000000-0000-0000-0000-000000000001',
+    month: 'May 2026',
+    issue_date: '2026-05-01',
+    due_date: '2026-05-15',
+    subtotal: 6000.0,
+    discount: 0.0,
+    discount_reason: null,
+    fine: 0.0,
+    total_amount: 6000.0,
+    paid_amount: 3500.0,
+    balance_amount: 2500.0,
+    status: 'partial',
+    notes: 'Partial installment paid on 5th May; remaining 2,500 due.',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'e2000000-0000-0000-0000-000000000002',
+    invoice_no: 'INV-2026-0002',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    student_id: 'd0000000-0000-0000-0000-000000000002',
+    class_id: 'c0000000-0000-0000-0000-000000000001',
+    section_id: 'e0000000-0000-0000-0000-000000000001',
+    fee_structure_id: 'e1000000-0000-0000-0000-000000000001',
+    month: 'May 2026',
+    issue_date: '2026-05-01',
+    due_date: '2026-05-15',
+    subtotal: 6000.0,
+    discount: 1000.0,
+    discount_reason: 'Merit Scholarship 15% Waiver',
+    fine: 0.0,
+    total_amount: 5000.0,
+    paid_amount: 5000.0,
+    balance_amount: 0.0,
+    status: 'paid',
+    notes: 'Full tuition and lab fee cleared via Bank Alfalah.',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'e2000000-0000-0000-0000-000000000003',
+    invoice_no: 'INV-2026-0003',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    student_id: 'd0000000-0000-0000-0000-000000000003',
+    class_id: 'c0000000-0000-0000-0000-000000000001',
+    section_id: 'e0000000-0000-0000-0000-000000000001',
+    fee_structure_id: 'e1000000-0000-0000-0000-000000000001',
+    month: 'May 2026',
+    issue_date: '2026-05-01',
+    due_date: '2026-05-15',
+    subtotal: 6000.0,
+    discount: 0.0,
+    discount_reason: null,
+    fine: 0.0,
+    total_amount: 6000.0,
+    paid_amount: 0.0,
+    balance_amount: 6000.0,
+    status: 'unpaid',
+    notes: 'First monthly fee voucher issued.',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
+const INITIAL_FEE_PAYMENTS: FeePayment[] = [
+  {
+    id: 'e3000000-0000-0000-0000-000000000001',
+    receipt_no: 'REC-2026-0001',
+    invoice_id: 'e2000000-0000-0000-0000-000000000001',
+    student_id: 'd0000000-0000-0000-0000-000000000001',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    amount: 3500.0,
+    payment_date: '2026-05-05',
+    payment_method: 'Cash',
+    transaction_reference: 'CSH-8821',
+    collected_by: 'Sheikh Zeeshan (Accounts)',
+    remarks: 'Part payment of Rs 3,500 received at front desk.',
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 'e3000000-0000-0000-0000-000000000002',
+    receipt_no: 'REC-2026-0002',
+    invoice_id: 'e2000000-0000-0000-0000-000000000002',
+    student_id: 'd0000000-0000-0000-0000-000000000002',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    amount: 5000.0,
+    payment_date: '2026-05-08',
+    payment_method: 'Bank Transfer',
+    transaction_reference: 'BAFL-TRX-99412',
+    collected_by: 'Sheikh Zeeshan (Accounts)',
+    remarks: 'Direct transfer to Star Academy Meezan Bank Account.',
+    created_at: new Date().toISOString()
+  }
+];
+
 // Local storage keys
 const STORAGE_KEYS = {
   SETTINGS: 'star_academy_settings',
@@ -2331,6 +2473,9 @@ const STORAGE_KEYS = {
   STUDENT_MARKS: 'star_academy_student_marks',
   PARENTS: 'star_academy_parents',
   PARENT_STUDENTS: 'star_academy_parent_students',
+  FEE_STRUCTURES: 'star_academy_fee_structures',
+  FEE_INVOICES: 'star_academy_fee_invoices',
+  FEE_PAYMENTS: 'star_academy_fee_payments',
 };
 
 // Safe storage access helper (supports browser localStorage and Node test environments)
@@ -6155,6 +6300,514 @@ export const databaseService = {
     return {
       parent,
       children: childrenSummaries
+    };
+  },
+
+  // --------------------------------------------------------------------------
+  // Phase 10: Fee Structures, Invoices & Payments
+  // --------------------------------------------------------------------------
+  async getFeeStructures(academicYearId?: string): Promise<FeeStructure[]> {
+    if (isSupabaseConfigured) {
+      try {
+        let query = supabase
+          .from('fee_structures')
+          .select(`
+            *,
+            class:classes(*)
+          `)
+          .order('title', { ascending: true });
+        if (academicYearId) {
+          query = query.eq('academic_year_id', academicYearId);
+        }
+        const { data, error } = await query;
+        if (!error && data) return data as unknown as FeeStructure[];
+      } catch (e) {
+        console.warn('Supabase getFeeStructures failed, falling back to local store', e);
+      }
+    }
+
+    let records = loadFromStorage<FeeStructure[]>(STORAGE_KEYS.FEE_STRUCTURES, INITIAL_FEE_STRUCTURES);
+    if (academicYearId) {
+      records = records.filter(r => r.academic_year_id === academicYearId);
+    }
+    const classes = await this.getClasses();
+    return records.map(r => ({
+      ...r,
+      class: classes.find(c => c.id === r.class_id)
+    }));
+  },
+
+  async createFeeStructure(data: Omit<FeeStructure, 'id' | 'created_at' | 'updated_at'>): Promise<FeeStructure> {
+    const now = new Date().toISOString();
+    const total_amount = Number(data.tuition_fee || 0) +
+      Number(data.admission_fee || 0) +
+      Number(data.exam_fee || 0) +
+      Number(data.lab_fee || 0) +
+      Number(data.other_fee || 0);
+
+    const newStruct: FeeStructure = {
+      id: crypto.randomUUID(),
+      ...data,
+      total_amount,
+      created_at: now,
+      updated_at: now
+    };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data: inserted, error } = await supabase
+          .from('fee_structures')
+          .insert(newStruct)
+          .select()
+          .single();
+        if (!error && inserted) return inserted as unknown as FeeStructure;
+      } catch (e) {
+        console.warn('Supabase createFeeStructure failed, saving locally', e);
+      }
+    }
+
+    const list = await this.getFeeStructures();
+    list.push(newStruct);
+    saveToStorage(STORAGE_KEYS.FEE_STRUCTURES, list);
+    return newStruct;
+  },
+
+  async updateFeeStructure(id: string, updates: Partial<FeeStructure>): Promise<FeeStructure> {
+    const now = new Date().toISOString();
+    const list = await this.getFeeStructures();
+    const index = list.findIndex(f => f.id === id);
+    if (index === -1) throw new Error('Fee structure not found');
+
+    const merged = { ...list[index], ...updates };
+    const total_amount = Number(merged.tuition_fee || 0) +
+      Number(merged.admission_fee || 0) +
+      Number(merged.exam_fee || 0) +
+      Number(merged.lab_fee || 0) +
+      Number(merged.other_fee || 0);
+
+    const finalStruct = { ...merged, total_amount, updated_at: now };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('fee_structures')
+          .update(finalStruct)
+          .eq('id', id)
+          .select()
+          .single();
+        if (!error && data) return data as unknown as FeeStructure;
+      } catch (e) {
+        console.warn('Supabase updateFeeStructure failed, saving locally', e);
+      }
+    }
+
+    list[index] = finalStruct;
+    saveToStorage(STORAGE_KEYS.FEE_STRUCTURES, list);
+    return finalStruct;
+  },
+
+  async deleteFeeStructure(id: string): Promise<void> {
+    if (isSupabaseConfigured) {
+      try {
+        const { error } = await supabase.from('fee_structures').delete().eq('id', id);
+        if (!error) return;
+      } catch (e) {
+        console.warn('Supabase deleteFeeStructure failed, falling back to local store', e);
+      }
+    }
+
+    const list = (await this.getFeeStructures()).filter(f => f.id !== id);
+    saveToStorage(STORAGE_KEYS.FEE_STRUCTURES, list);
+  },
+
+  // --------------------------------------------------------------------------
+  // Fee Invoices
+  // --------------------------------------------------------------------------
+  async getFeeInvoices(filter?: {
+    academicYearId?: string;
+    studentId?: string;
+    classId?: string;
+    status?: string;
+  }): Promise<FeeInvoice[]> {
+    if (isSupabaseConfigured) {
+      try {
+        let query = supabase
+          .from('fee_invoices')
+          .select(`
+            *,
+            student:students(*),
+            class:classes(*),
+            section:sections(*),
+            fee_structure:fee_structures(*),
+            payments:fee_payments(*)
+          `)
+          .order('issue_date', { ascending: false });
+
+        if (filter?.academicYearId) query = query.eq('academic_year_id', filter.academicYearId);
+        if (filter?.studentId) query = query.eq('student_id', filter.studentId);
+        if (filter?.classId) query = query.eq('class_id', filter.classId);
+        if (filter?.status) query = query.eq('status', filter.status);
+
+        const { data, error } = await query;
+        if (!error && data) return data as unknown as FeeInvoice[];
+      } catch (e) {
+        console.warn('Supabase getFeeInvoices failed, falling back to local store', e);
+      }
+    }
+
+    let records = loadFromStorage<FeeInvoice[]>(STORAGE_KEYS.FEE_INVOICES, INITIAL_FEE_INVOICES);
+    if (filter?.academicYearId) records = records.filter(r => r.academic_year_id === filter.academicYearId);
+    if (filter?.studentId) records = records.filter(r => r.student_id === filter.studentId);
+    if (filter?.classId) records = records.filter(r => r.class_id === filter.classId);
+    if (filter?.status) records = records.filter(r => r.status === filter.status);
+
+    const [students, classes, sections, payments] = await Promise.all([
+      this.getStudents(),
+      this.getClasses(),
+      this.getSections(),
+      this.getFeePayments()
+    ]);
+
+    return records.map(inv => ({
+      ...inv,
+      student: students.find(s => s.id === inv.student_id),
+      class: classes.find(c => c.id === inv.class_id),
+      section: sections.find(sec => sec.id === inv.section_id),
+      payments: payments.filter(p => p.invoice_id === inv.id)
+    }));
+  },
+
+  async getFeeInvoiceById(id: string): Promise<FeeInvoice | null> {
+    const list = await this.getFeeInvoices();
+    return list.find(i => i.id === id) || null;
+  },
+
+  async createFeeInvoice(data: {
+    academic_year_id: string;
+    student_id: string;
+    class_id: string;
+    section_id?: string | null;
+    fee_structure_id?: string | null;
+    month: string;
+    issue_date: string;
+    due_date: string;
+    subtotal: number;
+    discount?: number;
+    discount_reason?: string | null;
+    fine?: number;
+    notes?: string | null;
+  }): Promise<FeeInvoice> {
+    const now = new Date().toISOString();
+    const existing = await this.getFeeInvoices();
+    const invoiceNum = `INV-${new Date().getFullYear()}-${String(existing.length + 1).padStart(4, '0')}`;
+
+    const subtotal = Number(data.subtotal || 0);
+    const discount = Number(data.discount || 0);
+    const fine = Number(data.fine || 0);
+    const total_amount = Math.max(0, subtotal - discount + fine);
+
+    const newInvoice: FeeInvoice = {
+      id: crypto.randomUUID(),
+      invoice_no: invoiceNum,
+      academic_year_id: data.academic_year_id,
+      student_id: data.student_id,
+      class_id: data.class_id,
+      section_id: data.section_id || null,
+      fee_structure_id: data.fee_structure_id || null,
+      month: data.month,
+      issue_date: data.issue_date,
+      due_date: data.due_date,
+      subtotal,
+      discount,
+      discount_reason: data.discount_reason || null,
+      fine,
+      total_amount,
+      paid_amount: 0,
+      balance_amount: total_amount,
+      status: 'unpaid',
+      notes: data.notes || null,
+      created_at: now,
+      updated_at: now
+    };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data: inserted, error } = await supabase
+          .from('fee_invoices')
+          .insert(newInvoice)
+          .select()
+          .single();
+        if (!error && inserted) return inserted as unknown as FeeInvoice;
+      } catch (e) {
+        console.warn('Supabase createFeeInvoice failed, saving locally', e);
+      }
+    }
+
+    existing.unshift(newInvoice);
+    saveToStorage(STORAGE_KEYS.FEE_INVOICES, existing);
+    return newInvoice;
+  },
+
+  async generateMonthlyInvoicesBatch(params: {
+    academicYearId: string;
+    month: string;
+    dueDate: string;
+    classId?: string;
+  }): Promise<FeeInvoice[]> {
+    const allStudents = await this.getStudents(params.academicYearId);
+    let targetStudents = allStudents.filter(s => s.status === 'active' && s.academic_record);
+    if (params.classId) {
+      targetStudents = targetStudents.filter(s => s.academic_record?.class_id === params.classId);
+    }
+
+    const feeStructures = await this.getFeeStructures(params.academicYearId);
+    const existingInvoices = await this.getFeeInvoices({ academicYearId: params.academicYearId });
+
+    const createdList: FeeInvoice[] = [];
+    const todayDate = new Date().toISOString().split('T')[0];
+
+    for (const student of targetStudents) {
+      const clsId = student.academic_record!.class_id;
+      const secId = student.academic_record!.section_id;
+
+      // Avoid duplicates for this month
+      const alreadyHas = existingInvoices.some(
+        inv => inv.student_id === student.id && inv.month.toLowerCase() === params.month.toLowerCase()
+      );
+      if (alreadyHas) continue;
+
+      const matchedStruct = feeStructures.find(f => f.class_id === clsId && f.status === 'active') || feeStructures[0];
+      const subtotal = matchedStruct ? Number(matchedStruct.total_amount) : 5000;
+
+      const created = await this.createFeeInvoice({
+        academic_year_id: params.academicYearId,
+        student_id: student.id,
+        class_id: clsId,
+        section_id: secId,
+        fee_structure_id: matchedStruct?.id || null,
+        month: params.month,
+        issue_date: todayDate,
+        due_date: params.dueDate,
+        subtotal,
+        discount: 0,
+        fine: 0,
+        notes: `Centralized batch generation for ${params.month}`
+      });
+
+      createdList.push(created);
+    }
+
+    return createdList;
+  },
+
+  async updateFeeInvoice(id: string, updates: Partial<FeeInvoice>): Promise<FeeInvoice> {
+    const now = new Date().toISOString();
+    const existing = await this.getFeeInvoices();
+    const index = existing.findIndex(i => i.id === id);
+    if (index === -1) throw new Error('Fee invoice not found');
+
+    const merged = { ...existing[index], ...updates };
+    const subtotal = Number(merged.subtotal || 0);
+    const discount = Number(merged.discount || 0);
+    const fine = Number(merged.fine || 0);
+    const total_amount = Math.max(0, subtotal - discount + fine);
+    const paid_amount = Number(merged.paid_amount || 0);
+    const balance_amount = Math.max(0, total_amount - paid_amount);
+
+    let status = merged.status;
+    if (balance_amount <= 0) {
+      status = 'paid';
+    } else if (paid_amount > 0) {
+      status = 'partial';
+    } else if (new Date(merged.due_date) < new Date()) {
+      status = 'overdue';
+    } else {
+      status = 'unpaid';
+    }
+
+    const finalInvoice = {
+      ...merged,
+      total_amount,
+      paid_amount,
+      balance_amount,
+      status,
+      updated_at: now
+    };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('fee_invoices')
+          .update(finalInvoice)
+          .eq('id', id)
+          .select()
+          .single();
+        if (!error && data) return data as unknown as FeeInvoice;
+      } catch (e) {
+        console.warn('Supabase updateFeeInvoice failed, saving locally', e);
+      }
+    }
+
+    existing[index] = finalInvoice;
+    saveToStorage(STORAGE_KEYS.FEE_INVOICES, existing);
+    return finalInvoice;
+  },
+
+  async deleteFeeInvoice(id: string): Promise<void> {
+    if (isSupabaseConfigured) {
+      try {
+        const { error } = await supabase.from('fee_invoices').delete().eq('id', id);
+        if (!error) return;
+      } catch (e) {
+        console.warn('Supabase deleteFeeInvoice failed, falling back to local store', e);
+      }
+    }
+
+    const existing = (await this.getFeeInvoices()).filter(i => i.id !== id);
+    saveToStorage(STORAGE_KEYS.FEE_INVOICES, existing);
+  },
+
+  // --------------------------------------------------------------------------
+  // Fee Payments (Receipts)
+  // --------------------------------------------------------------------------
+  async getFeePayments(filter?: {
+    invoiceId?: string;
+    studentId?: string;
+    academicYearId?: string;
+  }): Promise<FeePayment[]> {
+    if (isSupabaseConfigured) {
+      try {
+        let query = supabase
+          .from('fee_payments')
+          .select(`
+            *,
+            student:students(*),
+            invoice:fee_invoices(*)
+          `)
+          .order('payment_date', { ascending: false });
+
+        if (filter?.invoiceId) query = query.eq('invoice_id', filter.invoiceId);
+        if (filter?.studentId) query = query.eq('student_id', filter.studentId);
+        if (filter?.academicYearId) query = query.eq('academic_year_id', filter.academicYearId);
+
+        const { data, error } = await query;
+        if (!error && data) return data as unknown as FeePayment[];
+      } catch (e) {
+        console.warn('Supabase getFeePayments failed, falling back to local store', e);
+      }
+    }
+
+    let records = loadFromStorage<FeePayment[]>(STORAGE_KEYS.FEE_PAYMENTS, INITIAL_FEE_PAYMENTS);
+    if (filter?.invoiceId) records = records.filter(r => r.invoice_id === filter.invoiceId);
+    if (filter?.studentId) records = records.filter(r => r.student_id === filter.studentId);
+    if (filter?.academicYearId) records = records.filter(r => r.academic_year_id === filter.academicYearId);
+
+    const students = await this.getStudents();
+    return records.map(p => ({
+      ...p,
+      student: students.find(s => s.id === p.student_id)
+    }));
+  },
+
+  async recordFeePayment(paymentData: {
+    invoice_id: string;
+    student_id: string;
+    academic_year_id: string;
+    amount: number;
+    payment_date: string;
+    payment_method: 'Cash' | 'Bank Transfer' | 'Cheque' | 'Online / Mobile Wallet';
+    transaction_reference?: string | null;
+    collected_by?: string | null;
+    remarks?: string | null;
+  }): Promise<FeePayment> {
+    const existingPayments = await this.getFeePayments();
+    const receiptNum = `REC-${new Date().getFullYear()}-${String(existingPayments.length + 1).padStart(4, '0')}`;
+
+    const newPayment: FeePayment = {
+      id: crypto.randomUUID(),
+      receipt_no: receiptNum,
+      ...paymentData,
+      amount: Number(paymentData.amount),
+      created_at: new Date().toISOString()
+    };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data: inserted, error } = await supabase
+          .from('fee_payments')
+          .insert(newPayment)
+          .select()
+          .single();
+        if (!error && inserted) {
+          // Trigger in PostgreSQL will sync invoice automatically
+          return inserted as unknown as FeePayment;
+        }
+      } catch (e) {
+        console.warn('Supabase recordFeePayment failed, saving locally', e);
+      }
+    }
+
+    // Local storage path: record payment and update invoice balance
+    existingPayments.unshift(newPayment);
+    saveToStorage(STORAGE_KEYS.FEE_PAYMENTS, existingPayments);
+
+    // Sync invoice
+    const invoices = await this.getFeeInvoices();
+    const invIndex = invoices.findIndex(i => i.id === paymentData.invoice_id);
+    if (invIndex !== -1) {
+      const inv = invoices[invIndex];
+      const invPayments = existingPayments.filter(p => p.invoice_id === inv.id);
+      const totalPaid = invPayments.reduce((sum, p) => sum + Number(p.amount), 0);
+      const balance = Math.max(0, Number(inv.total_amount) - totalPaid);
+
+      let newStatus: any = 'unpaid';
+      if (balance <= 0) newStatus = 'paid';
+      else if (totalPaid > 0) newStatus = 'partial';
+      else if (new Date(inv.due_date) < new Date()) newStatus = 'overdue';
+
+      invoices[invIndex] = {
+        ...inv,
+        paid_amount: totalPaid,
+        balance_amount: balance,
+        status: newStatus,
+        updated_at: new Date().toISOString()
+      };
+      saveToStorage(STORAGE_KEYS.FEE_INVOICES, invoices);
+    }
+
+    return newPayment;
+  },
+
+  async getFeeKPIStats(academicYearId?: string): Promise<FeeKPIStats> {
+    const invoices = await this.getFeeInvoices(academicYearId ? { academicYearId } : undefined);
+
+    let totalInvoiced = 0;
+    let totalCollected = 0;
+    let totalOutstanding = 0;
+    let defaultersCount = 0;
+
+    for (const inv of invoices) {
+      totalInvoiced += Number(inv.total_amount || 0);
+      totalCollected += Number(inv.paid_amount || 0);
+      totalOutstanding += Number(inv.balance_amount || 0);
+
+      if (inv.status === 'unpaid' || inv.status === 'partial' || inv.status === 'overdue') {
+        if (Number(inv.balance_amount) > 0) {
+          defaultersCount++;
+        }
+      }
+    }
+
+    const collectionPercentage = totalInvoiced > 0 
+      ? Math.round((totalCollected / totalInvoiced) * 100) 
+      : 100;
+
+    return {
+      totalInvoiced,
+      totalCollected,
+      totalOutstanding,
+      totalDefaulters: defaultersCount,
+      collectionPercentage
     };
   }
 };

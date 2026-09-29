@@ -29,7 +29,12 @@ import {
   Assessment,
   StudentMark,
   StudentMarksheetSubjectResult,
-  StudentReportCard
+  StudentReportCard,
+  Parent,
+  ParentStudent,
+  StudentPortalOverview,
+  ParentPortalOverview,
+  ParentPortalChildSummary
 } from '../types/database.types';
 
 // ============================================================================
@@ -2221,6 +2226,86 @@ const INITIAL_STUDENT_MARKS: StudentMark[] = [
   }
 ];
 
+const INITIAL_PARENTS: Parent[] = [
+  {
+    id: 'e0000000-0000-0000-0000-000000000001',
+    user_id: null,
+    full_name: 'Usman Ali',
+    relationship: 'Father',
+    phone: '+92 300 5550101',
+    email: 'usman.ali@example.com',
+    cnic: '35201-1234567-1',
+    occupation: 'Senior Electrical Engineer',
+    address: 'House 42, Street 8, Sector G-9/1, Islamabad',
+    status: 'active',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'e0000000-0000-0000-0000-000000000002',
+    user_id: null,
+    full_name: 'Noor Ahmad',
+    relationship: 'Father',
+    phone: '+92 321 5550202',
+    email: 'noor.ahmad@example.com',
+    cnic: '35201-2345678-3',
+    occupation: 'Business Consultant & Entrepreneur',
+    address: 'Plot 15-B, Commercial Area, F-10, Islamabad',
+    status: 'active',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'e0000000-0000-0000-0000-000000000003',
+    user_id: null,
+    full_name: 'Hassan Raza',
+    relationship: 'Father',
+    phone: '+92 333 5550303',
+    email: 'hassan.raza@example.com',
+    cnic: '35201-3456789-5',
+    occupation: 'Chartered Accountant',
+    address: 'House 12, Lane 3, Askari 14, Rawalpindi',
+    status: 'active',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
+const INITIAL_PARENT_STUDENTS: ParentStudent[] = [
+  {
+    id: 'f0000000-0000-0000-0000-000000000001',
+    parent_id: 'e0000000-0000-0000-0000-000000000001',
+    student_id: 'd0000000-0000-0000-0000-000000000001',
+    relationship_type: 'Father',
+    is_primary_contact: true,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 'f0000000-0000-0000-0000-000000000002',
+    parent_id: 'e0000000-0000-0000-0000-000000000002',
+    student_id: 'd0000000-0000-0000-0000-000000000002',
+    relationship_type: 'Father',
+    is_primary_contact: true,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 'f0000000-0000-0000-0000-000000000003',
+    parent_id: 'e0000000-0000-0000-0000-000000000003',
+    student_id: 'd0000000-0000-0000-0000-000000000003',
+    relationship_type: 'Father',
+    is_primary_contact: true,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 'f0000000-0000-0000-0000-000000000004',
+    parent_id: 'e0000000-0000-0000-0000-000000000001',
+    student_id: 'd0000000-0000-0000-0000-000000000003',
+    relationship_type: 'Guardian',
+    is_primary_contact: false,
+    created_at: new Date().toISOString()
+  }
+];
+
 // Local storage keys
 const STORAGE_KEYS = {
   SETTINGS: 'star_academy_settings',
@@ -2244,6 +2329,8 @@ const STORAGE_KEYS = {
   SUBJECT_CONTENTS: 'star_academy_subject_contents',
   ASSESSMENTS: 'star_academy_assessments',
   STUDENT_MARKS: 'star_academy_student_marks',
+  PARENTS: 'star_academy_parents',
+  PARENT_STUDENTS: 'star_academy_parent_students',
 };
 
 // Safe storage access helper (supports browser localStorage and Node test environments)
@@ -5740,6 +5827,334 @@ export const databaseService = {
       pendingAttendanceCount,
       teacherSOS,
       teacherAssessments
+    };
+  },
+
+  // --------------------------------------------------------------------------
+  // Phase 9: Parents & Parent-Students
+  // --------------------------------------------------------------------------
+  async getParents(): Promise<Parent[]> {
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('parents')
+          .select('*')
+          .order('full_name', { ascending: true });
+        if (!error && data) return data as Parent[];
+      } catch (e) {
+        console.warn('Supabase getParents failed, falling back to local store', e);
+      }
+    }
+    return loadFromStorage<Parent[]>(STORAGE_KEYS.PARENTS, INITIAL_PARENTS);
+  },
+
+  async getParentById(id: string): Promise<Parent | null> {
+    const parents = await this.getParents();
+    return parents.find(p => p.id === id) || null;
+  },
+
+  async createParent(parentData: Omit<Parent, 'id' | 'created_at' | 'updated_at'>): Promise<Parent> {
+    const now = new Date().toISOString();
+    const newParent: Parent = {
+      id: crypto.randomUUID(),
+      ...parentData,
+      created_at: now,
+      updated_at: now
+    };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('parents')
+          .insert(newParent)
+          .select()
+          .single();
+        if (!error && data) return data as Parent;
+      } catch (e) {
+        console.warn('Supabase createParent failed, saving locally', e);
+      }
+    }
+
+    const parents = await this.getParents();
+    parents.push(newParent);
+    saveToStorage(STORAGE_KEYS.PARENTS, parents);
+    return newParent;
+  },
+
+  async updateParent(id: string, updates: Partial<Parent>): Promise<Parent> {
+    const now = new Date().toISOString();
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('parents')
+          .update({ ...updates, updated_at: now })
+          .eq('id', id)
+          .select()
+          .single();
+        if (!error && data) return data as Parent;
+      } catch (e) {
+        console.warn('Supabase updateParent failed, saving locally', e);
+      }
+    }
+
+    const parents = await this.getParents();
+    const index = parents.findIndex(p => p.id === id);
+    if (index === -1) throw new Error('Parent record not found');
+    parents[index] = { ...parents[index], ...updates, updated_at: now };
+    saveToStorage(STORAGE_KEYS.PARENTS, parents);
+    return parents[index];
+  },
+
+  async deleteParent(id: string): Promise<void> {
+    if (isSupabaseConfigured) {
+      try {
+        const { error } = await supabase.from('parents').delete().eq('id', id);
+        if (!error) return;
+      } catch (e) {
+        console.warn('Supabase deleteParent failed, falling back to local store', e);
+      }
+    }
+
+    const parents = (await this.getParents()).filter(p => p.id !== id);
+    saveToStorage(STORAGE_KEYS.PARENTS, parents);
+
+    const parentStudents = (await this.getParentStudents()).filter(ps => ps.parent_id !== id);
+    saveToStorage(STORAGE_KEYS.PARENT_STUDENTS, parentStudents);
+  },
+
+  async getParentStudents(parentId?: string): Promise<ParentStudent[]> {
+    if (isSupabaseConfigured) {
+      try {
+        let query = supabase.from('parent_students').select(`
+          *,
+          parent:parents(*),
+          student:students(*)
+        `);
+        if (parentId) {
+          query = query.eq('parent_id', parentId);
+        }
+        const { data, error } = await query;
+        if (!error && data) return data as unknown as ParentStudent[];
+      } catch (e) {
+        console.warn('Supabase getParentStudents failed, falling back to local store', e);
+      }
+    }
+
+    let records = loadFromStorage<ParentStudent[]>(STORAGE_KEYS.PARENT_STUDENTS, INITIAL_PARENT_STUDENTS);
+    if (parentId) {
+      records = records.filter(r => r.parent_id === parentId);
+    }
+    return records;
+  },
+
+  async linkParentStudent(data: Omit<ParentStudent, 'id' | 'created_at'>): Promise<ParentStudent> {
+    const newLink: ParentStudent = {
+      id: crypto.randomUUID(),
+      ...data,
+      created_at: new Date().toISOString()
+    };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data: inserted, error } = await supabase
+          .from('parent_students')
+          .insert(newLink)
+          .select()
+          .single();
+        if (!error && inserted) return inserted as unknown as ParentStudent;
+      } catch (e) {
+        console.warn('Supabase linkParentStudent failed, saving locally', e);
+      }
+    }
+
+    const links = await this.getParentStudents();
+    links.push(newLink);
+    saveToStorage(STORAGE_KEYS.PARENT_STUDENTS, links);
+    return newLink;
+  },
+
+  async unlinkParentStudent(id: string): Promise<void> {
+    if (isSupabaseConfigured) {
+      try {
+        const { error } = await supabase.from('parent_students').delete().eq('id', id);
+        if (!error) return;
+      } catch (e) {
+        console.warn('Supabase unlinkParentStudent failed, falling back to local store', e);
+      }
+    }
+
+    const links = (await this.getParentStudents()).filter(l => l.id !== id);
+    saveToStorage(STORAGE_KEYS.PARENT_STUDENTS, links);
+  },
+
+  async getStudentPortalOverview(studentId: string, academicYearId?: string): Promise<StudentPortalOverview> {
+    const currentYear = academicYearId 
+      ? (await this.getAcademicYears()).find(y => y.id === academicYearId)
+      : (await this.getAcademicYears()).find(y => y.is_current);
+
+    const yearId = currentYear?.id || '';
+
+    // Get student details with enrollment
+    const student = await this.getStudentById(studentId);
+    if (!student) {
+      throw new Error('Student not found');
+    }
+
+    const classId = student.academic_record?.class_id || '';
+    const sectionId = student.academic_record?.section_id || '';
+
+    // 1. Attendance Summary
+    let attendanceSummary = {
+      totalDays: 0,
+      presentDays: 0,
+      absentDays: 0,
+      leaveDays: 0,
+      percentage: 100
+    };
+
+    try {
+      const dailyAttendance = await this.getDailyAttendance({
+        academic_year_id: yearId,
+        student_id: student.id
+      });
+      const total = dailyAttendance.length;
+      const present = dailyAttendance.filter(a => a.status === 'Present').length;
+      const absent = dailyAttendance.filter(a => a.status === 'Absent').length;
+      const leave = dailyAttendance.filter(a => a.status === 'Leave' || a.status === 'Late').length;
+      const pct = total > 0 ? Math.round((present / total) * 100) : 100;
+
+      attendanceSummary = {
+        totalDays: total,
+        presentDays: present,
+        absentDays: absent,
+        leaveDays: leave,
+        percentage: pct
+      };
+    } catch (e) {
+      console.warn('Failed to calculate student attendance summary', e);
+    }
+
+    // 2. Today's Timetable Slots
+    const dayNames: DayOfWeek[] = ['Sunday' as any, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const todayDayName = dayNames[new Date().getDay()] || 'Monday';
+
+    let todaySlots: any[] = [];
+    try {
+      const allSlots = await this.getTimetableSlots({
+        academicYearId: yearId,
+        classId: classId
+      });
+      todaySlots = allSlots
+        .filter(s => s.status === 'active' && s.day_of_week === todayDayName && (!sectionId || !s.section_id || s.section_id === sectionId))
+        .sort((a, b) => a.period_number - b.period_number)
+        .map(s => ({
+          ...s,
+          subject_name: s.subject?.name || 'Class Lecture',
+          teacher_name: s.teacher?.name || 'Assigned Faculty',
+          room_number: s.room || 'Room 1'
+        }));
+    } catch (e) {
+      console.warn('Failed to load student todaySlots', e);
+    }
+
+    // 3. Upcoming Assessments
+    let upcomingAssessments: Assessment[] = [];
+    try {
+      const allAssessments = await this.getAssessments(yearId);
+      upcomingAssessments = allAssessments
+        .filter(a => a.class_id === classId && (!a.section_id || a.section_id === sectionId) && a.status === 'scheduled')
+        .sort((a, b) => new Date(a.test_date).getTime() - new Date(b.test_date).getTime())
+        .slice(0, 5);
+    } catch (e) {
+      console.warn('Failed to load upcoming assessments', e);
+    }
+
+    // 4. Report Card & Recent Marks
+    let reportCard: StudentReportCard | null = null;
+    let recentMarks: StudentMarksheetSubjectResult[] = [];
+    try {
+      reportCard = await this.getStudentReportCard(student.id, yearId);
+      if (reportCard && reportCard.results) {
+        recentMarks = reportCard.results;
+      }
+    } catch (e) {
+      console.warn('Failed to load student report card', e);
+    }
+
+    // 5. Study Materials
+    let studyMaterials: SubjectContent[] = [];
+    try {
+      const allContent = await this.getSubjectContents(yearId);
+      studyMaterials = allContent.filter(c => c.class_id === classId);
+    } catch (e) {
+      console.warn('Failed to load study materials', e);
+    }
+
+    return {
+      student,
+      academicYear: currentYear,
+      attendanceSummary,
+      todaySlots,
+      upcomingAssessments,
+      recentMarks,
+      reportCard,
+      studyMaterials
+    };
+  },
+
+  async getParentPortalOverview(parentId: string, academicYearId?: string): Promise<ParentPortalOverview> {
+    const parent = await this.getParentById(parentId);
+    if (!parent) {
+      throw new Error('Parent not found');
+    }
+
+    const currentYear = academicYearId 
+      ? (await this.getAcademicYears()).find(y => y.id === academicYearId)
+      : (await this.getAcademicYears()).find(y => y.is_current);
+
+    const yearId = currentYear?.id || '';
+
+    // Fetch linked children
+    const links = await this.getParentStudents(parentId);
+    const childrenSummaries: ParentPortalChildSummary[] = [];
+
+    for (const link of links) {
+      try {
+        const student = await this.getStudentById(link.student_id);
+        if (!student) continue;
+
+        // Attendance %
+        const daily = await this.getDailyAttendance({
+          academic_year_id: yearId,
+          student_id: student.id
+        });
+        const total = daily.length;
+        const present = daily.filter(d => d.status === 'Present').length;
+        const attendancePct = total > 0 ? Math.round((present / total) * 100) : 100;
+
+        // Marks & Grades
+        const report = await this.getStudentReportCard(student.id, yearId);
+        const totalTests = report?.results.length || 0;
+        const avgPct = report?.overall_percentage || 0;
+        const grade = report?.overall_grade || 'N/A';
+
+        childrenSummaries.push({
+          student,
+          relationship_type: link.relationship_type,
+          is_primary_contact: link.is_primary_contact,
+          attendancePercentage: attendancePct,
+          latestGrade: grade,
+          totalTestsGiven: totalTests,
+          averageMarksPercentage: avgPct
+        });
+      } catch (e) {
+        console.warn('Failed to compile child summary for parent portal', e);
+      }
+    }
+
+    return {
+      parent,
+      children: childrenSummaries
     };
   }
 };

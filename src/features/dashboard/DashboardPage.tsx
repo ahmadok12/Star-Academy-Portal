@@ -15,7 +15,8 @@ import {
   Briefcase,
   Clock,
   Award,
-  Smartphone
+  Smartphone,
+  ShieldCheck
 } from 'lucide-react';
 import { useAcademicYear } from '../../context/AcademicYearContext';
 import { databaseService } from '../../lib/database-service';
@@ -151,13 +152,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
               Operations, Portals &amp; Academics
             </h2>
             <span className="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full border border-emerald-200/60">
-              Phase 5, 6, 7 &amp; 8 Live
+              Phases 5 to 9 Live
             </span>
           </div>
-          <span className="text-xs text-slate-400">Classroom, Schedules &amp; Exams</span>
+          <span className="text-xs text-slate-400">Classroom, Schedules, Portals &amp; Exams</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5">
           {/* Phase 5: Timetable Card */}
           <div
             onClick={() => onNavigate('timetable')}
@@ -257,6 +258,58 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
                   {loading ? '...' : stats.assessmentsCount}
                 </p>
                 <p className="text-[10px] text-slate-400">{stats.sosUnitsCount} SOS units</p>
+              </div>
+              <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
+            </div>
+          </div>
+
+          {/* Phase 9: Student Portal Card */}
+          <div
+            onClick={() => onNavigate('student-portal')}
+            className="bg-white rounded-2xl p-4 border border-slate-200/70 shadow-xs hover:border-slate-300 transition cursor-pointer group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-700 group-hover:bg-indigo-600 group-hover:text-white transition">
+                  <GraduationCap className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-mono text-indigo-700 font-bold bg-indigo-50 px-1.5 py-0.5 rounded">P9</span>
+              </div>
+              <h3 className="font-bold text-slate-900 text-xs mt-3">Student Portal</h3>
+              <p className="text-[11px] text-slate-400 mt-0.5">Lectures, notes &amp; marks</p>
+            </div>
+            <div className="mt-4 flex items-end justify-between pt-2 border-t border-slate-100">
+              <div>
+                <p className="text-2xl font-black text-slate-900 tracking-tight font-mono">
+                  {loading ? '...' : stats.studentsCount}
+                </p>
+                <p className="text-[10px] text-slate-400">Enrolled learners</p>
+              </div>
+              <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
+            </div>
+          </div>
+
+          {/* Phase 9: Parent Portal Card */}
+          <div
+            onClick={() => onNavigate('parent-portal')}
+            className="bg-white rounded-2xl p-4 border border-slate-200/70 shadow-xs hover:border-slate-300 transition cursor-pointer group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-700 group-hover:bg-teal-600 group-hover:text-white transition">
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-mono text-teal-700 font-bold bg-teal-50 px-1.5 py-0.5 rounded">P9</span>
+              </div>
+              <h3 className="font-bold text-slate-900 text-xs mt-3">Parent Portal</h3>
+              <p className="text-[11px] text-slate-400 mt-0.5">Multi-child switcher</p>
+            </div>
+            <div className="mt-4 flex items-end justify-between pt-2 border-t border-slate-100">
+              <div>
+                <p className="text-2xl font-black text-slate-900 tracking-tight font-mono">
+                  3
+                </p>
+                <p className="text-[10px] text-slate-400">Linked guardians</p>
               </div>
               <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
             </div>

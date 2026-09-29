@@ -504,5 +504,60 @@ export interface StudentReportCard {
   class_rank?: number;
 }
 
+export interface Parent {
+  id: string;
+  user_id?: string | null;
+  full_name: string;
+  relationship: string;
+  phone: string;
+  email?: string | null;
+  cnic?: string | null;
+  occupation?: string | null;
+  address?: string | null;
+  status: 'active' | 'inactive';
+  created_at?: string;
+  updated_at?: string;
+}
 
+export interface ParentStudent {
+  id: string;
+  parent_id: string;
+  student_id: string;
+  relationship_type: string;
+  is_primary_contact: boolean;
+  created_at?: string;
+  parent?: Parent;
+  student?: StudentWithEnrollment;
+}
 
+export interface StudentPortalOverview {
+  student: StudentWithEnrollment;
+  academicYear?: AcademicYear | null;
+  attendanceSummary: {
+    totalDays: number;
+    presentDays: number;
+    absentDays: number;
+    leaveDays: number;
+    percentage: number;
+  };
+  todaySlots: (TimetableSlot & { subject_name?: string; teacher_name?: string; room_number?: string })[];
+  upcomingAssessments: Assessment[];
+  recentMarks: StudentMarksheetSubjectResult[];
+  reportCard: StudentReportCard | null;
+  studyMaterials: SubjectContent[];
+}
+
+export interface ParentPortalChildSummary {
+  student: StudentWithEnrollment;
+  relationship_type: string;
+  is_primary_contact: boolean;
+  attendancePercentage: number;
+  latestGrade?: string;
+  totalTestsGiven: number;
+  averageMarksPercentage: number;
+}
+
+export interface ParentPortalOverview {
+  parent: Parent;
+  children: ParentPortalChildSummary[];
+}

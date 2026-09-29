@@ -49,6 +49,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
     sosUnitsCount: 0,
     feeInvoicesCount: 0,
     pendingFeesAmount: 0,
+    liquidReserves: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -78,12 +79,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
           databaseService.getTeacherAssignments({ academicYearId: selectedAcademicYear?.id }),
         ]);
 
-        const [slotsList, periodsList, assessmentsList, sosList, feeKPIs] = await Promise.all([
+        const [slotsList, periodsList, assessmentsList, sosList, feeKPIs, financeKPIs] = await Promise.all([
           databaseService.getTimetableSlots({ academicYearId: selectedAcademicYear?.id }),
           databaseService.getTimetablePeriods(),
           databaseService.getAssessments(selectedAcademicYear?.id || ''),
           databaseService.getSchemeOfStudies(selectedAcademicYear?.id || ''),
           databaseService.getFeeKPIStats(selectedAcademicYear?.id).catch(() => ({ totalInvoices: 0, pendingAmount: 0 } as any)),
+          databaseService.getFinanceKPIStats(selectedAcademicYear?.id).catch(() => ({ totalLiquidBalance: 0 } as any)),
         ]);
 
         setStats({
@@ -103,6 +105,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
           sosUnitsCount: sosList.length,
           feeInvoicesCount: feeKPIs?.totalInvoices || 0,
           pendingFeesAmount: feeKPIs?.pendingAmount || 0,
+          liquidReserves: financeKPIs?.totalLiquidBalance || 0,
         });
       } catch (e) {
         console.error('Error loading dashboard stats:', e);
@@ -344,6 +347,32 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, settin
                 <p className="text-[10px] text-emerald-600 font-medium">
                   {stats.pendingFeesAmount > 0 ? `Rs. ${stats.pendingFeesAmount.toLocaleString()} pending` : 'All cleared'}
                 </p>
+              </div>
+              <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
+            </div>
+          </div>
+
+          {/* Phase 11: Finance & Accounts Card */}
+          <div
+            onClick={() => onNavigate('finance')}
+            className="bg-white rounded-2xl p-4 border border-slate-200/70 shadow-xs hover:border-slate-300 transition cursor-pointer group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center text-blue-700 group-hover:bg-blue-600 group-hover:text-white transition">
+                  <Building2 className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-mono text-blue-700 font-bold bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200/50">P11</span>
+              </div>
+              <h3 className="font-bold text-slate-900 text-xs mt-3">Finance &amp; Payroll</h3>
+              <p className="text-[11px] text-slate-400 mt-0.5">Banks, expenses &amp; salaries</p>
+            </div>
+            <div className="mt-4 flex items-end justify-between pt-2 border-t border-slate-100">
+              <div>
+                <p className="text-2xl font-black text-slate-900 tracking-tight font-mono">
+                  {loading ? '...' : `Rs. ${(stats.liquidReserves / 1000).toFixed(0)}k`}
+                </p>
+                <p className="text-[10px] text-blue-600 font-medium">Liquid reserves</p>
               </div>
               <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition" />
             </div>

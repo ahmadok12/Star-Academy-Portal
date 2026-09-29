@@ -14,7 +14,8 @@ import {
   Award,
   Smartphone,
   GraduationCap,
-  ShieldCheck
+  ShieldCheck,
+  Building2
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -25,6 +26,7 @@ export type NavTab =
   | 'parent-portal'
   | 'exams-marks'
   | 'fees'
+  | 'finance'
   | 'student-inquiries'
   | 'students-directory'
   | 'student-admission'
@@ -361,11 +363,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </ul>
             </div>
 
-            {/* Fees & Billing (Phase 10) */}
+            {/* Finance & Accounts (Phase 10 & 11) */}
             <div>
               <p className="text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-2 px-3 flex items-center justify-between">
-                <span>Fees &amp; Billing</span>
-                <span className="text-[9px] bg-emerald-50 text-emerald-700 font-semibold px-1.5 py-0.5 rounded border border-emerald-200/60">Phase 10</span>
+                <span>Finance &amp; Accounts</span>
+                <span className="text-[9px] bg-emerald-50 text-emerald-700 font-semibold px-1.5 py-0.5 rounded border border-emerald-200/60">P10 &amp; P11</span>
               </p>
               <ul className="space-y-1">
                 <li>
@@ -384,6 +386,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <span className="text-[9px] font-mono text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded font-semibold border border-emerald-200/50">P10</span>
                   </button>
                 </li>
+
+                <li>
+                  <button
+                    onClick={() => handleNavClick('finance')}
+                    className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl font-medium text-xs transition ${
+                      currentTab === 'finance'
+                        ? 'bg-slate-100 text-slate-900 font-semibold'
+                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <Building2 className="w-4 h-4 shrink-0 text-blue-600" />
+                      <span className="font-semibold text-slate-900">Finance &amp; Payroll</span>
+                    </div>
+                    <span className="text-[9px] font-mono text-blue-700 bg-blue-50 px-1 py-0.5 rounded font-semibold border border-blue-200/50">P11</span>
+                  </button>
+                </li>
               </ul>
             </div>
 
@@ -395,7 +414,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </p>
               <ul className="space-y-1 opacity-55">
                 {[
-                  { label: 'Finance & Accounts', icon: DollarSign, tag: 'P11' },
                   { label: 'Central Reports', icon: BarChart3, tag: 'P12' },
                 ].map((item, i) => {
                   const Icon = item.icon;

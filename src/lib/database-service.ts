@@ -38,7 +38,12 @@ import {
   FeeStructure,
   FeeInvoice,
   FeePayment,
-  FeeKPIStats
+  FeeKPIStats,
+  BankAccount,
+  BankTransfer,
+  Expense,
+  Payroll,
+  FinanceKPIStats
 } from '../types/database.types';
 
 // ============================================================================
@@ -2448,6 +2453,218 @@ const INITIAL_FEE_PAYMENTS: FeePayment[] = [
   }
 ];
 
+
+const INITIAL_BANK_ACCOUNTS: BankAccount[] = [
+  {
+    id: 'b1000000-0000-0000-0000-000000000001',
+    name: 'Cash in Hand (Admin Desk)',
+    account_number: 'CASH-DESK-01',
+    bank_name: 'Cash Desk',
+    account_type: 'cash',
+    opening_balance: 50000.0,
+    current_balance: 78500.0,
+    status: 'active',
+    notes: 'Front office daily petty cash & fee counter',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'b1000000-0000-0000-0000-000000000002',
+    name: 'Meezan Bank - Main Operational',
+    account_number: '01020109876543',
+    bank_name: 'Meezan Bank Ltd',
+    account_type: 'bank',
+    opening_balance: 450000.0,
+    current_balance: 420000.0,
+    status: 'active',
+    notes: 'Primary Islamic corporate current account for fee collection & salaries',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'b1000000-0000-0000-0000-000000000003',
+    name: 'Habib Bank Limited (HBL)',
+    account_number: '00427901234503',
+    bank_name: 'Habib Bank Limited',
+    account_type: 'bank',
+    opening_balance: 300000.0,
+    current_balance: 315000.0,
+    status: 'active',
+    notes: 'Secondary branch account for reserve funds and online transfers',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'b1000000-0000-0000-0000-000000000004',
+    name: 'Bank Alfalah Academic Acct',
+    account_number: '55120098765432',
+    bank_name: 'Bank Alfalah',
+    account_type: 'bank',
+    opening_balance: 150000.0,
+    current_balance: 150000.0,
+    status: 'active',
+    notes: 'Special development and equipment fund',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
+const INITIAL_BANK_TRANSFERS: BankTransfer[] = [
+  {
+    id: 'b3000000-0000-0000-0000-000000000001',
+    transfer_date: '2026-05-18',
+    from_account_id: 'b1000000-0000-0000-0000-000000000001',
+    to_account_id: 'b1000000-0000-0000-0000-000000000002',
+    amount: 30000.0,
+    reference_no: 'TRF-CASH-DEP-01',
+    description: 'Surplus cash deposited from front desk into Meezan corporate account',
+    created_by: 'Principal Office',
+    created_at: new Date().toISOString()
+  }
+];
+
+const INITIAL_EXPENSES: Expense[] = [
+  {
+    id: 'b2000000-0000-0000-0000-000000000001',
+    date: '2026-05-12',
+    category: 'Electricity',
+    amount: 38500.0,
+    payment_account_id: 'b1000000-0000-0000-0000-000000000002',
+    payee_name: 'IESCO / Power Distribution Co.',
+    reference_no: 'IESCO-BILL-MAY-26',
+    description: 'Campus monthly electricity bill for classrooms & air-conditioning',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'b2000000-0000-0000-0000-000000000002',
+    date: '2026-05-16',
+    category: 'Stationery',
+    amount: 14200.0,
+    payment_account_id: 'b1000000-0000-0000-0000-000000000001',
+    payee_name: 'Al-Rehman Book Depot',
+    reference_no: 'STAT-INV-4410',
+    description: 'Examination answer booklets, printing paper, whiteboard markers',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'b2000000-0000-0000-0000-000000000003',
+    date: '2026-05-20',
+    category: 'Marketing',
+    amount: 22000.0,
+    payment_account_id: 'b1000000-0000-0000-0000-000000000002',
+    payee_name: 'Vision Graphics & Media',
+    reference_no: 'MKT-AD-2026-06',
+    description: 'Admission campaign road banners and social media promotions',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'b2000000-0000-0000-0000-000000000004',
+    date: '2026-05-22',
+    category: 'Maintenance',
+    amount: 8500.0,
+    payment_account_id: 'b1000000-0000-0000-0000-000000000001',
+    payee_name: 'Bashir Electric Works',
+    reference_no: 'MAINT-092',
+    description: 'Classroom ceiling fans servicing and backup UPS wiring repair',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
+const INITIAL_PAYROLLS: Payroll[] = [
+  {
+    id: 'b4000000-0000-0000-0000-000000000001',
+    staff_id: '30000000-0000-0000-0000-000000000001',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    salary_month: 'May 2026',
+    basic_salary: 85000.0,
+    allowances: 5000.0,
+    allowances_breakdown: 'Senior Teacher Allowance: Rs. 5,000',
+    deductions: 2000.0,
+    deductions_breakdown: 'Income Tax deduction: Rs. 2,000',
+    advance_salary_deducted: 0.0,
+    net_salary: 88000.0,
+    payment_status: 'paid',
+    payment_date: '2026-05-15',
+    payment_account_id: 'b1000000-0000-0000-0000-000000000002',
+    payment_method: 'Bank Transfer',
+    transaction_reference: 'MEEZAN-PAY-88219',
+    notes: 'Monthly salary credited directly to Meezan salary account',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'b4000000-0000-0000-0000-000000000002',
+    staff_id: '30000000-0000-0000-0000-000000000002',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    salary_month: 'May 2026',
+    basic_salary: 110000.0,
+    allowances: 8000.0,
+    allowances_breakdown: 'Head of Dept Allowance: Rs. 5,000, Fuel: Rs. 3,000',
+    deductions: 3500.0,
+    deductions_breakdown: 'Tax deduction: Rs. 3,500',
+    advance_salary_deducted: 0.0,
+    net_salary: 114500.0,
+    payment_status: 'paid',
+    payment_date: '2026-05-15',
+    payment_account_id: 'b1000000-0000-0000-0000-000000000002',
+    payment_method: 'Bank Transfer',
+    transaction_reference: 'MEEZAN-PAY-88220',
+    notes: 'HOD physics salary transferred',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'b4000000-0000-0000-0000-000000000003',
+    staff_id: '30000000-0000-0000-0000-000000000003',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    salary_month: 'June 2026',
+    basic_salary: 75000.0,
+    allowances: 4000.0,
+    allowances_breakdown: 'Special coaching allowance: Rs. 4,000',
+    deductions: 1500.0,
+    deductions_breakdown: 'Late coming fine: Rs. 1,500',
+    advance_salary_deducted: 5000.0,
+    net_salary: 72500.0,
+    payment_status: 'approved',
+    payment_date: null,
+    payment_account_id: null,
+    payment_method: 'Bank Transfer',
+    transaction_reference: null,
+    notes: 'Approved by Finance Committee, pending final disbursement',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'b4000000-0000-0000-0000-000000000004',
+    staff_id: '30000000-0000-0000-0000-000000000004',
+    academic_year_id: 'a0000000-0000-0000-0000-000000000001',
+    salary_month: 'June 2026',
+    basic_salary: 70000.0,
+    allowances: 3000.0,
+    allowances_breakdown: 'Conveyance allowance: Rs. 3,000',
+    deductions: 1000.0,
+    deductions_breakdown: 'Tax: Rs. 1,000',
+    advance_salary_deducted: 0.0,
+    net_salary: 72000.0,
+    payment_status: 'draft',
+    payment_date: null,
+    payment_account_id: null,
+    payment_method: 'Cash',
+    transaction_reference: null,
+    notes: 'Draft salary calculation for June cycle',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
 // Local storage keys
 const STORAGE_KEYS = {
   SETTINGS: 'star_academy_settings',
@@ -2476,6 +2693,10 @@ const STORAGE_KEYS = {
   FEE_STRUCTURES: 'star_academy_fee_structures',
   FEE_INVOICES: 'star_academy_fee_invoices',
   FEE_PAYMENTS: 'star_academy_fee_payments',
+  BANK_ACCOUNTS: 'star_academy_bank_accounts',
+  BANK_TRANSFERS: 'star_academy_bank_transfers',
+  EXPENSES: 'star_academy_expenses',
+  PAYROLLS: 'star_academy_payrolls',
 };
 
 // Safe storage access helper (supports browser localStorage and Node test environments)
@@ -6808,6 +7029,636 @@ export const databaseService = {
       totalOutstanding,
       totalDefaulters: defaultersCount,
       collectionPercentage
+    };
+  },
+
+  // ==========================================
+  // Phase 11: Finance - Bank Accounts
+  // ==========================================
+  async getBankAccounts(): Promise<BankAccount[]> {
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('bank_accounts')
+          .select('*')
+          .order('name');
+        if (!error && data) return data as BankAccount[];
+      } catch (e) {
+        console.warn('Falling back to local storage for bank accounts:', e);
+      }
+    }
+    return loadFromStorage<BankAccount[]>(STORAGE_KEYS.BANK_ACCOUNTS, INITIAL_BANK_ACCOUNTS);
+  },
+
+  async getBankAccountById(id: string): Promise<BankAccount | null> {
+    const accounts = await this.getBankAccounts();
+    return accounts.find(a => a.id === id) || null;
+  },
+
+  async createBankAccount(accountData: Omit<BankAccount, 'id' | 'created_at' | 'updated_at'>): Promise<BankAccount> {
+    const newAccount: BankAccount = {
+      ...accountData,
+      id: crypto.randomUUID(),
+      current_balance: Number(accountData.opening_balance || 0),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('bank_accounts')
+          .insert([newAccount])
+          .select()
+          .single();
+        if (!error && data) {
+          const list = await this.getBankAccounts();
+          saveToStorage(STORAGE_KEYS.BANK_ACCOUNTS, [data, ...list.filter(a => a.id !== data.id)]);
+          return data as BankAccount;
+        }
+      } catch (e) {
+        console.warn('Falling back to local storage for creating bank account:', e);
+      }
+    }
+
+    const list = await this.getBankAccounts();
+    list.push(newAccount);
+    saveToStorage(STORAGE_KEYS.BANK_ACCOUNTS, list);
+    return newAccount;
+  },
+
+  async updateBankAccount(id: string, updates: Partial<BankAccount>): Promise<BankAccount> {
+    const updatedFields = { ...updates, updated_at: new Date().toISOString() };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('bank_accounts')
+          .update(updatedFields)
+          .eq('id', id)
+          .select()
+          .single();
+        if (!error && data) {
+          const list = await this.getBankAccounts();
+          saveToStorage(STORAGE_KEYS.BANK_ACCOUNTS, list.map(a => a.id === id ? (data as BankAccount) : a));
+          return data as BankAccount;
+        }
+      } catch (e) {
+        console.warn('Falling back to local storage for updating bank account:', e);
+      }
+    }
+
+    const list = await this.getBankAccounts();
+    const idx = list.findIndex(a => a.id === id);
+    if (idx === -1) throw new Error('Bank account not found');
+    list[idx] = { ...list[idx], ...updatedFields };
+    saveToStorage(STORAGE_KEYS.BANK_ACCOUNTS, list);
+    return list[idx];
+  },
+
+  async deleteBankAccount(id: string): Promise<void> {
+    if (isSupabaseConfigured) {
+      try {
+        const { error } = await supabase
+          .from('bank_accounts')
+          .delete()
+          .eq('id', id);
+        if (!error) {
+          const list = await this.getBankAccounts();
+          saveToStorage(STORAGE_KEYS.BANK_ACCOUNTS, list.filter(a => a.id !== id));
+          return;
+        }
+      } catch (e) {
+        console.warn('Falling back to local storage for deleting bank account:', e);
+      }
+    }
+
+    const list = await this.getBankAccounts();
+    saveToStorage(STORAGE_KEYS.BANK_ACCOUNTS, list.filter(a => a.id !== id));
+  },
+
+  // ==========================================
+  // Phase 11: Finance - Bank Transfers
+  // ==========================================
+  async getBankTransfers(): Promise<BankTransfer[]> {
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('bank_transfers')
+          .select('*, from_account:bank_accounts!from_account_id(*), to_account:bank_accounts!to_account_id(*)')
+          .order('transfer_date', { ascending: false });
+        if (!error && data) return data as BankTransfer[];
+      } catch (e) {
+        console.warn('Falling back to local storage for transfers:', e);
+      }
+    }
+
+    const transfers = loadFromStorage<BankTransfer[]>(STORAGE_KEYS.BANK_TRANSFERS, INITIAL_BANK_TRANSFERS);
+    const accounts = await this.getBankAccounts();
+    return transfers.map(t => ({
+      ...t,
+      from_account: accounts.find(a => a.id === t.from_account_id),
+      to_account: accounts.find(a => a.id === t.to_account_id)
+    }));
+  },
+
+  async createBankTransfer(transferData: Omit<BankTransfer, 'id' | 'created_at'>): Promise<BankTransfer> {
+    const newTransfer: BankTransfer = {
+      ...transferData,
+      id: crypto.randomUUID(),
+      created_at: new Date().toISOString()
+    };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('bank_transfers')
+          .insert([{
+            id: newTransfer.id,
+            transfer_date: newTransfer.transfer_date,
+            from_account_id: newTransfer.from_account_id,
+            to_account_id: newTransfer.to_account_id,
+            amount: newTransfer.amount,
+            reference_no: newTransfer.reference_no,
+            description: newTransfer.description,
+            created_by: newTransfer.created_by
+          }])
+          .select('*, from_account:bank_accounts!from_account_id(*), to_account:bank_accounts!to_account_id(*)')
+          .single();
+        if (!error && data) {
+          const list = await this.getBankTransfers();
+          saveToStorage(STORAGE_KEYS.BANK_TRANSFERS, [data, ...list.filter(t => t.id !== data.id)]);
+          return data as BankTransfer;
+        }
+      } catch (e) {
+        console.warn('Falling back to local storage for transfer creation:', e);
+      }
+    }
+
+    // Local storage path: adjust balances
+    const accounts = await this.getBankAccounts();
+    const fromAcc = accounts.find(a => a.id === transferData.from_account_id);
+    const toAcc = accounts.find(a => a.id === transferData.to_account_id);
+    if (fromAcc && toAcc) {
+      fromAcc.current_balance = Number(fromAcc.current_balance) - Number(transferData.amount);
+      toAcc.current_balance = Number(toAcc.current_balance) + Number(transferData.amount);
+      saveToStorage(STORAGE_KEYS.BANK_ACCOUNTS, accounts);
+    }
+
+    const list = await this.getBankTransfers();
+    list.unshift(newTransfer);
+    saveToStorage(STORAGE_KEYS.BANK_TRANSFERS, list);
+    return newTransfer;
+  },
+
+  // ==========================================
+  // Phase 11: Finance - Expenses
+  // ==========================================
+  async getExpenses(filter?: {
+    category?: string;
+    paymentAccountId?: string;
+    academicYearId?: string;
+    startDate?: string;
+    endDate?: string;
+  }): Promise<Expense[]> {
+    if (isSupabaseConfigured) {
+      try {
+        let query = supabase
+          .from('expenses')
+          .select('*, payment_account:bank_accounts(*)');
+
+        if (filter?.category) query = query.eq('category', filter.category);
+        if (filter?.paymentAccountId) query = query.eq('payment_account_id', filter.paymentAccountId);
+        if (filter?.academicYearId) query = query.eq('academic_year_id', filter.academicYearId);
+        if (filter?.startDate) query = query.gte('date', filter.startDate);
+        if (filter?.endDate) query = query.lte('date', filter.endDate);
+
+        const { data, error } = await query.order('date', { ascending: false });
+        if (!error && data) return data as Expense[];
+      } catch (e) {
+        console.warn('Falling back to local storage for expenses:', e);
+      }
+    }
+
+    let records = loadFromStorage<Expense[]>(STORAGE_KEYS.EXPENSES, INITIAL_EXPENSES);
+    const accounts = await this.getBankAccounts();
+
+    records = records.map(exp => ({
+      ...exp,
+      payment_account: exp.payment_account_id ? accounts.find(a => a.id === exp.payment_account_id) : undefined
+    }));
+
+    if (filter?.category) {
+      records = records.filter(r => r.category.toLowerCase() === filter.category!.toLowerCase());
+    }
+    if (filter?.paymentAccountId) {
+      records = records.filter(r => r.payment_account_id === filter.paymentAccountId);
+    }
+    if (filter?.academicYearId) {
+      records = records.filter(r => !r.academic_year_id || r.academic_year_id === filter.academicYearId);
+    }
+    if (filter?.startDate) {
+      records = records.filter(r => r.date >= filter.startDate!);
+    }
+    if (filter?.endDate) {
+      records = records.filter(r => r.date <= filter.endDate!);
+    }
+
+    return records.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  },
+
+  async createExpense(expenseData: Omit<Expense, 'id' | 'created_at' | 'updated_at'>): Promise<Expense> {
+    const newExpense: Expense = {
+      ...expenseData,
+      id: crypto.randomUUID(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('expenses')
+          .insert([{
+            id: newExpense.id,
+            date: newExpense.date,
+            category: newExpense.category,
+            amount: newExpense.amount,
+            payment_account_id: newExpense.payment_account_id || null,
+            payee_name: newExpense.payee_name,
+            reference_no: newExpense.reference_no,
+            description: newExpense.description,
+            receipt_url: newExpense.receipt_url,
+            academic_year_id: newExpense.academic_year_id || null
+          }])
+          .select('*, payment_account:bank_accounts(*)')
+          .single();
+        if (!error && data) {
+          const list = await this.getExpenses();
+          saveToStorage(STORAGE_KEYS.EXPENSES, [data, ...list.filter(e => e.id !== data.id)]);
+          return data as Expense;
+        }
+      } catch (e) {
+        console.warn('Falling back to local storage for creating expense:', e);
+      }
+    }
+
+    // Local storage path: deduct from payment account
+    if (expenseData.payment_account_id) {
+      const accounts = await this.getBankAccounts();
+      const acc = accounts.find(a => a.id === expenseData.payment_account_id);
+      if (acc) {
+        acc.current_balance = Number(acc.current_balance) - Number(expenseData.amount);
+        saveToStorage(STORAGE_KEYS.BANK_ACCOUNTS, accounts);
+      }
+    }
+
+    const list = await this.getExpenses();
+    list.unshift(newExpense);
+    saveToStorage(STORAGE_KEYS.EXPENSES, list);
+    return newExpense;
+  },
+
+  async updateExpense(id: string, updates: Partial<Expense>): Promise<Expense> {
+    const updatedFields = { ...updates, updated_at: new Date().toISOString() };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('expenses')
+          .update(updatedFields)
+          .eq('id', id)
+          .select('*, payment_account:bank_accounts(*)')
+          .single();
+        if (!error && data) {
+          const list = await this.getExpenses();
+          saveToStorage(STORAGE_KEYS.EXPENSES, list.map(e => e.id === id ? (data as Expense) : e));
+          return data as Expense;
+        }
+      } catch (e) {
+        console.warn('Falling back to local storage for updating expense:', e);
+      }
+    }
+
+    const list = await this.getExpenses();
+    const idx = list.findIndex(e => e.id === id);
+    if (idx === -1) throw new Error('Expense not found');
+    list[idx] = { ...list[idx], ...updatedFields };
+    saveToStorage(STORAGE_KEYS.EXPENSES, list);
+    return list[idx];
+  },
+
+  async deleteExpense(id: string): Promise<void> {
+    if (isSupabaseConfigured) {
+      try {
+        const { error } = await supabase
+          .from('expenses')
+          .delete()
+          .eq('id', id);
+        if (!error) {
+          const list = await this.getExpenses();
+          saveToStorage(STORAGE_KEYS.EXPENSES, list.filter(e => e.id !== id));
+          return;
+        }
+      } catch (e) {
+        console.warn('Falling back to local storage for deleting expense:', e);
+      }
+    }
+
+    const list = await this.getExpenses();
+    saveToStorage(STORAGE_KEYS.EXPENSES, list.filter(e => e.id !== id));
+  },
+
+  // ==========================================
+  // Phase 11: Finance - Teacher & Staff Payroll
+  // ==========================================
+  async getPayrolls(filter?: {
+    salaryMonth?: string;
+    paymentStatus?: string;
+    staffId?: string;
+    academicYearId?: string;
+  }): Promise<Payroll[]> {
+    if (isSupabaseConfigured) {
+      try {
+        let query = supabase
+          .from('payrolls')
+          .select('*, staff(*), payment_account:bank_accounts(*)');
+
+        if (filter?.salaryMonth) query = query.eq('salary_month', filter.salaryMonth);
+        if (filter?.paymentStatus) query = query.eq('payment_status', filter.paymentStatus);
+        if (filter?.staffId) query = query.eq('staff_id', filter.staffId);
+        if (filter?.academicYearId) query = query.eq('academic_year_id', filter.academicYearId);
+
+        const { data, error } = await query.order('created_at', { ascending: false });
+        if (!error && data) return data as Payroll[];
+      } catch (e) {
+        console.warn('Falling back to local storage for payrolls:', e);
+      }
+    }
+
+    let records = loadFromStorage<Payroll[]>(STORAGE_KEYS.PAYROLLS, INITIAL_PAYROLLS);
+    const staffList = await this.getStaff();
+    const accounts = await this.getBankAccounts();
+
+    records = records.map(p => ({
+      ...p,
+      staff: staffList.find(s => s.id === p.staff_id),
+      payment_account: p.payment_account_id ? accounts.find(a => a.id === p.payment_account_id) : undefined
+    }));
+
+    if (filter?.salaryMonth) {
+      records = records.filter(r => r.salary_month.toLowerCase() === filter.salaryMonth!.toLowerCase());
+    }
+    if (filter?.paymentStatus) {
+      records = records.filter(r => r.payment_status === filter.paymentStatus);
+    }
+    if (filter?.staffId) {
+      records = records.filter(r => r.staff_id === filter.staffId);
+    }
+    if (filter?.academicYearId) {
+      records = records.filter(r => !r.academic_year_id || r.academic_year_id === filter.academicYearId);
+    }
+
+    return records.sort((a, b) => new Date(b.created_at || '').getTime() - new Date(a.created_at || '').getTime());
+  },
+
+  async createPayroll(payrollData: Omit<Payroll, 'id' | 'created_at' | 'updated_at'>): Promise<Payroll> {
+    const net = Math.max(0, Number(payrollData.basic_salary) + Number(payrollData.allowances || 0) - Number(payrollData.deductions || 0) - Number(payrollData.advance_salary_deducted || 0));
+
+    const newPayroll: Payroll = {
+      ...payrollData,
+      net_salary: net,
+      id: crypto.randomUUID(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('payrolls')
+          .insert([{
+            id: newPayroll.id,
+            staff_id: newPayroll.staff_id,
+            academic_year_id: newPayroll.academic_year_id || null,
+            salary_month: newPayroll.salary_month,
+            basic_salary: newPayroll.basic_salary,
+            allowances: newPayroll.allowances,
+            allowances_breakdown: newPayroll.allowances_breakdown,
+            deductions: newPayroll.deductions,
+            deductions_breakdown: newPayroll.deductions_breakdown,
+            advance_salary_deducted: newPayroll.advance_salary_deducted,
+            net_salary: newPayroll.net_salary,
+            payment_status: newPayroll.payment_status,
+            payment_date: newPayroll.payment_date || null,
+            payment_account_id: newPayroll.payment_account_id || null,
+            payment_method: newPayroll.payment_method,
+            transaction_reference: newPayroll.transaction_reference,
+            notes: newPayroll.notes
+          }])
+          .select('*, staff(*), payment_account:bank_accounts(*)')
+          .single();
+        if (!error && data) {
+          const list = await this.getPayrolls();
+          saveToStorage(STORAGE_KEYS.PAYROLLS, [data, ...list.filter(p => p.id !== data.id)]);
+          return data as Payroll;
+        }
+      } catch (e) {
+        console.warn('Falling back to local storage for creating payroll:', e);
+      }
+    }
+
+    const list = await this.getPayrolls();
+    list.unshift(newPayroll);
+    saveToStorage(STORAGE_KEYS.PAYROLLS, list);
+    return newPayroll;
+  },
+
+  async generateBulkPayroll(staffIds: string[], salaryMonth: string, academicYearId?: string): Promise<{ createdCount: number }> {
+    const allStaff = await this.getStaff();
+    const targetStaff = allStaff.filter(s => staffIds.includes(s.id) && s.status === 'active');
+    let createdCount = 0;
+
+    for (const member of targetStaff) {
+      const basic = Number(member.salary || 60000);
+      try {
+        await this.createPayroll({
+          staff_id: member.id,
+          academic_year_id: academicYearId || null,
+          salary_month: salaryMonth,
+          basic_salary: basic,
+          allowances: 0,
+          allowances_breakdown: 'Standard monthly salary',
+          deductions: 0,
+          deductions_breakdown: '',
+          advance_salary_deducted: 0,
+          net_salary: basic,
+          payment_status: 'draft',
+          payment_method: 'Bank Transfer',
+          notes: `Batch generated payroll for ${salaryMonth}`
+        });
+        createdCount++;
+      } catch (err) {
+        console.warn(`Skipping existing payroll for staff ${member.name} in month ${salaryMonth}`, err);
+      }
+    }
+
+    return { createdCount };
+  },
+
+  async updatePayroll(id: string, updates: Partial<Payroll>): Promise<Payroll> {
+    const updatedFields = { ...updates, updated_at: new Date().toISOString() };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('payrolls')
+          .update(updatedFields)
+          .eq('id', id)
+          .select('*, staff(*), payment_account:bank_accounts(*)')
+          .single();
+        if (!error && data) {
+          const list = await this.getPayrolls();
+          saveToStorage(STORAGE_KEYS.PAYROLLS, list.map(p => p.id === id ? (data as Payroll) : p));
+          return data as Payroll;
+        }
+      } catch (e) {
+        console.warn('Falling back to local storage for updating payroll:', e);
+      }
+    }
+
+    const list = await this.getPayrolls();
+    const idx = list.findIndex(p => p.id === id);
+    if (idx === -1) throw new Error('Payroll record not found');
+    list[idx] = { ...list[idx], ...updatedFields };
+    saveToStorage(STORAGE_KEYS.PAYROLLS, list);
+    return list[idx];
+  },
+
+  async payPayroll(
+    id: string,
+    paymentData: {
+      payment_account_id: string;
+      payment_method: string;
+      payment_date: string;
+      transaction_reference?: string;
+    }
+  ): Promise<Payroll> {
+    const payrolls = await this.getPayrolls();
+    const pr = payrolls.find(p => p.id === id);
+    if (!pr) throw new Error('Payroll record not found');
+
+    const updates: Partial<Payroll> = {
+      payment_status: 'paid',
+      payment_account_id: paymentData.payment_account_id,
+      payment_method: paymentData.payment_method,
+      payment_date: paymentData.payment_date,
+      transaction_reference: paymentData.transaction_reference || null
+    };
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('payrolls')
+          .update(updates)
+          .eq('id', id)
+          .select('*, staff(*), payment_account:bank_accounts(*)')
+          .single();
+
+        if (!error && data) {
+          // Deduct from bank account
+          const acc = await this.getBankAccountById(paymentData.payment_account_id);
+          if (acc) {
+            await this.updateBankAccount(paymentData.payment_account_id, {
+              current_balance: Number(acc.current_balance) - Number(pr.net_salary)
+            });
+          }
+
+          // Automatically record corresponding Salary expense for financial audit
+          try {
+            await this.createExpense({
+              date: paymentData.payment_date,
+              category: 'Salary',
+              amount: pr.net_salary,
+              payment_account_id: paymentData.payment_account_id,
+              payee_name: pr.staff?.name || 'Staff Member',
+              reference_no: paymentData.transaction_reference || `PAY-${pr.salary_month.replace(/s+/g, '-')}`,
+              description: `Salary disbursement for ${pr.staff?.name} (${pr.salary_month})`,
+              academic_year_id: pr.academic_year_id
+            });
+          } catch (expErr) {
+            console.warn('Salary audit expense could not be logged:', expErr);
+          }
+
+          return data as Payroll;
+        }
+      } catch (e) {
+        console.warn('Falling back to local storage for payPayroll:', e);
+      }
+    }
+
+    // Local storage path
+    const accounts = await this.getBankAccounts();
+    const acc = accounts.find(a => a.id === paymentData.payment_account_id);
+    if (acc) {
+      acc.current_balance = Number(acc.current_balance) - Number(pr.net_salary);
+      saveToStorage(STORAGE_KEYS.BANK_ACCOUNTS, accounts);
+    }
+
+    return this.updatePayroll(id, updates);
+  },
+
+  async deletePayroll(id: string): Promise<void> {
+    if (isSupabaseConfigured) {
+      try {
+        const { error } = await supabase
+          .from('payrolls')
+          .delete()
+          .eq('id', id);
+        if (!error) {
+          const list = await this.getPayrolls();
+          saveToStorage(STORAGE_KEYS.PAYROLLS, list.filter(p => p.id !== id));
+          return;
+        }
+      } catch (e) {
+        console.warn('Falling back to local storage for deleting payroll:', e);
+      }
+    }
+
+    const list = await this.getPayrolls();
+    saveToStorage(STORAGE_KEYS.PAYROLLS, list.filter(p => p.id !== id));
+  },
+
+  async getFinanceKPIStats(academicYearId?: string): Promise<FinanceKPIStats> {
+    const [accounts, expenses, payrolls] = await Promise.all([
+      this.getBankAccounts(),
+      this.getExpenses(academicYearId ? { academicYearId } : undefined),
+      this.getPayrolls(academicYearId ? { academicYearId } : undefined)
+    ]);
+
+    const totalLiquidBalance = accounts
+      .filter(a => a.status === 'active')
+      .reduce((sum, a) => sum + Number(a.current_balance || 0), 0);
+
+    const totalExpenses = expenses
+      .reduce((sum, e) => sum + Number(e.amount || 0), 0);
+
+    const totalPayrollPaid = payrolls
+      .filter(p => p.payment_status === 'paid')
+      .reduce((sum, p) => sum + Number(p.net_salary || 0), 0);
+
+    const pendingPayrollLiability = payrolls
+      .filter(p => p.payment_status === 'approved' || p.payment_status === 'draft')
+      .reduce((sum, p) => sum + Number(p.net_salary || 0), 0);
+
+    const netCashFlow = totalLiquidBalance - totalExpenses;
+
+    return {
+      totalLiquidBalance,
+      totalExpenses,
+      totalPayrollPaid,
+      pendingPayrollLiability,
+      netCashFlow
     };
   }
 };

@@ -27,6 +27,7 @@ import { StudentPortalPage } from './features/student-portal/StudentPortalPage';
 import { ParentPortalPage } from './features/parent-portal/ParentPortalPage';
 import { ExamsAndContentPage } from './features/exams/ExamsAndContentPage';
 import { FeesPage } from './features/fees/FeesPage';
+import { FinancePage } from './features/finance/FinancePage';
 import { databaseService } from './lib/database-service';
 import { AcademySettings, StudentInquiry } from './types/database.types';
 
@@ -135,6 +136,9 @@ const MainAppContent: React.FC = () => {
 
       {/* Fees & Billing (Phase 10) */}
       {currentTab === 'fees' && <FeesPage settings={settings} />}
+
+      {/* Finance & Payroll (Phase 11) */}
+      {currentTab === 'finance' && <FinancePage settings={settings} />}
 
       {/* Academic Setup */}
       {currentTab === 'academic-years' && <AcademicYearsPage />}

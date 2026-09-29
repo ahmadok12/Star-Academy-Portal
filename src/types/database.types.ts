@@ -642,3 +642,100 @@ export interface FeeKPIStats {
   collectionPercentage: number;
 }
 
+// ==========================================
+// Phase 11: Finance & Payroll Types
+// ==========================================
+
+export type AccountType = 'cash' | 'bank' | 'mobile_wallet';
+
+export interface BankAccount {
+  id: string;
+  name: string;
+  account_number: string;
+  bank_name: string;
+  account_type: AccountType;
+  opening_balance: number;
+  current_balance: number;
+  status: EntityStatus;
+  notes?: string | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface BankTransfer {
+  id: string;
+  transfer_date: string;
+  from_account_id: string;
+  to_account_id: string;
+  amount: number;
+  reference_no?: string | null;
+  description?: string | null;
+  created_by?: string | null;
+  created_at?: string;
+  from_account?: BankAccount;
+  to_account?: BankAccount;
+}
+
+export type ExpenseCategory =
+  | 'Salary'
+  | 'Electricity'
+  | 'Rent'
+  | 'Stationery'
+  | 'Maintenance'
+  | 'Transport'
+  | 'Marketing'
+  | 'Utilities'
+  | 'Lab Supplies'
+  | 'Other';
+
+export interface Expense {
+  id: string;
+  date: string;
+  category: ExpenseCategory | string;
+  amount: number;
+  payment_account_id?: string | null;
+  payee_name?: string | null;
+  reference_no?: string | null;
+  description?: string | null;
+  receipt_url?: string | null;
+  academic_year_id?: string | null;
+  created_at?: string;
+  updated_at?: string;
+  payment_account?: BankAccount;
+}
+
+export type PayrollStatus = 'draft' | 'approved' | 'paid';
+
+export interface Payroll {
+  id: string;
+  staff_id: string;
+  academic_year_id?: string | null;
+  salary_month: string;
+  basic_salary: number;
+  allowances: number;
+  allowances_breakdown?: string | null;
+  deductions: number;
+  deductions_breakdown?: string | null;
+  advance_salary_deducted: number;
+  net_salary: number;
+  payment_status: PayrollStatus;
+  payment_date?: string | null;
+  payment_account_id?: string | null;
+  payment_method?: string | null;
+  transaction_reference?: string | null;
+  notes?: string | null;
+  created_at?: string;
+  updated_at?: string;
+  staff?: Staff;
+  payment_account?: BankAccount;
+}
+
+export interface FinanceKPIStats {
+  totalLiquidBalance: number;
+  totalExpenses: number;
+  totalPayrollPaid: number;
+  pendingPayrollLiability: number;
+  netCashFlow: number;
+}
+
+
